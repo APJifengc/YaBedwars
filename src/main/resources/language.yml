@@ -8,12 +8,12 @@ commands:
   version: "版本"
   author: "作者"
   help:
-  - " &e/bwsba  &7-&f  显示插件信息"
-  - " &e/bwsba help  &7-&f  显示帮助菜单"
-  - " &e/bwsba shop  &7-&f  商店设置"
-  - " &e/bwsba edit <游戏>  &7-&f  编辑游戏"
-  - " &e/bwsba reload  &7-&f  重载配置文件"
-  - " &e/bwsba upcheck  &7-&f  检测版本更新"
+    - " &e/bwsba  &7-&f  显示插件信息"
+    - " &e/bwsba help  &7-&f  显示帮助菜单"
+    - " &e/bwsba shop  &7-&f  商店设置"
+    - " &e/bwsba edit <游戏>  &7-&f  编辑游戏"
+    - " &e/bwsba reload  &7-&f  重载配置文件"
+    - " &e/bwsba upcheck  &7-&f  检测版本更新"
   message:
     prefix: "&b&lBWSBA &f>> "
     no_permission: "&c你没有使用该命令的权限！"

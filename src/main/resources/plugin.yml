@@ -32,8 +32,11 @@ permissions:
     default: op
 
 commands:
+  yabedwars:
+    aliases:
+      - yb
   bedwarsitemshop:
-    aliases: [bwis]
+    aliases: [ bwis ]
   bedwarsscoreboardaddon:
     description: Base command.
     aliases: [ bwsba ]

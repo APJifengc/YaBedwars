@@ -20,16 +20,16 @@ upgrade:
 
   #疯狂矿工
   fast_dig:
-  
+
     #物品名称
     item: "GOLD_PICKAXE"
-    
+
     #升级名称
     name: "&f疯狂矿工"
-    
+
     #等级一
     level_1:
-    
+
       #需要的资源
       # cost: "物品,数量"
       #经验模式
@@ -42,7 +42,7 @@ upgrade:
         - "&72阶:急迫II&7,&b4 钻石"
         - ""
         - "&e点击购买！"
-    
+
     #等级二
     level_2:
       cost: "DIAMOND,4"
@@ -53,7 +53,7 @@ upgrade:
         - "&72阶:急迫II&7,&b4 钻石"
         - ""
         - "&e点击购买！"
-        
+
     #满级
     level_full:
       lore:
@@ -63,7 +63,7 @@ upgrade:
         - "&a2阶:急迫II&7,&b4 钻石"
         - ""
         - "&a已解锁"
-  
+
   #锋利附魔
   sword_sharpness:
     item: "IRON_SWORD"
@@ -94,7 +94,7 @@ upgrade:
         - "&a2阶:锋利II&7,&b8 钻石"
         - ""
         - "&a已解锁"
-  
+
   #护甲强化
   armor_protection:
     item: "IRON_CHESTPLATE"
@@ -153,24 +153,24 @@ upgrade:
         - "&a4阶:保护IV&7,&b16 钻石"
         - ""
         - "&a已解锁"
-  
+
   #这是个陷阱
   trap:
     item: "LEATHER"
     name: "&f这是个陷阱"
-    
+
     #触发范围
     trigger_range: 5
-    
+
     #触发后
     trigger:
-    
+
       #大标题
       title: "&c触发陷阱！"
-      
+
       #小标题
       subtitle: "&7敌人已落入你的陷阱"
-      
+
       #提示
       message: ""
     level_1:
@@ -188,7 +188,7 @@ upgrade:
         - "&7花费:&b1 钻石"
         - ""
         - "&a已解锁"
-  
+
   #防御系统
   defense:
     #永久触发
@@ -211,7 +211,7 @@ upgrade:
         - "&7花费:&b2 钻石"
         - ""
         - "&a已解锁"
-  
+
   #治愈池
   heal:
     item: "BEACON"

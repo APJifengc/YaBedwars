@@ -30,205 +30,205 @@ items:
 
   #火球
   fireball:
-  
+
     #启用
     enabled: true
-    
+
     #冷却时间(秒)
     cooldown: 1
-    
+
     #伤害
     damage: 3
-    
+
     #弹射模式
     ejection: true
-    
+
     #弹射速度
     velocity: 1
 
   #TNT自动点燃
   tnt:
-  
+
     #启用
     enabled: true
-    
+
     #冷却时间(秒)
     cooldown: 0
-    
+
     #爆炸延迟
     fuse_ticks: 80
-    
+
     #伤害
     damage: 1
-    
+
     #弹射模式
     ejection: true
-    
+
     #弹射速度
     velocity: 1
 
 
   #降落伞
   parachute:
-  
+
     #启用
     enabled: true
-    
+
     #冷却时间(秒)
     cooldown: 5
-    
+
     #物品
     item: FEATHER
-    
+
     #弹射速度(高度)
     velocity: 3
-    
+
     #降落速度
     landing_velocity: 0.2
-    
+
     #滑翔速度
     gliding_velocity: 0.3
 
 
   #蹦床
   trampoline:
-  
+
     #启用
     enabled: true
-    
+
     #冷却时间(秒)
     cooldown: 5
-    
+
     #物品
     item: DOUBLE_PLANT
-    
+
     #蹦床大小 1-3
     size: 2
-    
+
     #弹射速度(高度)
     velocity: 3
-    
+
     #蹦床多少秒后消失
     staytime: 20
-    
+
     #空间不足提示
     lack_space: "没有足够的空间使用此道具！"
 
 
   #搭桥蛋
   bridge_egg:
-  
+
     #启用
     enabled: true
-    
+
     #冷却时间(秒)
     cooldown: 5
-    
+
     #每次最大放置方块数量
     maxblock: 50
 
 
   #骑行末影珍珠
   ender_pearl_chair:
-  
+
     #启用
     enabled: true
-    
+
     #冷却时间(秒)
     cooldown: 0
 
   #队伍防守铁傀儡
   team_iron_golem:
-  
+
     #启用
     enabled: true
-    
+
     #物品
     item: MONSTER_EGG
-    
+
     #冷却时间(秒)
     cooldown: 0
-    
+
     #铁傀儡有效时间
     # -1 禁用此功能
     staytime: 120
-    
+
     #血量
     health: 20
-    
+
     #对玩家造成的伤害
     damage: 3
-    
+
     #铁傀儡名称
     name: "{color}{team} 铁傀儡 {time}秒"
 
 
   #队伍防守蠹虫
   team_silver_fish:
-  
+
     #启用
     enabled: true
-    
+
     #铁傀儡有效时间
     # -1 禁用此功能
     staytime: 120
-    
+
     #血量
     health: 20
-    
+
     #对玩家造成的伤害
     damage: 2
-    
+
     #铁傀儡名称
     name: "{color}{team} 蠹虫 {time}秒"
 
 
   #防爆玻璃
   explosion_proof:
-  
+
     #启用
     enabled: true
 
   #行走平台
   walk_platform:
-    
+
     #启用
     enabled: true
-    
+
     #物品
     item: PAPER
-    
+
     #冷却时间(秒)
     cooldown: 30
-    
+
     #消失时间
     break_time: 5
 
 
   #TNT发射器
   tnt_launch:
-  
+
     #启用
     enabled: true
-    
+
     #物品
     item: DISPENSER
-    
+
     #冷却时间(秒)
     cooldown: 5
-    
+
     #爆炸延迟
     fuse_ticks: 20
-    
+
     #伤害
     damage: 1
-    
+
     #发射速度
     launch_velocity: 2
-    
+
     #弹射模式
     ejection: true
-    
+
     #弹射速度
     velocity: 1
 
@@ -906,7 +906,7 @@ allowed-commands:
   - /help
 
 endgame:
-  ### Main lobby enabled
+  ### YaBedwars lobby enabled
   ### Type: boolean
   ### Not available with bungeecord!
   ### If you want, that all players will be teleported to a specific
@@ -1674,7 +1674,7 @@ play_sound:
       - ENDERDRAGON_GROWL,1,1
 
     #死亡
-    death: {}
+    death: { }
 
     #击杀
     kill:
@@ -1682,10 +1682,10 @@ play_sound:
       - WOLF_BARK,1,1
 
     #资源升级
-    upgrade: {}
+    upgrade: { }
 
     #血量设置
-    sethealth: {}
+    sethealth: { }
 
     #资源不足
     no_resource:
@@ -1700,7 +1700,7 @@ play_sound:
       - WITHER_HURT,1,0
 
     #死亡模式
-    deathmode: {}
+    deathmode: { }
 
     #游戏结束
     over:
@@ -1756,7 +1756,7 @@ spectator:
     item_name: "&a旁观设置"
 
     #物品描述
-    item_lore: {}
+    item_lore: { }
 
     #菜单标题
     gui_title: "旁观者设置"
@@ -1784,7 +1784,7 @@ spectator:
     item_name: "&a再玩一局"
 
     #物品描述
-    item_lore: {}
+    item_lore: { }
 
     #ServerJoiner服务器组
     group: "bedwars"
@@ -1803,7 +1803,7 @@ compass:
   item_name: "&a指南针"
 
   #物品描述
-  item_lore: {}
+  item_lore: { }
 
   #返回按钮
   back: "&f返回"

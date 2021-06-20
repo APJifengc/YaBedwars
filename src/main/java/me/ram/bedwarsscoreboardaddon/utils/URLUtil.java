@@ -9,14 +9,14 @@ import java.net.URLConnection;
 
 public class URLUtil {
   public static String getDocumentAt(String urlString) {
-    StringBuffer document = new StringBuffer("");
+    StringBuffer document = new StringBuffer();
     try {
       URL url = new URL(urlString);
       URLConnection conn = url.openConnection();
       BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
       String line = null;
       while ((line = reader.readLine()) != null)
-        document.append(String.valueOf(line) + " "); 
+        document.append(line + " ");
       reader.close();
     } catch (MalformedURLException e) {
       return null;

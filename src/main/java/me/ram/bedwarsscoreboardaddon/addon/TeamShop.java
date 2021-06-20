@@ -31,19 +31,19 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
 public class TeamShop {
-  private Game game;
+  private final Game game;
   
-  private Map<String, Integer> haste;
+  private final Map<String, Integer> haste;
   
-  private Map<String, Integer> sharpness;
+  private final Map<String, Integer> sharpness;
   
-  private Map<String, Integer> protection;
+  private final Map<String, Integer> protection;
   
-  private Map<String, Integer> trap;
+  private final Map<String, Integer> trap;
   
-  private Map<String, Integer> defense;
+  private final Map<String, Integer> defense;
   
-  private Map<String, Integer> heal;
+  private final Map<String, Integer> heal;
   
   public void openTeamShop(Player player) {
     if (this.game != null && Config.teamshop_enabled && 
@@ -77,18 +77,18 @@ public class TeamShop {
     trap_itemMeta.setDisplayName(Config.teamshop_upgrade_trap_name);
     defense_itemMeta.setDisplayName(Config.teamshop_upgrade_defense_name);
     heal_itemMeta.setDisplayName(Config.teamshop_upgrade_heal_name);
-    haste_itemMeta.addItemFlags(new ItemFlag[] { ItemFlag.HIDE_ATTRIBUTES });
-    sharpness_itemMeta.addItemFlags(new ItemFlag[] { ItemFlag.HIDE_ATTRIBUTES });
-    protection_itemMeta.addItemFlags(new ItemFlag[] { ItemFlag.HIDE_ATTRIBUTES });
-    trap_itemMeta.addItemFlags(new ItemFlag[] { ItemFlag.HIDE_ATTRIBUTES });
-    defense_itemMeta.addItemFlags(new ItemFlag[] { ItemFlag.HIDE_ATTRIBUTES });
-    heal_itemMeta.addItemFlags(new ItemFlag[] { ItemFlag.HIDE_ATTRIBUTES });
-    haste_itemMeta.addItemFlags(new ItemFlag[] { ItemFlag.HIDE_POTION_EFFECTS });
-    sharpness_itemMeta.addItemFlags(new ItemFlag[] { ItemFlag.HIDE_POTION_EFFECTS });
-    protection_itemMeta.addItemFlags(new ItemFlag[] { ItemFlag.HIDE_POTION_EFFECTS });
-    trap_itemMeta.addItemFlags(new ItemFlag[] { ItemFlag.HIDE_POTION_EFFECTS });
-    defense_itemMeta.addItemFlags(new ItemFlag[] { ItemFlag.HIDE_POTION_EFFECTS });
-    heal_itemMeta.addItemFlags(new ItemFlag[] { ItemFlag.HIDE_POTION_EFFECTS });
+    haste_itemMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+    sharpness_itemMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+    protection_itemMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+    trap_itemMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+    defense_itemMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+    heal_itemMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+    haste_itemMeta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
+    sharpness_itemMeta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
+    protection_itemMeta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
+    trap_itemMeta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
+    defense_itemMeta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
+    heal_itemMeta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
     int hi = getPlayerTeamUpgradeLevel(player, this.haste, this.game);
     if (hi == 0) {
       haste_itemMeta.setLore(Config.teamshop_upgrade_fast_dig_level_1_lore);
@@ -168,7 +168,7 @@ public class TeamShop {
     int i = 0;
     for (String team : map.keySet()) {
       if (team.equals(g.getPlayerTeam(player).getName())) {
-        i = Integer.valueOf(((Integer)map.get(team)).intValue()).intValue();
+        i = Integer.valueOf(map.get(team).intValue()).intValue();
         break;
       } 
     } 
@@ -187,7 +187,7 @@ public class TeamShop {
         public void run() {
           for (String ts : TeamShop.this.heal.keySet()) {
             Team team = game.getTeam(ts);
-            if (team != null && ((Integer)TeamShop.this.heal.get(ts)).intValue() > 0) {
+            if (team != null && TeamShop.this.heal.get(ts).intValue() > 0) {
               Location location = team.getTargetHeadBlock().clone().add(0.5D, 1.0D, 0.5D);
               for (Player player : team.getPlayers()) {
                 for (int i = 0; i < 10; i++)
@@ -200,7 +200,7 @@ public class TeamShop {
             } 
           } 
         }
-      }).runTaskTimer((Plugin)Main.getInstance(), 0L, 40L);
+      }).runTaskTimer(Main.getInstance(), 0L, 40L);
     (new BukkitRunnable() {
         public void run() {
           if (game.getState() == GameState.RUNNING) {
@@ -209,7 +209,7 @@ public class TeamShop {
               if (team != null)
                 for (Player p : game.getTeam(hastes).getPlayers())
                   p.addPotionEffect(
-                      new PotionEffect(PotionEffectType.FAST_DIGGING, 30, ((Integer)TeamShop.this.haste.get(hastes)).intValue() - 1), 
+                      new PotionEffect(PotionEffectType.FAST_DIGGING, 30, TeamShop.this.haste.get(hastes).intValue() - 1),
                       true);  
             } 
             for (Player player : game.getPlayers()) {
@@ -299,7 +299,7 @@ public class TeamShop {
             } 
             label186: for (String ts : TeamShop.this.trap.keySet()) {
               Team team = game.getTeam(ts);
-              if (team != null && ((Integer)TeamShop.this.trap.get(ts)).intValue() > 0)
+              if (team != null && TeamShop.this.trap.get(ts).intValue() > 0)
                 for (Player player : game.getPlayers()) {
                   if (!game.isSpectator(player) && player.getGameMode() != GameMode.SPECTATOR && 
                     team.getTargetFeetBlock().distance(
@@ -325,7 +325,7 @@ public class TeamShop {
             } 
             label184: for (String ts : TeamShop.this.defense.keySet()) {
               Team team = game.getTeam(ts);
-              if (team != null && ((Integer)TeamShop.this.defense.get(ts)).intValue() > 0)
+              if (team != null && TeamShop.this.defense.get(ts).intValue() > 0)
                 for (Player player : game.getPlayers()) {
                   if (!game.isSpectator(player) && player.getGameMode() != GameMode.SPECTATOR && 
                     team.getTargetFeetBlock().distance(
@@ -349,7 +349,7 @@ public class TeamShop {
             } 
             for (String ts : TeamShop.this.heal.keySet()) {
               Team team = game.getTeam(ts);
-              if (team != null && ((Integer)TeamShop.this.heal.get(ts)).intValue() > 0)
+              if (team != null && TeamShop.this.heal.get(ts).intValue() > 0)
                 for (Player player : game.getPlayers()) {
                   if (!game.isSpectator(player) && player.getGameMode() != GameMode.SPECTATOR && 
                     team.getTargetFeetBlock().distance(
@@ -364,7 +364,7 @@ public class TeamShop {
             task.cancel();
           } 
         }
-      }).runTaskTimer((Plugin)Main.getInstance(), 0L, 5L);
+      }).runTaskTimer(Main.getInstance(), 0L, 5L);
   }
   
   private void setSharpness(Player player, ItemStack itemStack, ItemMeta itemMeta, int j, int k, boolean b) {
@@ -462,32 +462,32 @@ public class TeamShop {
       e.setCancelled(true);
       if (e.getRawSlot() == 13) {
         Team team = this.game.getPlayerTeam(player);
-        if (!this.haste.containsKey(team.getName()) || ((Integer)this.haste.get(team.getName())).intValue() == 1) {
-          String[] ary = ((String)Config.teamshop_upgrade_fast_dig_level_cost
-            .get(Integer.valueOf(((Integer)this.haste.getOrDefault(team.getName(), Integer.valueOf(0))).intValue() + 1))).split(",");
+        if (!this.haste.containsKey(team.getName()) || this.haste.get(team.getName()).intValue() == 1) {
+          String[] ary = Config.teamshop_upgrade_fast_dig_level_cost
+            .get(Integer.valueOf(this.haste.getOrDefault(team.getName(), Integer.valueOf(0)).intValue() + 1)).split(",");
           if (ary[0].equals("XP")) {
             if (Bukkit.getPluginManager().isPluginEnabled("BedwarsXP"))
               if (XPManager.getXPManager(this.game.getName()).getXP(player) >= Integer.valueOf(ary[1]).intValue()) {
                 XPManager.getXPManager(this.game.getName()).takeXP(player, Integer.valueOf(ary[1]).intValue());
-                this.haste.put(team.getName(), Integer.valueOf(((Integer)this.haste.getOrDefault(team.getName(), Integer.valueOf(0))).intValue() + 1));
+                this.haste.put(team.getName(), Integer.valueOf(this.haste.getOrDefault(team.getName(), Integer.valueOf(0)).intValue() + 1));
                 reOpenTeamShop(player);
                 for (Player p : team.getPlayers())
                   p.sendMessage(Config.teamshop_message.replace("{player}", player.getName())
                       .replace("{upgrade}", 
                         ColorUtil.remcolor(Config.teamshop_upgrade_fast_dig_name))
-                      .replace("{level}", getLevel(((Integer)this.haste.get(team.getName())).intValue()))); 
+                      .replace("{level}", getLevel(this.haste.get(team.getName()).intValue())));
               } else {
                 player.sendMessage(Config.teamshop_no_resource);
                 PlaySound.playSound(player, Config.play_sound_sound_no_resource);
               }  
           } else if (isEnough(player, ary)) {
             takeItem(player, ary);
-            this.haste.put(team.getName(), Integer.valueOf(((Integer)this.haste.getOrDefault(team.getName(), Integer.valueOf(0))).intValue() + 1));
+            this.haste.put(team.getName(), Integer.valueOf(this.haste.getOrDefault(team.getName(), Integer.valueOf(0)).intValue() + 1));
             reOpenTeamShop(player);
             for (Player p : team.getPlayers())
               p.sendMessage(Config.teamshop_message.replace("{player}", player.getName())
                   .replace("{upgrade}", ColorUtil.remcolor(Config.teamshop_upgrade_fast_dig_name))
-                  .replace("{level}", getLevel(((Integer)this.haste.get(team.getName())).intValue()))); 
+                  .replace("{level}", getLevel(this.haste.get(team.getName()).intValue())));
           } else {
             player.sendMessage(Config.teamshop_no_resource);
             PlaySound.playSound(player, Config.play_sound_sound_no_resource);
@@ -504,33 +504,33 @@ public class TeamShop {
       e.setCancelled(true);
       if (e.getRawSlot() == 11) {
         Team team = this.game.getPlayerTeam(player);
-        if (!this.sharpness.containsKey(team.getName()) || ((Integer)this.sharpness.get(team.getName())).intValue() == 1) {
-          String[] ary = ((String)Config.teamshop_upgrade_sword_sharpness_level_cost
-            .get(Integer.valueOf(((Integer)this.sharpness.getOrDefault(team.getName(), Integer.valueOf(0))).intValue() + 1))).split(",");
+        if (!this.sharpness.containsKey(team.getName()) || this.sharpness.get(team.getName()).intValue() == 1) {
+          String[] ary = Config.teamshop_upgrade_sword_sharpness_level_cost
+            .get(Integer.valueOf(this.sharpness.getOrDefault(team.getName(), Integer.valueOf(0)).intValue() + 1)).split(",");
           if (ary[0].equals("XP")) {
             if (Bukkit.getPluginManager().isPluginEnabled("BedwarsXP"))
               if (XPManager.getXPManager(this.game.getName()).getXP(player) >= Integer.valueOf(ary[1]).intValue()) {
                 XPManager.getXPManager(this.game.getName()).takeXP(player, Integer.valueOf(ary[1]).intValue());
-                this.sharpness.put(team.getName(), Integer.valueOf(((Integer)this.sharpness.getOrDefault(team.getName(), Integer.valueOf(0))).intValue() + 1));
+                this.sharpness.put(team.getName(), Integer.valueOf(this.sharpness.getOrDefault(team.getName(), Integer.valueOf(0)).intValue() + 1));
                 reOpenTeamShop(player);
                 for (Player p : team.getPlayers())
                   p.sendMessage(Config.teamshop_message.replace("{player}", player.getName())
                       .replace("{upgrade}", 
                         ColorUtil.remcolor(Config.teamshop_upgrade_sword_sharpness_name))
-                      .replace("{level}", getLevel(((Integer)this.sharpness.get(team.getName())).intValue()))); 
+                      .replace("{level}", getLevel(this.sharpness.get(team.getName()).intValue())));
               } else {
                 player.sendMessage(Config.teamshop_no_resource);
                 PlaySound.playSound(player, Config.play_sound_sound_no_resource);
               }  
           } else if (isEnough(player, ary)) {
             takeItem(player, ary);
-            this.sharpness.put(team.getName(), Integer.valueOf(((Integer)this.sharpness.getOrDefault(team.getName(), Integer.valueOf(0))).intValue() + 1));
+            this.sharpness.put(team.getName(), Integer.valueOf(this.sharpness.getOrDefault(team.getName(), Integer.valueOf(0)).intValue() + 1));
             reOpenTeamShop(player);
             for (Player p : team.getPlayers())
               p.sendMessage(Config.teamshop_message.replace("{player}", player.getName())
                   .replace("{upgrade}", 
                     ColorUtil.remcolor(Config.teamshop_upgrade_sword_sharpness_name))
-                  .replace("{level}", getLevel(((Integer)this.sharpness.get(team.getName())).intValue()))); 
+                  .replace("{level}", getLevel(this.sharpness.get(team.getName()).intValue())));
           } else {
             player.sendMessage(Config.teamshop_no_resource);
             PlaySound.playSound(player, Config.play_sound_sound_no_resource);
@@ -547,33 +547,33 @@ public class TeamShop {
       e.setCancelled(true);
       if (e.getRawSlot() == 12) {
         Team team = this.game.getPlayerTeam(player);
-        if (!this.protection.containsKey(team.getName()) || ((Integer)this.protection.get(team.getName())).intValue() < 4) {
-          String[] ary = ((String)Config.teamshop_upgrade_armor_protection_level_cost
-            .get(Integer.valueOf(((Integer)this.protection.getOrDefault(team.getName(), Integer.valueOf(0))).intValue() + 1))).split(",");
+        if (!this.protection.containsKey(team.getName()) || this.protection.get(team.getName()).intValue() < 4) {
+          String[] ary = Config.teamshop_upgrade_armor_protection_level_cost
+            .get(Integer.valueOf(this.protection.getOrDefault(team.getName(), Integer.valueOf(0)).intValue() + 1)).split(",");
           if (ary[0].equals("XP")) {
             if (Bukkit.getPluginManager().isPluginEnabled("BedwarsXP"))
               if (XPManager.getXPManager(this.game.getName()).getXP(player) >= Integer.valueOf(ary[1]).intValue()) {
                 XPManager.getXPManager(this.game.getName()).takeXP(player, Integer.valueOf(ary[1]).intValue());
-                this.protection.put(team.getName(), Integer.valueOf(((Integer)this.protection.getOrDefault(team.getName(), Integer.valueOf(0))).intValue() + 1));
+                this.protection.put(team.getName(), Integer.valueOf(this.protection.getOrDefault(team.getName(), Integer.valueOf(0)).intValue() + 1));
                 reOpenTeamShop(player);
                 for (Player p : team.getPlayers())
                   p.sendMessage(Config.teamshop_message.replace("{player}", player.getName())
                       .replace("{upgrade}", 
                         ColorUtil.remcolor(Config.teamshop_upgrade_armor_protection_name))
-                      .replace("{level}", getLevel(((Integer)this.protection.get(team.getName())).intValue()))); 
+                      .replace("{level}", getLevel(this.protection.get(team.getName()).intValue())));
               } else {
                 player.sendMessage(Config.teamshop_no_resource);
                 PlaySound.playSound(player, Config.play_sound_sound_no_resource);
               }  
           } else if (isEnough(player, ary)) {
             takeItem(player, ary);
-            this.protection.put(team.getName(), Integer.valueOf(((Integer)this.protection.getOrDefault(team.getName(), Integer.valueOf(0))).intValue() + 1));
+            this.protection.put(team.getName(), Integer.valueOf(this.protection.getOrDefault(team.getName(), Integer.valueOf(0)).intValue() + 1));
             reOpenTeamShop(player);
             for (Player p : team.getPlayers())
               p.sendMessage(Config.teamshop_message.replace("{player}", player.getName())
                   .replace("{upgrade}", 
                     ColorUtil.remcolor(Config.teamshop_upgrade_armor_protection_name))
-                  .replace("{level}", getLevel(((Integer)this.protection.get(team.getName())).intValue()))); 
+                  .replace("{level}", getLevel(this.protection.get(team.getName()).intValue())));
           } else {
             player.sendMessage(Config.teamshop_no_resource);
             PlaySound.playSound(player, Config.play_sound_sound_no_resource);
@@ -778,7 +778,7 @@ public class TeamShop {
             } 
           } 
         }
-      }).runTaskLater((Plugin)Main.getInstance(), 1L);
+      }).runTaskLater(Main.getInstance(), 1L);
   }
   
   private boolean isEnough(Player player, String[] ary) {
@@ -790,10 +790,8 @@ public class TeamShop {
       if (stack != null && 
         stack.getType().equals(Material.valueOf(ary[0])))
         k += stack.getAmount(); 
-    } 
-    if (k >= Integer.valueOf(ary[1]).intValue())
-      return true; 
-    return false;
+    }
+    return k >= Integer.valueOf(ary[1]).intValue();
   }
   
   private void takeItem(Player player, String[] ary) {

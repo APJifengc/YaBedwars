@@ -25,17 +25,17 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
 public class ScoreBoard {
-  private Arena arena;
+  private final Arena arena;
   
-  private Game game;
+  private final Game game;
   
   private int tc = 0;
   
-  private Map<String, String> timerplaceholder;
+  private final Map<String, String> timerplaceholder;
   
-  private PlaceholderManager placeholdermanager;
+  private final PlaceholderManager placeholdermanager;
   
-  private Map<String, String> teamstatus;
+  private final Map<String, String> teamstatus;
   
   private String over_plan_info;
   
@@ -53,14 +53,14 @@ public class ScoreBoard {
           
           public void run() {
             if (ScoreBoard.this.game.getState() == GameState.RUNNING) {
-              String format = String.valueOf(this.i / 60) + ":" + ((this.i % 60 < 10) ? ("0" + (this.i % 60)) : this.i % 60);
+              String format = this.i / 60 + ":" + ((this.i % 60 < 10) ? ("0" + (this.i % 60)) : this.i % 60);
               ScoreBoard.this.timerplaceholder.put("{timer_" + id + "}", format);
               this.i--;
             } else {
               cancel();
             } 
           }
-        }).runTaskTimer((Plugin)Main.getInstance(), 0L, 21L);
+        }).runTaskTimer(Main.getInstance(), 0L, 21L);
     } 
     (new BukkitRunnable() {
         int i = Config.scoreboard_interval;
@@ -77,7 +77,7 @@ public class ScoreBoard {
             return;
           } 
         }
-      }).runTaskTimer((Plugin)Main.getInstance(), 0L, 1L);
+      }).runTaskTimer(Main.getInstance(), 0L, 1L);
     (new BukkitRunnable() {
         public void run() {
           for (BukkitTask task : ScoreBoard.this.game.getRunningTasks())
@@ -85,7 +85,7 @@ public class ScoreBoard {
           ScoreBoard.this.game.getRunningTasks().clear();
           ScoreBoard.this.startTimerCountdown(ScoreBoard.this.game);
         }
-      }).runTaskLater((Plugin)Main.getInstance(), 19L);
+      }).runTaskLater(Main.getInstance(), 19L);
   }
   
   public PlaceholderManager getPlaceholderManager() {
@@ -120,7 +120,7 @@ public class ScoreBoard {
           game.setTimeLeft(game.getTimeLeft() - 1);
         }
       };
-    game.addRunningTask(task.runTaskTimer((Plugin)BedwarsRel.getInstance(), 0L, 20L));
+    game.addRunningTask(task.runTaskTimer(BedwarsRel.getInstance(), 0L, 20L));
   }
   
   public void updateScoreboard() {
@@ -152,7 +152,7 @@ public class ScoreBoard {
         rts++; 
     } 
     int wither = this.game.getTimeLeft() - Config.witherbow_gametime;
-    String format = String.valueOf(wither / 60) + ":" + ((wither % 60 < 10) ? ("0" + (wither % 60)) : wither % 60);
+    String format = wither / 60 + ":" + ((wither % 60 < 10) ? ("0" + (wither % 60)) : wither % 60);
     String bowtime = null;
     if (wither > 0)
       bowtime = format; 
@@ -170,11 +170,11 @@ public class ScoreBoard {
     } 
     String teams = (new StringBuilder(String.valueOf(this.game.getTeams().size()))).toString();
     if (Config.scoreboard_lines.containsKey(teams)) {
-      scoreboard_lines = (List<String>)Config.scoreboard_lines.get(teams);
+      scoreboard_lines = Config.scoreboard_lines.get(teams);
     } else if (Config.scoreboard_lines.containsKey("default")) {
-      scoreboard_lines = (List<String>)Config.scoreboard_lines.get("default");
+      scoreboard_lines = Config.scoreboard_lines.get("default");
     } else {
-      scoreboard_lines = Arrays.asList(new String[] { "", "{team_status}", "" });
+      scoreboard_lines = Arrays.asList("", "{team_status}", "");
     } 
     for (Player player : this.game.getPlayers()) {
       ChatColor chatColor = ChatColor.WHITE;
@@ -195,11 +195,11 @@ public class ScoreBoard {
       if (kills.containsKey(player.getName()))
         ks = kills.get(player.getName()).toString();
       if (finalkills.containsKey(player.getName()))
-        fks = (String)finalkills.get(player.getName()).toString();
+        fks = finalkills.get(player.getName()).toString();
       if (dies.containsKey(player.getName()))
-        dis = (String)dies.get(player.getName()).toString();
+        dis = dies.get(player.getName()).toString();
       if (beds.containsKey(player.getName()))
-        bes = (String)beds.get(player.getName()).toString();
+        bes = beds.get(player.getName()).toString();
       String p_t_c = "§f";
       String p_t_ps = "";
       String p_t = "";
@@ -221,7 +221,7 @@ public class ScoreBoard {
                 you = "";
               }  
             if (this.teamstatus.containsKey(t.getName())) {
-              lines.add(((String)this.teamstatus.get(t.getName())).replace("{you}", you));
+              lines.add(this.teamstatus.get(t.getName()).replace("{you}", you));
               continue;
             } 
             lines.add(ls.replace("{team_status}", 
@@ -250,8 +250,8 @@ public class ScoreBoard {
           addline = addline.replace("{resource_upgrade_" + formattime + "}", 
               this.arena.getResourceUpgrade().getUpgTime().get(formattime)); 
         for (String placeholder : this.placeholdermanager.getGamePlaceholder().keySet())
-          addline = addline.replace(placeholder, 
-              (CharSequence)this.placeholdermanager.getGamePlaceholder().get(placeholder)); 
+          addline = addline.replace(placeholder,
+                  this.placeholdermanager.getGamePlaceholder().get(placeholder));
         for (Team t : this.game.getTeams().values()) {
           if (addline.contains("{team_" + t.getName() + "_status}")) {
             String stf = getTeamStatusFormat(this.game, t);
@@ -279,8 +279,8 @@ public class ScoreBoard {
           Iterator<String> iterator = this.placeholdermanager.getTeamPlaceholder(playerteam.getName()).keySet().iterator();
           while (iterator.hasNext()) {
             String placeholder = iterator.next();
-            addline = addline.replace(placeholder, 
-                (CharSequence)this.placeholdermanager.getTeamPlaceholder(playerteam.getName()).get(placeholder));
+            addline = addline.replace(placeholder,
+                    this.placeholdermanager.getTeamPlaceholder(playerteam.getName()).get(placeholder));
           } 
         } else {
           for (String teamname : this.placeholdermanager.getTeamPlaceholders().keySet()) {
@@ -290,8 +290,8 @@ public class ScoreBoard {
         } 
         if (this.placeholdermanager.getPlayerPlaceholders().containsKey(player.getName())) {
           for (String placeholder : this.placeholdermanager.getPlayerPlaceholder(player.getName()).keySet())
-            addline = addline.replace(placeholder, 
-                (CharSequence)this.placeholdermanager.getPlayerPlaceholder(player.getName()).get(placeholder)); 
+            addline = addline.replace(placeholder,
+                    this.placeholdermanager.getPlayerPlaceholder(player.getName()).get(placeholder));
         } else {
           for (String playername : this.placeholdermanager.getPlayerPlaceholders().keySet()) {
             for (String placeholder : (this.placeholdermanager.getPlayerPlaceholders().get(playername)).keySet()) {
@@ -317,7 +317,7 @@ public class ScoreBoard {
           elements.add(1, null); 
       } 
       List<String> ncelements = elementsPro(elements);
-      String[] scoreboardelements = ncelements.<String>toArray(new String[ncelements.size()]);
+      String[] scoreboardelements = ncelements.toArray(new String[ncelements.size()]);
       ScoreboardUtil.setScoreboard(player, scoreboardelements, this.game);
     } 
   }
@@ -329,9 +329,9 @@ public class ScoreBoard {
     String secStr = "";
     min = (int)Math.floor((time / 60));
     sec = time % 60;
-    minStr = (min < 10) ? ("0" + String.valueOf(min)) : String.valueOf(min);
-    secStr = (sec < 10) ? ("0" + String.valueOf(sec)) : String.valueOf(sec);
-    return String.valueOf(minStr) + ":" + secStr;
+    minStr = (min < 10) ? ("0" + min) : String.valueOf(min);
+    secStr = (sec < 10) ? ("0" + sec) : String.valueOf(sec);
+    return minStr + ":" + secStr;
   }
   
   private List<String> elementsPro(List<String> lines) {
@@ -341,7 +341,7 @@ public class ScoreBoard {
       if (l != null) {
         if (nclines.contains(l)) {
           for (int i = 0; i == 0; ) {
-            l = String.valueOf(l) + "§r";
+            l = l + "§r";
             if (!nclines.contains(l)) {
               nclines.add(l);
               break;
@@ -360,7 +360,7 @@ public class ScoreBoard {
   private String conflict(List<String> lines, String line) {
     String l = line;
     for (int i = 0; i == 0; ) {
-      l = String.valueOf(l) + "§r";
+      l = l + "§r";
       if (!lines.contains(l))
         return l; 
     } 

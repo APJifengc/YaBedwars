@@ -21,11 +21,11 @@ public class TimeTask implements Listener {
       if (!cmd.equals("")) {
         if (cmd.contains("{player}")) {
           for (Player player : e.getGame().getPlayers())
-            Bukkit.getServer().dispatchCommand((CommandSender)Bukkit.getServer().getConsoleSender(), 
+            Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(),
                 ColorUtil.color(cmd.replace("{player}", player.getName()))); 
           continue;
         } 
-        Bukkit.getServer().dispatchCommand((CommandSender)Bukkit.getServer().getConsoleSender(), 
+        Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(),
             ColorUtil.color(cmd));
       } 
     } 
@@ -50,12 +50,12 @@ public class TimeTask implements Listener {
                     if (cmd.contains("{player}")) {
                       for (Player player : e.getGame().getPlayers())
                         Bukkit.getServer().dispatchCommand(
-                            (CommandSender)Bukkit.getServer().getConsoleSender(), 
+                                Bukkit.getServer().getConsoleSender(),
                             ColorUtil.color(cmd.replace("{player}", player.getName()))); 
                       continue;
                     } 
                     Bukkit.getServer().dispatchCommand(
-                        (CommandSender)Bukkit.getServer().getConsoleSender(), 
+                            Bukkit.getServer().getConsoleSender(),
                         ColorUtil.color(cmd));
                   } 
                 } 
@@ -65,7 +65,7 @@ public class TimeTask implements Listener {
               cancel();
             } 
           }
-        }).runTaskTimer((Plugin)Main.getInstance(), 0L, 21L);
+        }).runTaskTimer(Main.getInstance(), 0L, 21L);
     } 
   }
 }

@@ -35,13 +35,12 @@ import org.bukkit.projectiles.ProjectileSource;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class FireBall implements Listener {
-  private Map<Player, Long> cooldown = new HashMap<>();
+  private final Map<Player, Long> cooldown = new HashMap<>();
   
   @EventHandler
   public void onStart(BedwarsGameStartEvent e) {
     for (Player player : e.getGame().getPlayers()) {
-      if (this.cooldown.containsKey(player))
-        this.cooldown.remove(player); 
+      this.cooldown.remove(player);
     } 
   }
   
@@ -57,21 +56,21 @@ public class FireBall implements Listener {
       return; 
     if (game.getState() == GameState.RUNNING && (
       e.getAction().equals(Action.RIGHT_CLICK_AIR) || e.getAction().equals(Action.RIGHT_CLICK_BLOCK)) && e.getItem().getType() == (new ItemStack(Material.FIREBALL)).getType())
-      if (System.currentTimeMillis() - ((Long)this.cooldown.getOrDefault(player, Long.valueOf(0L))).longValue() <= (Config.items_fireball_cooldown * 1000)) {
+      if (System.currentTimeMillis() - this.cooldown.getOrDefault(player, Long.valueOf(0L)).longValue() <= (Config.items_fireball_cooldown * 1000)) {
         e.setCancelled(true);
-        player.sendMessage(Config.message_cooling.replace("{time}", (new StringBuilder(String.valueOf(((Config.items_fireball_cooldown * 1000) - System.currentTimeMillis() + ((Long)this.cooldown.getOrDefault(player, Long.valueOf(0L))).longValue()) / 1000L + 1L))).toString()));
+        player.sendMessage(Config.message_cooling.replace("{time}", (new StringBuilder(String.valueOf(((Config.items_fireball_cooldown * 1000) - System.currentTimeMillis() + this.cooldown.getOrDefault(player, Long.valueOf(0L)).longValue()) / 1000L + 1L))).toString()));
       } else {
         ItemStack stack = e.getItem();
         BedwarsUseItemEvent bedwarsUseItemEvent = new BedwarsUseItemEvent(game, player, EnumItem.FireBall, stack);
-        Bukkit.getPluginManager().callEvent((Event)bedwarsUseItemEvent);
+        Bukkit.getPluginManager().callEvent(bedwarsUseItemEvent);
         if (!bedwarsUseItemEvent.isCancelled()) {
           this.cooldown.put(player, Long.valueOf(System.currentTimeMillis()));
-          Fireball fireball = (Fireball)player.launchProjectile(Fireball.class);
+          Fireball fireball = player.launchProjectile(Fireball.class);
           fireball.setYield(3.0F);
           fireball.setBounce(false);
-          fireball.setShooter((ProjectileSource)player);
+          fireball.setShooter(player);
           fireball.setIsIncendiary(false);
-          fireball.setMetadata("FireBall", (MetadataValue)new FixedMetadataValue(Main.getInstance(), String.valueOf(game.getName()) + "." + player.getName()));
+          fireball.setMetadata("FireBall", new FixedMetadataValue(Main.getInstance(), game.getName() + "." + player.getName()));
           TakeItemUtil.TakeItem(player, stack);
         } 
         e.setCancelled(true);
@@ -111,7 +110,7 @@ public class FireBall implements Listener {
         if (game != null && game.getState() == GameState.RUNNING && !game.isSpectator(player) && player.getGameMode() != GameMode.SPECTATOR && player.getGameMode() != GameMode.CREATIVE && 
           e.getEntity().getWorld() == player.getWorld() && 
           player.getLocation().distance(e.getEntity().getLocation()) <= 4.0D) {
-          player.damage(Config.items_fireball_damage, (Entity)fireball);
+          player.damage(Config.items_fireball_damage, fireball);
           player.setAllowFlight(true);
           player.setVelocity(LocationUtil.getPosition(player.getLocation(), fireball.getLocation(), 1.5D).multiply(Config.items_fireball_velocity));
           setAllowFlight(player);

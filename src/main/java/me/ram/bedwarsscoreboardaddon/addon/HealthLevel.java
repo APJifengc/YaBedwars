@@ -16,7 +16,7 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class HealthLevel {
-  private Map<String, String> leveltime;
+  private final Map<String, String> leveltime;
   
   private Integer nowhealth;
   
@@ -46,7 +46,7 @@ public class HealthLevel {
                 player.sendMessage(Config.sethealth_start_message); 
             }  
         }
-      }).runTaskLater((Plugin)Main.getInstance(), 0L);
+      }).runTaskLater(Main.getInstance(), 0L);
     for (String sh : Main.getInstance().getConfig().getConfigurationSection("sethealth").getKeys(false)) {
       if (!sh.equals("start"))
         (new BukkitRunnable() {
@@ -75,7 +75,7 @@ public class HealthLevel {
                 if (game.getTimeLeft() <= this.gametime) {
                   this.isExecuted = Boolean.valueOf(true);
                   BoardAddonSetHealthEvent setHealthEvent = new BoardAddonSetHealthEvent(game);
-                  Bukkit.getPluginManager().callEvent((Event)setHealthEvent);
+                  Bukkit.getPluginManager().callEvent(setHealthEvent);
                   if (setHealthEvent.isCancelled()) {
                     cancel();
                     return;
@@ -102,7 +102,7 @@ public class HealthLevel {
                 cancel();
               } 
             }
-          }).runTaskTimer((Plugin)Main.getInstance(), 0L, 21L); 
+          }).runTaskTimer(Main.getInstance(), 0L, 21L);
     } 
   }
 }

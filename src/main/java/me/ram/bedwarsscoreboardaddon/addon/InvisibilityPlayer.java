@@ -23,11 +23,11 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
 public class InvisibilityPlayer {
-  private Game game;
+  private final Game game;
   
-  private List<UUID> players;
+  private final List<UUID> players;
   
-  private List<UUID> hplayers;
+  private final List<UUID> hplayers;
   
   public InvisibilityPlayer(Game game) {
     this.game = game;
@@ -75,9 +75,9 @@ public class InvisibilityPlayer {
                           0.05D, (Math.random() - Math.random()) * 0.5D), 
                         Effect.FOOTSTEP, 0); 
                 }
-              }).runTaskLater((Plugin)Main.getInstance(), 8L); 
+              }).runTaskLater(Main.getInstance(), 8L);
         }
-      }).runTaskTimer((Plugin)Main.getInstance(), 1L, 8L);
+      }).runTaskTimer(Main.getInstance(), 1L, 8L);
     (new BukkitRunnable() {
         public void run() {
           if (InvisibilityPlayer.this.game.getState() != GameState.RUNNING || !player.isOnline() || 
@@ -100,19 +100,19 @@ public class InvisibilityPlayer {
           if (InvisibilityPlayer.this.hplayers.contains(player.getUniqueId()))
             InvisibilityPlayer.this.hideArmor(player); 
         }
-      }).runTaskTimer((Plugin)Main.getInstance(), 2L, 1L);
+      }).runTaskTimer(Main.getInstance(), 2L, 1L);
   }
   
   private void hideArmor(Player player) {
     if (BedwarsRel.getInstance().getCurrentVersion().startsWith("v1_8")) {
       try {
-        Constructor constructor = Utils.getNMSClass("PacketPlayOutEntityEquipment").getConstructor(new Class[] { int.class, 
-              int.class, Utils.getNMSClass("ItemStack") });
-        Object as = Utils.getClass("inventory.CraftItemStack").getMethod("asNMSCopy", new Class[] { ItemStack.class }).invoke(null, new Object[] { new ItemStack(Material.AIR) });
-        Object packet1 = constructor.newInstance(new Object[] { Integer.valueOf(player.getEntityId()), Integer.valueOf(1), as });
-        Object packet2 = constructor.newInstance(new Object[] { Integer.valueOf(player.getEntityId()), Integer.valueOf(2), as });
-        Object packet3 = constructor.newInstance(new Object[] { Integer.valueOf(player.getEntityId()), Integer.valueOf(3), as });
-        Object packet4 = constructor.newInstance(new Object[] { Integer.valueOf(player.getEntityId()), Integer.valueOf(4), as });
+        Constructor constructor = Utils.getNMSClass("PacketPlayOutEntityEquipment").getConstructor(int.class,
+                int.class, Utils.getNMSClass("ItemStack"));
+        Object as = Utils.getClass("inventory.CraftItemStack").getMethod("asNMSCopy", new Class[] { ItemStack.class }).invoke(null, new ItemStack(Material.AIR));
+        Object packet1 = constructor.newInstance(Integer.valueOf(player.getEntityId()), Integer.valueOf(1), as);
+        Object packet2 = constructor.newInstance(Integer.valueOf(player.getEntityId()), Integer.valueOf(2), as);
+        Object packet3 = constructor.newInstance(Integer.valueOf(player.getEntityId()), Integer.valueOf(3), as);
+        Object packet4 = constructor.newInstance(Integer.valueOf(player.getEntityId()), Integer.valueOf(4), as);
         List<Player> players = this.game.getPlayerTeam(player).getPlayers();
         for (Player p : this.game.getPlayers()) {
           if (p != player && !players.contains(p)) {
@@ -125,17 +125,17 @@ public class InvisibilityPlayer {
       } catch (Exception exception) {}
     } else {
       try {
-        Constructor constructor = Utils.getNMSClass("PacketPlayOutEntityEquipment").getConstructor(new Class[] { int.class, 
-              Utils.getNMSClass("EnumItemSlot"), Utils.getNMSClass("ItemStack") });
-        Object as = Utils.getClass("inventory.CraftItemStack").getMethod("asNMSCopy", new Class[] { ItemStack.class }).invoke(null, new Object[] { new ItemStack(Material.AIR) });
-        Object packet1 = constructor.newInstance(new Object[] { Integer.valueOf(player.getEntityId()), 
-              Utils.getNMSClass("EnumItemSlot").getField("FEET").get(null), as });
-        Object packet2 = constructor.newInstance(new Object[] { Integer.valueOf(player.getEntityId()), 
-              Utils.getNMSClass("EnumItemSlot").getField("LEGS").get(null), as });
-        Object packet3 = constructor.newInstance(new Object[] { Integer.valueOf(player.getEntityId()), 
-              Utils.getNMSClass("EnumItemSlot").getField("CHEST").get(null), as });
-        Object packet4 = constructor.newInstance(new Object[] { Integer.valueOf(player.getEntityId()), 
-              Utils.getNMSClass("EnumItemSlot").getField("HEAD").get(null), as });
+        Constructor constructor = Utils.getNMSClass("PacketPlayOutEntityEquipment").getConstructor(int.class,
+                Utils.getNMSClass("EnumItemSlot"), Utils.getNMSClass("ItemStack"));
+        Object as = Utils.getClass("inventory.CraftItemStack").getMethod("asNMSCopy", new Class[] { ItemStack.class }).invoke(null, new ItemStack(Material.AIR));
+        Object packet1 = constructor.newInstance(Integer.valueOf(player.getEntityId()),
+                Utils.getNMSClass("EnumItemSlot").getField("FEET").get(null), as);
+        Object packet2 = constructor.newInstance(Integer.valueOf(player.getEntityId()),
+                Utils.getNMSClass("EnumItemSlot").getField("LEGS").get(null), as);
+        Object packet3 = constructor.newInstance(Integer.valueOf(player.getEntityId()),
+                Utils.getNMSClass("EnumItemSlot").getField("CHEST").get(null), as);
+        Object packet4 = constructor.newInstance(Integer.valueOf(player.getEntityId()),
+                Utils.getNMSClass("EnumItemSlot").getField("HEAD").get(null), as);
         List<Player> players = this.game.getPlayerTeam(player).getPlayers();
         for (Player p : this.game.getPlayers()) {
           if (p != player && !players.contains(p)) {
@@ -152,18 +152,18 @@ public class InvisibilityPlayer {
   private void showArmor(Player player) {
     if (BedwarsRel.getInstance().getCurrentVersion().startsWith("v1_8")) {
       try {
-        Constructor constructor = Utils.getNMSClass("PacketPlayOutEntityEquipment").getConstructor(new Class[] { int.class, 
-              int.class, Utils.getNMSClass("ItemStack") });
-        Object as = Utils.getClass("inventory.CraftItemStack").getMethod("asNMSCopy", new Class[] { ItemStack.class }).invoke(null, new Object[] { new ItemStack(Material.AIR) });
-        Method method = Utils.getClass("inventory.CraftItemStack").getMethod("asNMSCopy", new Class[] { ItemStack.class });
-        Object packet1 = constructor.newInstance(new Object[] { Integer.valueOf(player.getEntityId()), Integer.valueOf(1), 
-              method.invoke(null, new Object[] { player.getInventory().getBoots() }) });
-        Object packet2 = constructor.newInstance(new Object[] { Integer.valueOf(player.getEntityId()), Integer.valueOf(2), 
-              method.invoke(null, new Object[] { player.getInventory().getLeggings() }) });
-        Object packet3 = constructor.newInstance(new Object[] { Integer.valueOf(player.getEntityId()), Integer.valueOf(3), 
-              method.invoke(null, new Object[] { player.getInventory().getChestplate() }) });
-        Object packet4 = constructor.newInstance(new Object[] { Integer.valueOf(player.getEntityId()), Integer.valueOf(4), 
-              method.invoke(null, new Object[] { player.getInventory().getHelmet() }) });
+        Constructor constructor = Utils.getNMSClass("PacketPlayOutEntityEquipment").getConstructor(int.class,
+                int.class, Utils.getNMSClass("ItemStack"));
+        Object as = Utils.getClass("inventory.CraftItemStack").getMethod("asNMSCopy", new Class[] { ItemStack.class }).invoke(null, new ItemStack(Material.AIR));
+        Method method = Utils.getClass("inventory.CraftItemStack").getMethod("asNMSCopy", ItemStack.class);
+        Object packet1 = constructor.newInstance(Integer.valueOf(player.getEntityId()), Integer.valueOf(1),
+                method.invoke(null, player.getInventory().getBoots()));
+        Object packet2 = constructor.newInstance(Integer.valueOf(player.getEntityId()), Integer.valueOf(2),
+                method.invoke(null, player.getInventory().getLeggings()));
+        Object packet3 = constructor.newInstance(Integer.valueOf(player.getEntityId()), Integer.valueOf(3),
+                method.invoke(null, player.getInventory().getChestplate()));
+        Object packet4 = constructor.newInstance(Integer.valueOf(player.getEntityId()), Integer.valueOf(4),
+                method.invoke(null, player.getInventory().getHelmet()));
         List<Player> players = this.game.getPlayerTeam(player).getPlayers();
         for (Player p : this.game.getPlayers()) {
           if (p != player && !players.contains(p)) {
@@ -176,22 +176,22 @@ public class InvisibilityPlayer {
       } catch (Exception exception) {}
     } else {
       try {
-        Constructor constructor = Utils.getNMSClass("PacketPlayOutEntityEquipment").getConstructor(new Class[] { int.class, 
-              Utils.getNMSClass("EnumItemSlot"), Utils.getNMSClass("ItemStack") });
-        Object as = Utils.getClass("inventory.CraftItemStack").getMethod("asNMSCopy", new Class[] { ItemStack.class }).invoke(null, new Object[] { new ItemStack(Material.AIR) });
-        Method method = Utils.getClass("inventory.CraftItemStack").getMethod("asNMSCopy", new Class[] { ItemStack.class });
-        Object packet1 = constructor.newInstance(new Object[] { Integer.valueOf(player.getEntityId()), 
-              Utils.getNMSClass("EnumItemSlot").getField("FEET").get(null), 
-              method.invoke(null, new Object[] { player.getInventory().getBoots() }) });
-        Object packet2 = constructor.newInstance(new Object[] { Integer.valueOf(player.getEntityId()), 
-              Utils.getNMSClass("EnumItemSlot").getField("LEGS").get(null), 
-              method.invoke(null, new Object[] { player.getInventory().getLeggings() }) });
-        Object packet3 = constructor.newInstance(new Object[] { Integer.valueOf(player.getEntityId()), 
-              Utils.getNMSClass("EnumItemSlot").getField("CHEST").get(null), 
-              method.invoke(null, new Object[] { player.getInventory().getChestplate() }) });
-        Object packet4 = constructor.newInstance(new Object[] { Integer.valueOf(player.getEntityId()), 
-              Utils.getNMSClass("EnumItemSlot").getField("HEAD").get(null), 
-              method.invoke(null, new Object[] { player.getInventory().getHelmet() }) });
+        Constructor constructor = Utils.getNMSClass("PacketPlayOutEntityEquipment").getConstructor(int.class,
+                Utils.getNMSClass("EnumItemSlot"), Utils.getNMSClass("ItemStack"));
+        Object as = Utils.getClass("inventory.CraftItemStack").getMethod("asNMSCopy", new Class[] { ItemStack.class }).invoke(null, new ItemStack(Material.AIR));
+        Method method = Utils.getClass("inventory.CraftItemStack").getMethod("asNMSCopy", ItemStack.class);
+        Object packet1 = constructor.newInstance(Integer.valueOf(player.getEntityId()),
+                Utils.getNMSClass("EnumItemSlot").getField("FEET").get(null),
+                method.invoke(null, player.getInventory().getBoots()));
+        Object packet2 = constructor.newInstance(Integer.valueOf(player.getEntityId()),
+                Utils.getNMSClass("EnumItemSlot").getField("LEGS").get(null),
+                method.invoke(null, player.getInventory().getLeggings()));
+        Object packet3 = constructor.newInstance(Integer.valueOf(player.getEntityId()),
+                Utils.getNMSClass("EnumItemSlot").getField("CHEST").get(null),
+                method.invoke(null, player.getInventory().getChestplate()));
+        Object packet4 = constructor.newInstance(Integer.valueOf(player.getEntityId()),
+                Utils.getNMSClass("EnumItemSlot").getField("HEAD").get(null),
+                method.invoke(null, player.getInventory().getHelmet()));
         List<Player> players = this.game.getPlayerTeam(player).getPlayers();
         for (Player p : this.game.getPlayers()) {
           if (p != player && !players.contains(p)) {

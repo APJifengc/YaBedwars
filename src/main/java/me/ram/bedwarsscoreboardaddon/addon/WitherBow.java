@@ -55,9 +55,9 @@ public class WitherBow implements Listener {
     String secStr = "";
     min = (int)Math.floor((time / 60));
     sec = time % 60;
-    minStr = (min < 10) ? ("0" + String.valueOf(min)) : String.valueOf(min);
-    secStr = (sec < 10) ? ("0" + String.valueOf(sec)) : String.valueOf(sec);
-    return String.valueOf(minStr) + ":" + secStr;
+    minStr = (min < 10) ? ("0" + min) : String.valueOf(min);
+    secStr = (sec < 10) ? ("0" + sec) : String.valueOf(sec);
+    return minStr + ":" + secStr;
   }
   
   @EventHandler
@@ -72,7 +72,7 @@ public class WitherBow implements Listener {
           if (e.getGame().getState() != GameState.WAITING && e.getGame().getState() == GameState.RUNNING) {
             for (Player player : e.getGame().getPlayers()) {
               int wither = e.getGame().getTimeLeft() - Config.witherbow_gametime;
-              String format = String.valueOf(wither / 60) + ":" + ((wither % 60 < 10) ? ("0" + (wither % 60)) : wither % 60);
+              String format = wither / 60 + ":" + ((wither % 60 < 10) ? ("0" + (wither % 60)) : wither % 60);
               String bowtime = null;
               if (wither > 0)
                 bowtime = format; 
@@ -97,54 +97,54 @@ public class WitherBow implements Listener {
                   .replace("{game}", e.getGame().getName()).replace("{date}", WitherBow.this.getDate())
                   .replace("{online}", (new StringBuilder(String.valueOf(Bukkit.getOnlinePlayers().size()))).toString());
                 if (WitherBow.placeholdermanager.containsKey(game.getName())) {
-                  Iterator<String> iterator = ((PlaceholderManager)WitherBow.placeholdermanager.get(game.getName())).getGamePlaceholder().keySet().iterator();
+                  Iterator<String> iterator = WitherBow.placeholdermanager.get(game.getName()).getGamePlaceholder().keySet().iterator();
                   while (iterator.hasNext()) {
                     String placeholder = iterator.next();
-                    ab = ab.replace(placeholder, (CharSequence)((PlaceholderManager)WitherBow.placeholdermanager.get(game.getName()))
+                    ab = ab.replace(placeholder, WitherBow.placeholdermanager.get(game.getName())
                         .getGamePlaceholder().get(placeholder));
                   } 
                   if (playerteam == null) {
-                    iterator = ((PlaceholderManager)WitherBow.placeholdermanager.get(game.getName())).getTeamPlaceholders().keySet().iterator();
+                    iterator = WitherBow.placeholdermanager.get(game.getName()).getTeamPlaceholders().keySet().iterator();
                     while (iterator.hasNext()) {
                       String teamname = iterator.next();
-                      Iterator<String> iterator1 = ((Map)((PlaceholderManager)WitherBow.placeholdermanager.get(game.getName())).getTeamPlaceholders().get(teamname)).keySet().iterator();
+                      Iterator<String> iterator1 = ((Map) WitherBow.placeholdermanager.get(game.getName()).getTeamPlaceholders().get(teamname)).keySet().iterator();
                       while (iterator1.hasNext()) {
                         String placeholder = iterator1.next();
                         ab = ab.replace(placeholder, "");
                       } 
                     } 
-                  } else if (((PlaceholderManager)WitherBow.placeholdermanager.get(game.getName())).getTeamPlaceholders()
+                  } else if (WitherBow.placeholdermanager.get(game.getName()).getTeamPlaceholders()
                     .containsKey(playerteam.getName())) {
-                    iterator = ((PlaceholderManager)WitherBow.placeholdermanager.get(game.getName())).getTeamPlaceholder(playerteam.getName()).keySet().iterator();
+                    iterator = WitherBow.placeholdermanager.get(game.getName()).getTeamPlaceholder(playerteam.getName()).keySet().iterator();
                     while (iterator.hasNext()) {
                       String placeholder = iterator.next();
-                      ab = ab.replace(placeholder, (CharSequence)((PlaceholderManager)WitherBow.placeholdermanager.get(game.getName()))
+                      ab = ab.replace(placeholder, WitherBow.placeholdermanager.get(game.getName())
                           .getTeamPlaceholder(playerteam.getName()).get(placeholder));
                     } 
                   } else {
-                    iterator = ((PlaceholderManager)WitherBow.placeholdermanager.get(game.getName())).getTeamPlaceholders().keySet().iterator();
+                    iterator = WitherBow.placeholdermanager.get(game.getName()).getTeamPlaceholders().keySet().iterator();
                     while (iterator.hasNext()) {
                       String teamname = iterator.next();
-                      Iterator<String> iterator1 = ((Map)((PlaceholderManager)WitherBow.placeholdermanager.get(game.getName())).getTeamPlaceholders().get(teamname)).keySet().iterator();
+                      Iterator<String> iterator1 = ((Map) WitherBow.placeholdermanager.get(game.getName()).getTeamPlaceholders().get(teamname)).keySet().iterator();
                       while (iterator1.hasNext()) {
                         String placeholder = iterator1.next();
                         ab = ab.replace(placeholder, "");
                       } 
                     } 
                   } 
-                  if (((PlaceholderManager)WitherBow.placeholdermanager.get(game.getName())).getPlayerPlaceholders()
+                  if (WitherBow.placeholdermanager.get(game.getName()).getPlayerPlaceholders()
                     .containsKey(player.getName())) {
-                    iterator = ((PlaceholderManager)WitherBow.placeholdermanager.get(game.getName())).getPlayerPlaceholder(player.getName()).keySet().iterator();
+                    iterator = WitherBow.placeholdermanager.get(game.getName()).getPlayerPlaceholder(player.getName()).keySet().iterator();
                     while (iterator.hasNext()) {
                       String placeholder = iterator.next();
-                      ab = ab.replace(placeholder, (CharSequence)((PlaceholderManager)WitherBow.placeholdermanager.get(game.getName()))
+                      ab = ab.replace(placeholder, WitherBow.placeholdermanager.get(game.getName())
                           .getPlayerPlaceholder(player.getName()).get(placeholder));
                     } 
                   } else {
-                    iterator = ((PlaceholderManager)WitherBow.placeholdermanager.get(game.getName())).getPlayerPlaceholders().keySet().iterator();
+                    iterator = WitherBow.placeholdermanager.get(game.getName()).getPlayerPlaceholders().keySet().iterator();
                     while (iterator.hasNext()) {
                       String playername = iterator.next();
-                      Iterator<String> iterator1 = ((Map)((PlaceholderManager)WitherBow.placeholdermanager.get(game.getName())).getPlayerPlaceholders().get(playername)).keySet().iterator();
+                      Iterator<String> iterator1 = ((Map) WitherBow.placeholdermanager.get(game.getName()).getPlayerPlaceholders().get(playername)).keySet().iterator();
                       while (iterator1.hasNext()) {
                         String placeholder = iterator1.next();
                         ab = ab.replace(placeholder, "");
@@ -168,7 +168,7 @@ public class WitherBow implements Listener {
             cancel();
           } 
         }
-      }).runTaskTimer((Plugin)Main.getInstance(), 0L, 21L);
+      }).runTaskTimer(Main.getInstance(), 0L, 21L);
   }
   
   @EventHandler
@@ -181,10 +181,10 @@ public class WitherBow implements Listener {
       return; 
     if (getGame.getTimeLeft() <= Config.witherbow_gametime && Config.witherbow_enabled && 
       getGame.getPlayerTeam(player) != null && getGame.getState() == GameState.RUNNING) {
-      WitherSkull skull = (WitherSkull)player.launchProjectile(WitherSkull.class);
+      WitherSkull skull = player.launchProjectile(WitherSkull.class);
       BoardAddonPlayerShootWitherBowEvent shootWitherBowEvent = new BoardAddonPlayerShootWitherBowEvent(getGame, 
           player, skull);
-      BedwarsRel.getInstance().getServer().getPluginManager().callEvent((Event)shootWitherBowEvent);
+      BedwarsRel.getInstance().getServer().getPluginManager().callEvent(shootWitherBowEvent);
       if (shootWitherBowEvent.isCancelled()) {
         skull.remove();
         return;
@@ -193,7 +193,7 @@ public class WitherBow implements Listener {
       PlaySound.playSound(player, Config.play_sound_sound_witherbow);
       skull.setYield(4.0F);
       skull.setVelocity(e.getProjectile().getVelocity());
-      skull.setShooter((ProjectileSource)player);
+      skull.setShooter(player);
       e.setCancelled(true);
       player.updateInventory();
     } 

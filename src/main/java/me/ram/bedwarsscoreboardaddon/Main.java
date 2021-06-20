@@ -58,7 +58,7 @@ public class Main extends JavaPlugin {
   
   public void onEnable() {
     if (!getDescription().getVersion().equals(getVersion())) {
-      Bukkit.getPluginManager().disablePlugin((Plugin)this);
+      Bukkit.getPluginManager().disablePlugin(this);
       return;
     } 
     instance = this;
@@ -85,7 +85,7 @@ public class Main extends JavaPlugin {
             Main.this.init();
           } 
         }
-      }).runTaskTimer((Plugin)this, 0L, 0L);
+      }).runTaskTimer(this, 0L, 0L);
   }
   
   private void init() {
@@ -94,78 +94,78 @@ public class Main extends JavaPlugin {
       debug = Boolean.valueOf(getConfig().getBoolean("init_debug"));
     } catch (Exception exception) {}
     String prefix = "[" + getDescription().getName() + "] ";
-    Bukkit.getConsoleSender().sendMessage(String.valueOf(prefix) + "§f开始加载插件...");
+    Bukkit.getConsoleSender().sendMessage(prefix + "§f开始加载插件...");
     if (Bukkit.getPluginManager().getPlugin("BedwarsRel") != null) {
       if (!Bukkit.getPluginManager().getPlugin("BedwarsRel").getDescription().getVersion().equals("1.3.6")) {
-        Bukkit.getConsoleSender().sendMessage(String.valueOf(prefix) + "§c错误: §fBedwarsRel版本过低！");
-        Bukkit.getConsoleSender().sendMessage(String.valueOf(prefix) + "§c插件加载失败！");
-        Bukkit.getPluginManager().disablePlugin((Plugin)instance);
+        Bukkit.getConsoleSender().sendMessage(prefix + "§c错误: §fBedwarsRel版本过低！");
+        Bukkit.getConsoleSender().sendMessage(prefix + "§c插件加载失败！");
+        Bukkit.getPluginManager().disablePlugin(instance);
         return;
       } 
     } else {
-      Bukkit.getConsoleSender().sendMessage(String.valueOf(prefix) + "§c错误: §f缺少必要前置 §aBedwarsRel");
-      Bukkit.getConsoleSender().sendMessage(String.valueOf(prefix) + "§c插件加载失败！");
-      Bukkit.getPluginManager().disablePlugin((Plugin)instance);
+      Bukkit.getConsoleSender().sendMessage(prefix + "§c错误: §f缺少必要前置 §aBedwarsRel");
+      Bukkit.getConsoleSender().sendMessage(prefix + "§c插件加载失败！");
+      Bukkit.getPluginManager().disablePlugin(instance);
       return;
     } 
     if (Bukkit.getPluginManager().getPlugin("Citizens") == null) {
-      Bukkit.getConsoleSender().sendMessage(String.valueOf(prefix) + "§c错误: §f缺少必要前置 §aCitizens");
-      Bukkit.getConsoleSender().sendMessage(String.valueOf(prefix) + "§c插件加载失败！");
-      Bukkit.getPluginManager().disablePlugin((Plugin)instance);
+      Bukkit.getConsoleSender().sendMessage(prefix + "§c错误: §f缺少必要前置 §aCitizens");
+      Bukkit.getConsoleSender().sendMessage(prefix + "§c插件加载失败！");
+      Bukkit.getPluginManager().disablePlugin(instance);
       return;
     } 
     if (Bukkit.getPluginManager().getPlugin("ProtocolLib") == null) {
-      Bukkit.getConsoleSender().sendMessage(String.valueOf(prefix) + "§c错误: §f缺少必要前置 §aProtocolLib");
-      Bukkit.getConsoleSender().sendMessage(String.valueOf(prefix) + "§c插件加载失败！");
-      Bukkit.getPluginManager().disablePlugin((Plugin)instance);
+      Bukkit.getConsoleSender().sendMessage(prefix + "§c错误: §f缺少必要前置 §aProtocolLib");
+      Bukkit.getConsoleSender().sendMessage(prefix + "§c插件加载失败！");
+      Bukkit.getPluginManager().disablePlugin(instance);
       return;
     } 
     try {
       Config.loadConfig();
     } catch (Exception e) {
-      Bukkit.getConsoleSender().sendMessage(String.valueOf(prefix) + "§c错误: §f配置文件加载失败！");
-      Bukkit.getConsoleSender().sendMessage(String.valueOf(prefix) + "§c插件加载失败！");
-      Bukkit.getPluginManager().disablePlugin((Plugin)instance);
+      Bukkit.getConsoleSender().sendMessage(prefix + "§c错误: §f配置文件加载失败！");
+      Bukkit.getConsoleSender().sendMessage(prefix + "§c插件加载失败！");
+      Bukkit.getPluginManager().disablePlugin(instance);
       if (debug.booleanValue())
         e.printStackTrace(); 
       return;
     } 
     try {
-      Bukkit.getConsoleSender().sendMessage(String.valueOf(prefix) + "§f正在注册监听器...");
+      Bukkit.getConsoleSender().sendMessage(prefix + "§f正在注册监听器...");
       registerEvents();
-      Bukkit.getConsoleSender().sendMessage(String.valueOf(prefix) + "§a监听器注册成功！");
+      Bukkit.getConsoleSender().sendMessage(prefix + "§a监听器注册成功！");
     } catch (Exception e) {
-      Bukkit.getConsoleSender().sendMessage(String.valueOf(prefix) + "§c错误: §f监听器注册失败！");
-      Bukkit.getConsoleSender().sendMessage(String.valueOf(prefix) + "§c插件加载失败！");
-      Bukkit.getPluginManager().disablePlugin((Plugin)instance);
+      Bukkit.getConsoleSender().sendMessage(prefix + "§c错误: §f监听器注册失败！");
+      Bukkit.getConsoleSender().sendMessage(prefix + "§c插件加载失败！");
+      Bukkit.getPluginManager().disablePlugin(instance);
       if (debug.booleanValue())
         e.printStackTrace(); 
       return;
     } 
     try {
-      Bukkit.getConsoleSender().sendMessage(String.valueOf(prefix) + "§f正在注册指令...");
-      Bukkit.getPluginCommand("bedwarsscoreboardaddon").setExecutor((CommandExecutor)new Commands());
-      Bukkit.getPluginCommand("bedwarsscoreboardaddon").setTabCompleter((TabCompleter)new CommandTabCompleter());
-      Bukkit.getPluginCommand("bw").setTabCompleter((TabCompleter)new BedwarsRelCommandTabCompleter());
-      Bukkit.getConsoleSender().sendMessage(String.valueOf(prefix) + "§a指令注册成功！");
+      Bukkit.getConsoleSender().sendMessage(prefix + "§f正在注册指令...");
+      Bukkit.getPluginCommand("bedwarsscoreboardaddon").setExecutor(new Commands());
+      Bukkit.getPluginCommand("bedwarsscoreboardaddon").setTabCompleter(new CommandTabCompleter());
+      Bukkit.getPluginCommand("bw").setTabCompleter(new BedwarsRelCommandTabCompleter());
+      Bukkit.getConsoleSender().sendMessage(prefix + "§a指令注册成功！");
     } catch (Exception e) {
-      Bukkit.getConsoleSender().sendMessage(String.valueOf(prefix) + "§c错误: §f指令注册失败！");
-      Bukkit.getConsoleSender().sendMessage(String.valueOf(prefix) + "§c插件加载失败！");
-      Bukkit.getPluginManager().disablePlugin((Plugin)instance);
+      Bukkit.getConsoleSender().sendMessage(prefix + "§c错误: §f指令注册失败！");
+      Bukkit.getConsoleSender().sendMessage(prefix + "§c插件加载失败！");
+      Bukkit.getPluginManager().disablePlugin(instance);
       if (debug.booleanValue())
         e.printStackTrace(); 
       return;
     } 
-    Bukkit.getConsoleSender().sendMessage(String.valueOf(prefix) + "§a插件加载成功！");
+    Bukkit.getConsoleSender().sendMessage(prefix + "§a插件加载成功！");
     try {
-      Metrics metrics = new Metrics((Plugin)this);
-      metrics.addCustomChart((Metrics.CustomChart)new Metrics.SimplePie("pluginPrefix", new Callable<String>() {
+      Metrics metrics = new Metrics(this);
+      metrics.addCustomChart(new Metrics.SimplePie("pluginPrefix", new Callable<String>() {
               public String call() throws Exception {
                 return BedwarsRel.getInstance().getConfig().getString("chat-prefix", 
                     ChatColor.GRAY + "[" + ChatColor.AQUA + "BedWars" + ChatColor.GRAY + "]");
               }
             }));
-      metrics.addCustomChart((Metrics.CustomChart)new Metrics.SimplePie("language", new Callable<String>() {
+      metrics.addCustomChart(new Metrics.SimplePie("language", new Callable<String>() {
               public String call() throws Exception {
                 return "Chinese";
               }
@@ -174,20 +174,20 @@ public class Main extends JavaPlugin {
   }
   
   private void registerEvents() {
-    Bukkit.getPluginManager().registerEvents((Listener)new EventListener(), (Plugin)this);
-    Bukkit.getPluginManager().registerEvents((Listener)new LobbyScoreBoard(), (Plugin)this);
-    Bukkit.getPluginManager().registerEvents((Listener)new SpawnNoBuild(), (Plugin)this);
-    Bukkit.getPluginManager().registerEvents((Listener)new UpdateCheck(), (Plugin)this);
-    Bukkit.getPluginManager().registerEvents((Listener)new ChatFormat(), (Plugin)this);
-    Bukkit.getPluginManager().registerEvents((Listener)new HidePlayer(), (Plugin)this);
-    Bukkit.getPluginManager().registerEvents((Listener)new WitherBow(), (Plugin)this);
-    Bukkit.getPluginManager().registerEvents((Listener)new DeathItem(), (Plugin)this);
-    Bukkit.getPluginManager().registerEvents((Listener)new Spectator(), (Plugin)this);
-    Bukkit.getPluginManager().registerEvents((Listener)new GiveItem(), (Plugin)this);
-    Bukkit.getPluginManager().registerEvents((Listener)new TimeTask(), (Plugin)this);
-    Bukkit.getPluginManager().registerEvents((Listener)new EditGame(), (Plugin)this);
-    Bukkit.getPluginManager().registerEvents((Listener)new Compass(), (Plugin)this);
-    Bukkit.getPluginManager().registerEvents((Listener)new Title(), (Plugin)this);
-    Bukkit.getPluginManager().registerEvents((Listener)new Shop(), (Plugin)this);
+    Bukkit.getPluginManager().registerEvents(new EventListener(), this);
+    Bukkit.getPluginManager().registerEvents(new LobbyScoreBoard(), this);
+    Bukkit.getPluginManager().registerEvents(new SpawnNoBuild(), this);
+    Bukkit.getPluginManager().registerEvents(new UpdateCheck(), this);
+    Bukkit.getPluginManager().registerEvents(new ChatFormat(), this);
+    Bukkit.getPluginManager().registerEvents(new HidePlayer(), this);
+    Bukkit.getPluginManager().registerEvents(new WitherBow(), this);
+    Bukkit.getPluginManager().registerEvents(new DeathItem(), this);
+    Bukkit.getPluginManager().registerEvents(new Spectator(), this);
+    Bukkit.getPluginManager().registerEvents(new GiveItem(), this);
+    Bukkit.getPluginManager().registerEvents(new TimeTask(), this);
+    Bukkit.getPluginManager().registerEvents(new EditGame(), this);
+    Bukkit.getPluginManager().registerEvents(new Compass(), this);
+    Bukkit.getPluginManager().registerEvents(new Title(), this);
+    Bukkit.getPluginManager().registerEvents(new Shop(), this);
   }
 }

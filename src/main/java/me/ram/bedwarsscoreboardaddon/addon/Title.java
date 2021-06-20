@@ -26,7 +26,7 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class Title implements Listener {
-  private Map<String, Integer> Times = new HashMap<>();
+  private final Map<String, Integer> Times = new HashMap<>();
   
   @EventHandler
   public void start(final BedwarsGameStartedEvent e) {
@@ -49,13 +49,13 @@ public class Title implements Listener {
               cancel();
             } 
           }
-        }).runTaskTimer((Plugin)Main.getInstance(), delay, 0L);
+        }).runTaskTimer(Main.getInstance(), delay, 0L);
     } 
     (new BukkitRunnable() {
         public void run() {
           PlaySound.playSound(e.getGame(), Config.play_sound_sound_start);
         }
-      }).runTaskLater((Plugin)Main.getInstance(), 30L);
+      }).runTaskLater(Main.getInstance(), 30L);
   }
   
   @EventHandler
@@ -79,15 +79,15 @@ public class Title implements Listener {
               Utils.sendTitle(player, Integer.valueOf(1), Integer.valueOf(80), Integer.valueOf(5), Config.die_out_title_title, 
                   Config.die_out_title_subtitle); 
           }
-        }).runTaskLater((Plugin)Main.getInstance(), 5L); 
+        }).runTaskLater(Main.getInstance(), 5L);
   }
   
   @EventHandler
   public void onOver(final BedwarsGameOverEvent e) {
     if (Config.victory_title_enabled) {
       final Team team = e.getWinner();
-      int time = ((Integer)this.Times.getOrDefault(e.getGame().getName(), Integer.valueOf(3600))).intValue() - e.getGame().getTimeLeft();
-      final String formattime = String.valueOf(time / 60) + ":" + ((time % 60 < 10) ? ("0" + (time % 60)) : time % 60);
+      int time = this.Times.getOrDefault(e.getGame().getName(), Integer.valueOf(3600)).intValue() - e.getGame().getTimeLeft();
+      final String formattime = time / 60 + ":" + ((time % 60 < 10) ? ("0" + (time % 60)) : time % 60);
       (new BukkitRunnable() {
           public void run() {
             if (team != null && team.getPlayers() != null)
@@ -96,7 +96,7 @@ public class Title implements Listener {
                   Utils.clearTitle(player); 
               }  
           }
-        }).runTaskLater((Plugin)Main.getInstance(), 1L);
+        }).runTaskLater(Main.getInstance(), 1L);
       (new BukkitRunnable() {
           int rn = 0;
           
@@ -105,8 +105,7 @@ public class Title implements Listener {
               if (team != null && team.getPlayers() != null) {
                 for (Player player : team.getPlayers()) {
                   if (player.isOnline())
-                    Utils.sendTitle(player, Integer.valueOf(0), Integer.valueOf(80), Integer.valueOf(5), (
-                        (String)Config.victory_title_title.get(this.rn)).replace("{time}", formattime)
+                    Utils.sendTitle(player, Integer.valueOf(0), Integer.valueOf(80), Integer.valueOf(5), Config.victory_title_title.get(this.rn).replace("{time}", formattime)
                         .replace("{color}", (CharSequence)team.getChatColor())
                         .replace("{team}", team.getName()), 
                         Config.victory_title_subtitle.replace("{time}", formattime)
@@ -121,13 +120,13 @@ public class Title implements Listener {
               cancel();
             } 
           }
-        }).runTaskTimer((Plugin)Main.getInstance(), 40L, 0L);
+        }).runTaskTimer(Main.getInstance(), 40L, 0L);
     } 
     (new BukkitRunnable() {
         public void run() {
           PlaySound.playSound(e.getGame(), Config.play_sound_sound_over);
         }
-      }).runTaskLater((Plugin)Main.getInstance(), 40L);
+      }).runTaskLater(Main.getInstance(), 40L);
   }
   
   @EventHandler
@@ -175,7 +174,7 @@ public class Title implements Listener {
                   .replace("{health}", df2.format(dp.getHealth()))
                   .replace("{maxhealth}", df2.format(dp.getMaxHealth())));
             }
-          }).runTaskLater((Plugin)Main.getInstance(), 0L); 
+          }).runTaskLater(Main.getInstance(), 0L);
     } 
   }
   
@@ -221,7 +220,7 @@ public class Title implements Listener {
                         .replace("{health}", df2.format(dp.getHealth()))
                         .replace("{maxhealth}", df2.format(dp.getMaxHealth()))); 
                 }
-              }).runTaskLater((Plugin)Main.getInstance(), 0L); 
+              }).runTaskLater(Main.getInstance(), 0L);
         } 
       } 
     } 

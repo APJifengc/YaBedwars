@@ -32,13 +32,12 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
 public class BridgeEgg implements Listener {
-  private Map<Player, Long> cooldown = new HashMap<>();
+  private final Map<Player, Long> cooldown = new HashMap<>();
   
   @EventHandler
   public void onStart(BedwarsGameStartEvent e) {
     for (Player player : e.getGame().getPlayers()) {
-      if (this.cooldown.containsKey(player))
-        this.cooldown.remove(player); 
+      this.cooldown.remove(player);
     } 
   }
   
@@ -56,18 +55,18 @@ public class BridgeEgg implements Listener {
       return; 
     if (game.getState() != GameState.WAITING && game.getState() == GameState.RUNNING && (
       e.getAction().equals(Action.RIGHT_CLICK_AIR) || e.getAction().equals(Action.RIGHT_CLICK_BLOCK)) && e.getItem().getType() == (new ItemStack(Material.EGG)).getType())
-      if (System.currentTimeMillis() - ((Long)this.cooldown.getOrDefault(player, Long.valueOf(0L))).longValue() <= (Config.items_bridge_egg_cooldown * 1000)) {
+      if (System.currentTimeMillis() - this.cooldown.getOrDefault(player, Long.valueOf(0L)).longValue() <= (Config.items_bridge_egg_cooldown * 1000)) {
         e.setCancelled(true);
-        player.sendMessage(Config.message_cooling.replace("{time}", (new StringBuilder(String.valueOf(((Config.items_bridge_egg_cooldown * 1000) - System.currentTimeMillis() + ((Long)this.cooldown.getOrDefault(player, Long.valueOf(0L))).longValue()) / 1000L + 1L))).toString()));
+        player.sendMessage(Config.message_cooling.replace("{time}", (new StringBuilder(String.valueOf(((Config.items_bridge_egg_cooldown * 1000) - System.currentTimeMillis() + this.cooldown.getOrDefault(player, Long.valueOf(0L)).longValue()) / 1000L + 1L))).toString()));
       } else {
         ItemStack stack = e.getItem();
         BedwarsUseItemEvent bedwarsUseItemEvent = new BedwarsUseItemEvent(game, player, EnumItem.BridgeEgg, stack);
-        Bukkit.getPluginManager().callEvent((Event)bedwarsUseItemEvent);
+        Bukkit.getPluginManager().callEvent(bedwarsUseItemEvent);
         if (!bedwarsUseItemEvent.isCancelled()) {
           this.cooldown.put(player, Long.valueOf(System.currentTimeMillis()));
-          Egg egg = (Egg)player.launchProjectile(Egg.class);
+          Egg egg = player.launchProjectile(Egg.class);
           egg.setBounce(false);
-          egg.setShooter((ProjectileSource)player);
+          egg.setShooter(player);
           setblock(game, egg, player);
           TakeItemUtil.TakeItem(player, stack);
         } 

@@ -35,7 +35,7 @@ public class BStatsMetrics {
   
   private static final String URL = "https://bStats.org/submitData/bukkit";
   
-  private boolean enabled;
+  private final boolean enabled;
   
   private static boolean logFailedRequests;
   
@@ -91,7 +91,7 @@ public class BStatsMetrics {
     logResponseStatusText = config.getBoolean("logResponseStatusText", false);
     if (this.enabled) {
       boolean found = false;
-      for (Class<?> service : (Iterable<Class<?>>)Bukkit.getServicesManager().getKnownServices()) {
+      for (Class<?> service : Bukkit.getServicesManager().getKnownServices()) {
         try {
           service.getField("B_STATS_VERSION");
           found = true;
@@ -147,7 +147,7 @@ public class BStatsMetrics {
   private JSONObject getServerData() {
     int playerAmount;
     try {
-      Method onlinePlayersMethod = Class.forName("org.bukkit.Server").getMethod("getOnlinePlayers", new Class[0]);
+      Method onlinePlayersMethod = Class.forName("org.bukkit.Server").getMethod("getOnlinePlayers");
       playerAmount = onlinePlayersMethod.getReturnType().equals(Collection.class) ? (
         (Collection)onlinePlayersMethod.invoke(Bukkit.getServer(), new Object[0])).size() : (
         (Player[])onlinePlayersMethod.invoke(Bukkit.getServer(), new Object[0])).length;
@@ -177,12 +177,12 @@ public class BStatsMetrics {
   private void submitData() {
     final JSONObject data = getServerData();
     JSONArray pluginData = new JSONArray();
-    for (Class<?> service : (Iterable<Class<?>>)Bukkit.getServicesManager().getKnownServices()) {
+    for (Class<?> service : Bukkit.getServicesManager().getKnownServices()) {
       try {
         service.getField("B_STATS_VERSION");
         for (RegisteredServiceProvider<?> provider : Bukkit.getServicesManager().getRegistrations(service)) {
           try {
-            pluginData.add(provider.getService().getMethod("getPluginData", new Class[0]).invoke(provider.getProvider(), new Object[0]));
+            pluginData.add(provider.getService().getMethod("getPluginData", new Class[0]).invoke(provider.getProvider()));
           } catch (NullPointerException|NoSuchMethodException|IllegalAccessException|java.lang.reflect.InvocationTargetException nullPointerException) {}
         } 
       } catch (NoSuchFieldException noSuchFieldException) {}
@@ -302,7 +302,7 @@ public class BStatsMetrics {
         return null; 
       boolean allSkipped = true;
       for (Map.Entry<String, Integer> entry : map.entrySet()) {
-        if (((Integer)entry.getValue()).intValue() == 0)
+        if (entry.getValue().intValue() == 0)
           continue; 
         allSkipped = false;
         values.put(entry.getKey(), entry.getValue());
@@ -358,7 +358,7 @@ public class BStatsMetrics {
     
     protected JSONObject getChartData() throws Exception {
       JSONObject data = new JSONObject();
-      int value = ((Integer)this.callable.call()).intValue();
+      int value = this.callable.call().intValue();
       if (value == 0)
         return null; 
       data.put("value", Integer.valueOf(value));
@@ -382,7 +382,7 @@ public class BStatsMetrics {
         return null; 
       boolean allSkipped = true;
       for (Map.Entry<String, Integer> entry : map.entrySet()) {
-        if (((Integer)entry.getValue()).intValue() == 0)
+        if (entry.getValue().intValue() == 0)
           continue; 
         allSkipped = false;
         values.put(entry.getKey(), entry.getValue());
@@ -434,12 +434,13 @@ public class BStatsMetrics {
         return null; 
       boolean allSkipped = true;
       for (Map.Entry<String, int[]> entry : map.entrySet()) {
-        if (((int[])entry.getValue()).length == 0)
+        if (entry.getValue().length == 0)
           continue; 
         allSkipped = false;
         JSONArray categoryValues = new JSONArray();
         byte b;
-        int i, arrayOfInt[];
+        int i;
+        int[] arrayOfInt;
         for (i = (arrayOfInt = entry.getValue()).length, b = 0; b < i; ) {
           int categoryValue = arrayOfInt[b];
           categoryValues.add(Integer.valueOf(categoryValue));

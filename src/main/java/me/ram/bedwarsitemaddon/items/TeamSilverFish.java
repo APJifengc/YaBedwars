@@ -34,9 +34,9 @@ import org.bukkit.event.server.PluginDisableEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class TeamSilverFish implements Listener {
-  private Map<String, Map<Silverfish, Team>> Fishs = new HashMap<>();
+  private final Map<String, Map<Silverfish, Team>> Fishs = new HashMap<>();
   
-  private Map<String, Map<Silverfish, Integer>> Fishtime = new HashMap<>();
+  private final Map<String, Map<Silverfish, Integer>> Fishtime = new HashMap<>();
   
   @EventHandler
   public void onStart(BedwarsGameStartEvent e) {
@@ -47,16 +47,16 @@ public class TeamSilverFish implements Listener {
         public void run() {
           if (game.getState() == GameState.RUNNING) {
             Map<Silverfish, Integer> nmap = new HashMap<>();
-            Map<Silverfish, Integer> guardtime = (Map<Silverfish, Integer>)TeamSilverFish.this.Fishtime.get(game.getName());
+            Map<Silverfish, Integer> guardtime = TeamSilverFish.this.Fishtime.get(game.getName());
             List<Silverfish> removelist = new ArrayList<>();
             for (Silverfish silverfish : guardtime.keySet()) {
-              if (((Integer)guardtime.get(silverfish)).intValue() == 0) {
+              if (guardtime.get(silverfish).intValue() == 0) {
                 silverfish.remove();
                 removelist.add(silverfish);
                 continue;
               } 
-              if (((Integer)guardtime.get(silverfish)).intValue() > 0)
-                nmap.put(silverfish, Integer.valueOf(((Integer)guardtime.get(silverfish)).intValue() - 1)); 
+              if (guardtime.get(silverfish).intValue() > 0)
+                nmap.put(silverfish, Integer.valueOf(guardtime.get(silverfish).intValue() - 1));
             } 
             for (Silverfish silverfish : removelist)
               guardtime.remove(silverfish); 
@@ -87,7 +87,7 @@ public class TeamSilverFish implements Listener {
     if (game.getPlayerTeam(player) == null)
       return; 
     BedwarsFishSpawnEvent bedwarsFishSpawnEvent = new BedwarsFishSpawnEvent(game, snowball.getLocation());
-    Bukkit.getPluginManager().callEvent((Event)bedwarsFishSpawnEvent);
+    Bukkit.getPluginManager().callEvent(bedwarsFishSpawnEvent);
     if (!bedwarsFishSpawnEvent.isCancelled())
       SpawnSilverfish(player, snowball.getLocation()); 
   }
@@ -141,7 +141,7 @@ public class TeamSilverFish implements Listener {
     if (game.isSpectator(player))
       return; 
     Silverfish silverfishe = (Silverfish)e.getEntity();
-    if (!((Map)this.Fishs.get(game.getName())).containsKey(silverfishe))
+    if (!this.Fishs.get(game.getName()).containsKey(silverfishe))
       return; 
     if (((Map)this.Fishs.get(game.getName())).get(silverfishe) == game.getPlayerTeam(player))
       return; 
@@ -193,13 +193,13 @@ public class TeamSilverFish implements Listener {
   }
   
   public void SpawnSilverfish(final Player player, Location location) {
-    final Silverfish silverfish = (Silverfish)player.getWorld().spawn(location, Silverfish.class);
+    final Silverfish silverfish = player.getWorld().spawn(location, Silverfish.class);
     silverfish.setMaxHealth(Config.items_team_silver_fish_health);
     silverfish.setHealth(silverfish.getMaxHealth());
     silverfish.setCustomNameVisible(true);
     final Game game = BedwarsRel.getInstance().getGameManager().getGameOfPlayer(player);
-    ((Map<Silverfish, Team>)this.Fishs.get(game.getName())).put(silverfish, game.getPlayerTeam(player));
-    ((Map<Silverfish, Integer>)this.Fishtime.get(game.getName())).put(silverfish, Integer.valueOf(Config.items_team_silver_fish_staytime));
+    this.Fishs.get(game.getName()).put(silverfish, game.getPlayerTeam(player));
+    this.Fishtime.get(game.getName()).put(silverfish, Integer.valueOf(Config.items_team_silver_fish_staytime));
     (new BukkitRunnable() {
         public void run() {
           if (game.getState() == GameState.RUNNING) {
@@ -243,7 +243,7 @@ public class TeamSilverFish implements Listener {
                 } 
               } 
             } 
-            silverfish.setTarget((LivingEntity)targetplayer);
+            silverfish.setTarget(targetplayer);
           } else {
             cancel();
           } 

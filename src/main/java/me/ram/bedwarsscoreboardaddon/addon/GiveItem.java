@@ -31,7 +31,7 @@ public class GiveItem implements Listener {
           GiveItem.giveItem(player, team);
         }
       }
-    }).runTaskLater((Plugin)Main.getInstance(), 5L);
+    }).runTaskLater(Main.getInstance(), 5L);
   }
 
   public static void giveItem(Player player, Team team) {
@@ -110,22 +110,22 @@ public class GiveItem implements Listener {
     if (helmet != null && Config.giveitem_armor_helmet_item.get("type").equals("TEAM_ARMOR")) {
       LeatherArmorMeta meta = (LeatherArmorMeta)helmet.getItemMeta();
       meta.setColor(team.getColor().getColor());
-      helmet.setItemMeta((ItemMeta)meta);
+      helmet.setItemMeta(meta);
     }
     if (chestplate != null && Config.giveitem_armor_chestplate_item.get("type").equals("TEAM_ARMOR")) {
       LeatherArmorMeta meta = (LeatherArmorMeta)chestplate.getItemMeta();
       meta.setColor(team.getColor().getColor());
-      chestplate.setItemMeta((ItemMeta)meta);
+      chestplate.setItemMeta(meta);
     }
     if (leggings != null && Config.giveitem_armor_leggings_item.get("type").equals("TEAM_ARMOR")) {
       LeatherArmorMeta meta = (LeatherArmorMeta)leggings.getItemMeta();
       meta.setColor(team.getColor().getColor());
-      leggings.setItemMeta((ItemMeta)meta);
+      leggings.setItemMeta(meta);
     }
     if (boots != null && Config.giveitem_armor_boots_item.get("type").equals("TEAM_ARMOR")) {
       LeatherArmorMeta meta = (LeatherArmorMeta)boots.getItemMeta();
       meta.setColor(team.getColor().getColor());
-      boots.setItemMeta((ItemMeta)meta);
+      boots.setItemMeta(meta);
     }
     if (Config.giveitem_armor_helmet_give)
       player.getInventory().setHelmet(helmet);

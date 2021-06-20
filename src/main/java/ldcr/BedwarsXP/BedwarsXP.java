@@ -15,20 +15,20 @@ public class BedwarsXP extends JavaPlugin {
   public static CommandSender log;
   
   public void onEnable() {
-    plugin = (Plugin)this;
-    log = (CommandSender)Bukkit.getConsoleSender();
+    plugin = this;
+    log = Bukkit.getConsoleSender();
     sendConsoleMessage("§6§l[BedwarsXP] &b正在加载BedwarsXP经验起床插件 Version." + getDescription().getVersion());
     try {
       BWVersionDelect();
     } catch (Exception e) {
-      Bukkit.getPluginManager().disablePlugin((Plugin)this);
+      Bukkit.getPluginManager().disablePlugin(this);
       return;
     } 
     try {
       Config.loadConfig();
       ActionBarUtils.load();
-      Bukkit.getPluginManager().registerEvents(new EventListeners(), (Plugin)this);
-      getCommand("bedwarsxpedit").setExecutor((CommandExecutor)new EditXPCommandListener());
+      Bukkit.getPluginManager().registerEvents(new EventListeners(), this);
+      getCommand("bedwarsxpedit").setExecutor(new EditXPCommandListener());
     } catch (Exception e) {
       sendConsoleMessage("&c&l[ERROR] §6§l[BedwarsXP] &c-----------------------------------");
       e.printStackTrace();
@@ -36,7 +36,7 @@ public class BedwarsXP extends JavaPlugin {
       sendConsoleMessage("&c&l[ERROR] §6§l[BedwarsXP] &cBedwarsXP加载出错. ");
       sendConsoleMessage("&c&l[ERROR] §6§l[BedwarsXP] &e   ↓↓ << 请前往此处反馈 >> ↓↓  ");
       sendConsoleMessage("&c&l[ERROR] §6§l[BedwarsXP] &c https://github.com/Ldcr993519867/BedwarsXP/issues/1");
-      Bukkit.getPluginManager().disablePlugin((Plugin)this);
+      Bukkit.getPluginManager().disablePlugin(this);
       return;
     } 
     sendConsoleMessage("§6§l[BedwarsXP] &b成功加载BedwarsXP经验起床插件 By.Ldcr");

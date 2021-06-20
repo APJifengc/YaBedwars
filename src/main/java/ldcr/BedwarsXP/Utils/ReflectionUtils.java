@@ -4,7 +4,7 @@ import java.lang.reflect.Field;
 
 public class ReflectionUtils {
   public static <T, R> void setPrivateValue(T r, String f, R value) throws Exception {
-    Class<? extends Object> clazz = (Class)r.getClass();
+    Class<? extends Object> clazz = r.getClass();
     Field field = clazz.getDeclaredField(f);
     field.setAccessible(true);
     field.set(r, value);
@@ -12,7 +12,7 @@ public class ReflectionUtils {
   }
   
   public static <T, R> Field getField(T r, String f) throws Exception {
-    Class<? extends Object> clazz = (Class)r.getClass();
+    Class<? extends Object> clazz = r.getClass();
     Field field = clazz.getDeclaredField(f);
     return field;
   }

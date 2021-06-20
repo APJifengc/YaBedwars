@@ -42,7 +42,7 @@ public class LobbyScoreBoard implements Listener {
               this.tc = 0; 
           } 
         }
-      }).runTaskTimer((Plugin)Main.getInstance(), 0L, 1L);
+      }).runTaskTimer(Main.getInstance(), 0L, 1L);
   }
   
   @EventHandler
@@ -68,7 +68,7 @@ public class LobbyScoreBoard implements Listener {
             cancel();
           } 
         }
-      }).runTaskTimer((Plugin)Main.getInstance(), 0L, 1L);
+      }).runTaskTimer(Main.getInstance(), 0L, 1L);
   }
   
   private void updateScoreboard(Player player, Game game, int tc) {
@@ -82,7 +82,7 @@ public class LobbyScoreBoard implements Listener {
       for (int i = 0; i < 16 - es; i++)
         ncelements.add(1, null); 
     } 
-    String[] scoreboardelements = ncelements.<String>toArray(new String[ncelements.size()]);
+    String[] scoreboardelements = ncelements.toArray(new String[ncelements.size()]);
     ScoreboardUtil.setScoreboard(player, scoreboardelements);
   }
   
@@ -117,7 +117,7 @@ public class LobbyScoreBoard implements Listener {
       if (l != null) {
         if (nclines.contains(l)) {
           for (int i = 0; i == 0; ) {
-            l = String.valueOf(l) + "§r";
+            l = l + "§r";
             if (!nclines.contains(l)) {
               nclines.add(l);
               break;

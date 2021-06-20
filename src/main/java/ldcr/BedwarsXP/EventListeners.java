@@ -69,7 +69,7 @@ public class EventListeners implements Listener {
       ItemStack s = stack.clone();
       ItemMeta meta = s.getItemMeta();
       meta.setDisplayName("§b§l&BedwarsXP_DropedXP");
-      meta.setLore(Arrays.asList(new String[] { String.valueOf(leftXP) }));
+      meta.setLore(Arrays.asList(String.valueOf(leftXP)));
       s.setItemMeta(meta);
       entity.setItemStack(s);
       entity.setPickupDelay(10);
@@ -108,7 +108,7 @@ public class EventListeners implements Listener {
     if (Config.deathDrop > 0.0D)
       dropped = (int)(costed * Config.deathDrop); 
     BedwarsXPDeathDropXPEvent event = new BedwarsXPDeathDropXPEvent(bw.getName(), p, dropped, costed);
-    Bukkit.getPluginManager().callEvent((Event)event);
+    Bukkit.getPluginManager().callEvent(event);
     costed = event.getXPCosted();
     dropped = event.getXPDropped();
     int to = xpman.getXP(p) - costed;
@@ -122,7 +122,7 @@ public class EventListeners implements Listener {
       ItemStack dropStack = new ItemStack(Material.EXP_BOTTLE, 1);
       ItemMeta meta = dropStack.getItemMeta();
       meta.setDisplayName("§b§l&BedwarsXP_DropedXP");
-      meta.setLore(Arrays.asList(new String[] { String.valueOf(dropped) }));
+      meta.setLore(Arrays.asList(String.valueOf(dropped)));
       meta.addEnchant(Enchantment.LOOT_BONUS_MOBS, 1, true);
       dropStack.setItemMeta(meta);
       Item droppedItem = p.getWorld().dropItemNaturally(p.getLocation().add(0.0D, 1.0D, 0.0D), dropStack);

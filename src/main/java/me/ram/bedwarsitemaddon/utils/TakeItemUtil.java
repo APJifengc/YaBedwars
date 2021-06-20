@@ -17,6 +17,6 @@ public class TakeItemUtil {
     ItemMeta meta = stack.getItemMeta();
     ItemStack itemStack = new ItemStack(stack.getType(), 1);
     itemStack.setItemMeta(meta);
-    player.getInventory().removeItem(new ItemStack[] { itemStack });
+    player.getInventory().removeItem(itemStack);
   }
 }

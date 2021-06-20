@@ -6,11 +6,11 @@ import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
 public class BoardAddonPlayerOpenItemShopEvent extends Event {
-  private static HandlerList handlers = new HandlerList();
+  private static final HandlerList handlers = new HandlerList();
   
-  private Game game;
+  private final Game game;
   
-  private Player player;
+  private final Player player;
   
   private Boolean cancelled = Boolean.valueOf(false);
   

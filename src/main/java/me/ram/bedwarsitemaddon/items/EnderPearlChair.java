@@ -30,13 +30,12 @@ import org.bukkit.projectiles.ProjectileSource;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class EnderPearlChair implements Listener {
-  private Map<Player, Long> cooldown = new HashMap<>();
+  private final Map<Player, Long> cooldown = new HashMap<>();
   
   @EventHandler
   public void onStart(BedwarsGameStartEvent e) {
     for (Player player : e.getGame().getPlayers()) {
-      if (this.cooldown.containsKey(player))
-        this.cooldown.remove(player); 
+      this.cooldown.remove(player);
     } 
   }
   
@@ -54,18 +53,18 @@ public class EnderPearlChair implements Listener {
       return; 
     if (game.getState() == GameState.RUNNING && (
       e.getAction().equals(Action.RIGHT_CLICK_AIR) || e.getAction().equals(Action.RIGHT_CLICK_BLOCK)) && e.getItem().getType() == (new ItemStack(Material.ENDER_PEARL)).getType())
-      if (System.currentTimeMillis() - ((Long)this.cooldown.getOrDefault(player, Long.valueOf(0L))).longValue() <= (Config.items_ender_pearl_chair_cooldown * 1000)) {
+      if (System.currentTimeMillis() - this.cooldown.getOrDefault(player, Long.valueOf(0L)).longValue() <= (Config.items_ender_pearl_chair_cooldown * 1000)) {
         e.setCancelled(true);
-        player.sendMessage(Config.message_cooling.replace("{time}", (new StringBuilder(String.valueOf(((Config.items_ender_pearl_chair_cooldown * 1000) - System.currentTimeMillis() + ((Long)this.cooldown.getOrDefault(player, Long.valueOf(0L))).longValue()) / 1000L + 1L))).toString()));
+        player.sendMessage(Config.message_cooling.replace("{time}", (new StringBuilder(String.valueOf(((Config.items_ender_pearl_chair_cooldown * 1000) - System.currentTimeMillis() + this.cooldown.getOrDefault(player, Long.valueOf(0L)).longValue()) / 1000L + 1L))).toString()));
       } else {
         ItemStack stack = e.getItem();
         BedwarsUseItemEvent bedwarsUseItemEvent = new BedwarsUseItemEvent(game, player, EnumItem.EnderPearlChair, stack);
-        Bukkit.getPluginManager().callEvent((Event)bedwarsUseItemEvent);
+        Bukkit.getPluginManager().callEvent(bedwarsUseItemEvent);
         if (!bedwarsUseItemEvent.isCancelled()) {
           this.cooldown.put(player, Long.valueOf(System.currentTimeMillis()));
-          EnderPearl enderpearl = (EnderPearl)player.launchProjectile(EnderPearl.class);
-          enderpearl.setShooter((ProjectileSource)player);
-          enderpearl.setPassenger((Entity)player);
+          EnderPearl enderpearl = player.launchProjectile(EnderPearl.class);
+          enderpearl.setShooter(player);
+          enderpearl.setPassenger(player);
           removeEnderPearl(player, enderpearl);
           TakeItemUtil.TakeItem(player, stack);
         } 

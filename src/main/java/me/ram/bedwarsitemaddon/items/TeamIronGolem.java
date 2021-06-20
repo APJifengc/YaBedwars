@@ -35,17 +35,16 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class TeamIronGolem implements Listener {
-  private Map<Player, Long> cooldown = new HashMap<>();
+  private final Map<Player, Long> cooldown = new HashMap<>();
   
-  private Map<String, Map<IronGolem, Team>> Golems = new HashMap<>();
+  private final Map<String, Map<IronGolem, Team>> Golems = new HashMap<>();
   
-  private Map<String, Map<IronGolem, Integer>> Guardtime = new HashMap<>();
+  private final Map<String, Map<IronGolem, Integer>> Guardtime = new HashMap<>();
   
   @EventHandler
   public void onStart(BedwarsGameStartEvent e) {
     for (Player player : e.getGame().getPlayers()) {
-      if (this.cooldown.containsKey(player))
-        this.cooldown.remove(player); 
+      this.cooldown.remove(player);
     } 
     final Game game = e.getGame();
     this.Golems.put(game.getName(), new HashMap<>());
@@ -54,16 +53,16 @@ public class TeamIronGolem implements Listener {
         public void run() {
           if (game.getState() == GameState.RUNNING) {
             Map<IronGolem, Integer> nmap = new HashMap<>();
-            Map<IronGolem, Integer> guardtime = (Map<IronGolem, Integer>)TeamIronGolem.this.Guardtime.get(game.getName());
+            Map<IronGolem, Integer> guardtime = TeamIronGolem.this.Guardtime.get(game.getName());
             List<IronGolem> removelist = new ArrayList<>();
             for (IronGolem irongolem : guardtime.keySet()) {
-              if (((Integer)guardtime.get(irongolem)).intValue() == 0) {
+              if (guardtime.get(irongolem).intValue() == 0) {
                 irongolem.remove();
                 removelist.add(irongolem);
                 continue;
               } 
-              if (((Integer)guardtime.get(irongolem)).intValue() > 0)
-                nmap.put(irongolem, Integer.valueOf(((Integer)guardtime.get(irongolem)).intValue() - 1)); 
+              if (guardtime.get(irongolem).intValue() > 0)
+                nmap.put(irongolem, Integer.valueOf(guardtime.get(irongolem).intValue() - 1));
             } 
             for (IronGolem irongolem : removelist)
               guardtime.remove(irongolem); 
@@ -90,13 +89,13 @@ public class TeamIronGolem implements Listener {
     if (game.getState() == GameState.RUNNING && (
       e.getAction().equals(Action.RIGHT_CLICK_AIR) || e.getAction().equals(Action.RIGHT_CLICK_BLOCK)) && 
       e.getItem().getType() == Material.valueOf(Config.items_team_iron_golem_item) && e.getItem().getDurability() == 0)
-      if (System.currentTimeMillis() - ((Long)this.cooldown.getOrDefault(player, Long.valueOf(0L))).longValue() <= (Config.items_team_iron_golem_cooldown * 1000)) {
+      if (System.currentTimeMillis() - this.cooldown.getOrDefault(player, Long.valueOf(0L)).longValue() <= (Config.items_team_iron_golem_cooldown * 1000)) {
         e.setCancelled(true);
-        player.sendMessage(Config.message_cooling.replace("{time}", (new StringBuilder(String.valueOf(((Config.items_team_iron_golem_cooldown * 1000) - System.currentTimeMillis() + ((Long)this.cooldown.getOrDefault(player, Long.valueOf(0L))).longValue()) / 1000L + 1L))).toString()));
+        player.sendMessage(Config.message_cooling.replace("{time}", (new StringBuilder(String.valueOf(((Config.items_team_iron_golem_cooldown * 1000) - System.currentTimeMillis() + this.cooldown.getOrDefault(player, Long.valueOf(0L)).longValue()) / 1000L + 1L))).toString()));
       } else {
         ItemStack stack = e.getItem();
         BedwarsUseItemEvent bedwarsUseItemEvent = new BedwarsUseItemEvent(game, player, EnumItem.TeamIronGolem, stack);
-        Bukkit.getPluginManager().callEvent((Event)bedwarsUseItemEvent);
+        Bukkit.getPluginManager().callEvent(bedwarsUseItemEvent);
         if (!bedwarsUseItemEvent.isCancelled()) {
           TakeItemUtil.TakeItem(player, e.getItem());
           SpawnIronGolem(player, e.getClickedBlock().getRelative(e.getBlockFace()).getLocation().add(0.5D, 0.0D, 0.5D));
@@ -121,7 +120,7 @@ public class TeamIronGolem implements Listener {
     if (game.isSpectator(player))
       return; 
     IronGolem irongoleme = (IronGolem)e.getEntity();
-    if (!((Map)this.Golems.get(game.getName())).containsKey(irongoleme))
+    if (!this.Golems.get(game.getName()).containsKey(irongoleme))
       return; 
     if (((Map)this.Golems.get(game.getName())).get(irongoleme) == game.getPlayerTeam(player))
       return; 
@@ -173,13 +172,13 @@ public class TeamIronGolem implements Listener {
   }
   
   public void SpawnIronGolem(final Player player, Location location) {
-    final IronGolem irongolem = (IronGolem)player.getWorld().spawn(location, IronGolem.class);
+    final IronGolem irongolem = player.getWorld().spawn(location, IronGolem.class);
     irongolem.setMaxHealth(Config.items_team_iron_golem_health);
     irongolem.setHealth(irongolem.getMaxHealth());
     irongolem.setCustomNameVisible(true);
     final Game game = BedwarsRel.getInstance().getGameManager().getGameOfPlayer(player);
-    ((Map<IronGolem, Team>)this.Golems.get(game.getName())).put(irongolem, game.getPlayerTeam(player));
-    ((Map<IronGolem, Integer>)this.Guardtime.get(game.getName())).put(irongolem, Integer.valueOf(Config.items_team_iron_golem_staytime));
+    this.Golems.get(game.getName()).put(irongolem, game.getPlayerTeam(player));
+    this.Guardtime.get(game.getName()).put(irongolem, Integer.valueOf(Config.items_team_iron_golem_staytime));
     this.cooldown.put(player, Long.valueOf(System.currentTimeMillis()));
     (new BukkitRunnable() {
         public void run() {
@@ -224,7 +223,7 @@ public class TeamIronGolem implements Listener {
                 } 
               } 
             } 
-            irongolem.setTarget((LivingEntity)targetplayer);
+            irongolem.setTarget(targetplayer);
           } else {
             cancel();
           } 

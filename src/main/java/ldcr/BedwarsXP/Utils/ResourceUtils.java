@@ -9,7 +9,7 @@ public class ResourceUtils {
       return 0; 
     int count = 0;
     if (Config.resources.containsKey(stack.getType()))
-      count = ((Integer)Config.resources.get(stack.getType())).intValue() * stack.getAmount(); 
+      count = Config.resources.get(stack.getType()).intValue() * stack.getAmount();
     return count;
   }
 }

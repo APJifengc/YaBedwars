@@ -8,15 +8,15 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.inventory.ItemStack;
 
 public class BedwarsUseItemEvent extends Event {
-  private static HandlerList handlers = new HandlerList();
+  private static final HandlerList handlers = new HandlerList();
   
-  private Game game;
+  private final Game game;
   
-  private Player player;
+  private final Player player;
   
-  private EnumItem itemtype;
+  private final EnumItem itemtype;
   
-  private ItemStack consumeitem;
+  private final ItemStack consumeitem;
   
   private Boolean cancelled = Boolean.valueOf(false);
   

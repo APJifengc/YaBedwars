@@ -39,7 +39,7 @@ public class HolographicAPI {
   
   private String title;
   
-  private BukkitTask task;
+  private final BukkitTask task;
   
   private List<ItemStack> equipment;
   
@@ -87,7 +87,7 @@ public class HolographicAPI {
             HolographicAPI.this.players.remove(uuid);
           } 
         }
-      }).runTaskTimer((Plugin)Main.getInstance(), 1L, 1L);
+      }).runTaskTimer(Main.getInstance(), 1L, 1L);
   }
   
   public void setEquipment(List<ItemStack> equipment) {
@@ -125,7 +125,7 @@ public class HolographicAPI {
             packet.getIntegers().write(0, this.ids.get(uuid));
             if (BedwarsRel.getInstance().getCurrentVersion().startsWith("v1_8")) {
               packet.getWatchableCollectionModifier().write(0, 
-                  Arrays.asList(new WrappedWatchableObject[] { new WrappedWatchableObject(2, title) }));
+                  Arrays.asList(new WrappedWatchableObject(2, title)));
             } else {
               WrappedDataWatcher wrappedDataWatcher = new WrappedDataWatcher();
               if (title != null) {
@@ -164,7 +164,7 @@ public class HolographicAPI {
       Field declaredField = Utils.getNMSClass("PacketPlayOutSpawnEntityLiving").getDeclaredField("a");
       declaredField.setAccessible(true);
       this.ids.put(player.getUniqueId(), Integer.valueOf(((Integer)declaredField.get(packet)).intValue()));
-      destroyPacket = getDestroyPacket(new int[] { ((Integer)declaredField.get(packet)).intValue() });
+      destroyPacket = getDestroyPacket(((Integer)declaredField.get(packet)).intValue());
     } catch (Exception exception) {}
     if (this.equipment.size() > 0)
       try {
@@ -213,7 +213,7 @@ public class HolographicAPI {
     for (UUID uuid : this.packets.keySet()) {
       Player player = Bukkit.getPlayer(uuid);
       if (player != null && player.isOnline() && this.players.contains(uuid))
-        sendTeleportPacket(((Integer)this.ids.get(uuid)).intValue(), loc, player); 
+        sendTeleportPacket(this.ids.get(uuid).intValue(), loc, player);
     } 
     this.location = loc.clone();
   }
@@ -221,11 +221,11 @@ public class HolographicAPI {
   private void sendTeleportPacket(int id, Location loc, Player player) {
     if (BedwarsRel.getInstance().getCurrentVersion().startsWith("v1_8")) {
       try {
-        Constructor constructor = Utils.getNMSClass("PacketPlayOutEntityTeleport").getConstructor(new Class[] { int.class, 
-              int.class, int.class, int.class, byte.class, byte.class, boolean.class });
-        Method method = Utils.getNMSClass("MathHelper").getMethod("floor", new Class[] { double.class });
-        Object packet = constructor.newInstance(new Object[] { Integer.valueOf(id), method.invoke(null, new Object[] { Double.valueOf(this.location.getX() * 32.0D) }), method.invoke(null, new Object[] { Double.valueOf(this.location.getY() * 32.0D) }), method.invoke(null, new Object[] { Double.valueOf(this.location.getZ() * 32.0D) }), Byte.valueOf((byte)(int)(this.location.getYaw() * 256.0F / 360.0F)), Byte.valueOf((byte)(int)(this.location.getPitch() * 256.0F / 360.0F)), 
-              Boolean.valueOf(true) });
+        Constructor constructor = Utils.getNMSClass("PacketPlayOutEntityTeleport").getConstructor(int.class,
+                int.class, int.class, int.class, byte.class, byte.class, boolean.class);
+        Method method = Utils.getNMSClass("MathHelper").getMethod("floor", double.class);
+        Object packet = constructor.newInstance(Integer.valueOf(id), method.invoke(null, Double.valueOf(this.location.getX() * 32.0D)), method.invoke(null, Double.valueOf(this.location.getY() * 32.0D)), method.invoke(null, Double.valueOf(this.location.getZ() * 32.0D)), Byte.valueOf((byte)(int)(this.location.getYaw() * 256.0F / 360.0F)), Byte.valueOf((byte)(int)(this.location.getPitch() * 256.0F / 360.0F)),
+                Boolean.valueOf(true));
         Utils.sendPacket(player, packet);
       } catch (Exception exception) {}
     } else {
@@ -246,21 +246,21 @@ public class HolographicAPI {
   private Object getPacket(Location location) {
     try {
       Object cast = Utils.getClass("CraftWorld").cast(location.getWorld());
-      Object instance = Utils.getNMSClass("EntityArmorStand").getConstructor(new Class[] { Utils.getNMSClass("World") }).newInstance(new Object[] { cast.getClass().getMethod("getHandle", new Class[0]).invoke(cast, 
-              new Object[0]) });
+      Object instance = Utils.getNMSClass("EntityArmorStand").getConstructor(new Class[] { Utils.getNMSClass("World") }).newInstance(cast.getClass().getMethod("getHandle", new Class[0]).invoke(cast
+      ));
       if (this.title != null) {
-        instance.getClass().getMethod("setCustomName", new Class[] { String.class }).invoke(instance, new Object[] { this.title });
-        Utils.getNMSClass("Entity").getMethod("setCustomNameVisible", new Class[] { boolean.class }).invoke(instance, new Object[] { Boolean.valueOf(true) });
+        instance.getClass().getMethod("setCustomName", new Class[] { String.class }).invoke(instance, this.title);
+        Utils.getNMSClass("Entity").getMethod("setCustomNameVisible", new Class[] { boolean.class }).invoke(instance, Boolean.valueOf(true));
       } 
       try {
-        instance.getClass().getMethod("setGravity", new Class[] { boolean.class }).invoke(instance, new Object[] { Boolean.valueOf(false) });
+        instance.getClass().getMethod("setGravity", new Class[] { boolean.class }).invoke(instance, Boolean.valueOf(false));
       } catch (Exception ex) {
-        instance.getClass().getMethod("setNoGravity", new Class[] { boolean.class }).invoke(instance, new Object[] { Boolean.valueOf(true) });
+        instance.getClass().getMethod("setNoGravity", new Class[] { boolean.class }).invoke(instance, Boolean.valueOf(true));
       } 
-      instance.getClass().getMethod("setLocation", new Class[] { double.class, double.class, double.class, float.class, float.class }).invoke(instance, new Object[] { Double.valueOf(location.getX()), Double.valueOf(location.getY()), Double.valueOf(location.getZ()), Float.valueOf(0.0F), Float.valueOf(0.0F) });
-      instance.getClass().getMethod("setBasePlate", new Class[] { boolean.class }).invoke(instance, new Object[] { Boolean.valueOf(false) });
-      instance.getClass().getMethod("setInvisible", new Class[] { boolean.class }).invoke(instance, new Object[] { Boolean.valueOf(true) });
-      return Utils.getNMSClass("PacketPlayOutSpawnEntityLiving").getConstructor(new Class[] { Utils.getNMSClass("EntityLiving") }).newInstance(new Object[] { instance });
+      instance.getClass().getMethod("setLocation", new Class[] { double.class, double.class, double.class, float.class, float.class }).invoke(instance, Double.valueOf(location.getX()), Double.valueOf(location.getY()), Double.valueOf(location.getZ()), Float.valueOf(0.0F), Float.valueOf(0.0F));
+      instance.getClass().getMethod("setBasePlate", new Class[] { boolean.class }).invoke(instance, Boolean.valueOf(false));
+      instance.getClass().getMethod("setInvisible", new Class[] { boolean.class }).invoke(instance, Boolean.valueOf(true));
+      return Utils.getNMSClass("PacketPlayOutSpawnEntityLiving").getConstructor(new Class[] { Utils.getNMSClass("EntityLiving") }).newInstance(instance);
     } catch (Exception e) {
       return null;
     } 

@@ -51,7 +51,7 @@ public class Compass implements Listener {
                 Compass.giveCompass(player); 
             } 
           }
-        }).runTaskLater((Plugin)Main.getInstance(), 5L); 
+        }).runTaskLater(Main.getInstance(), 5L);
   }
   
   @EventHandler
@@ -131,7 +131,7 @@ public class Compass implements Listener {
       } else if (slot == 24) {
         openSelectResourcesMenu(player, "§n");
       } 
-    } else if (inventory.getTitle().equals(String.valueOf(Config.compass_gui_title) + "§a§i")) {
+    } else if (inventory.getTitle().equals(Config.compass_gui_title + "§a§i")) {
       e.setCancelled(true);
       int slot = e.getRawSlot();
       if (slot == 31)
@@ -149,7 +149,7 @@ public class Compass implements Listener {
           } 
         } 
       } 
-    } else if (inventory.getTitle().equals(String.valueOf(Config.compass_gui_title) + "§a")) {
+    } else if (inventory.getTitle().equals(Config.compass_gui_title + "§a")) {
       e.setCancelled(true);
       int slot = e.getRawSlot();
       if (slot == 31)
@@ -167,7 +167,7 @@ public class Compass implements Listener {
           } 
         } 
       } 
-    } else if (inventory.getTitle().equals(String.valueOf(Config.compass_gui_title) + "§c")) {
+    } else if (inventory.getTitle().equals(Config.compass_gui_title + "§c")) {
       e.setCancelled(true);
       int slot = e.getRawSlot();
       if (slot == 31)
@@ -176,7 +176,7 @@ public class Compass implements Listener {
         sendMessage(player, game.getPlayerTeam(player), 
             Config.compass_message_VII_II.replace("{player}", player.getName()).replace("{resource}", 
               e.getCurrentItem().getItemMeta().getDisplayName())); 
-    } else if (inventory.getTitle().equals(String.valueOf(Config.compass_gui_title) + "§n")) {
+    } else if (inventory.getTitle().equals(Config.compass_gui_title + "§n")) {
       e.setCancelled(true);
       int slot = e.getRawSlot();
       if (slot == 31)
@@ -185,7 +185,7 @@ public class Compass implements Listener {
         sendMessage(player, game.getPlayerTeam(player), 
             Config.compass_message_VII_III.replace("{player}", player.getName()).replace("{resource}", 
               e.getCurrentItem().getItemMeta().getDisplayName())); 
-    } else if (inventory.getTitle().equals(String.valueOf(Config.compass_gui_title) + "§h")) {
+    } else if (inventory.getTitle().equals(Config.compass_gui_title + "§h")) {
       e.setCancelled(true);
       int slot = e.getRawSlot();
       if (slot == 31)
@@ -198,8 +198,8 @@ public class Compass implements Listener {
   }
   
   private void onBlockPlace() {
-    PacketAdapter packetAdapter = new PacketAdapter((Plugin)Main.getInstance(), ListenerPriority.HIGHEST, 
-        new PacketType[] { PacketType.Play.Client.BLOCK_PLACE }) {
+    PacketAdapter packetAdapter = new PacketAdapter(Main.getInstance(), ListenerPriority.HIGHEST,
+            PacketType.Play.Client.BLOCK_PLACE) {
         public void onPacketReceiving(PacketEvent e) {
           Player player = e.getPlayer();
           Game game = BedwarsRel.getInstance().getGameManager().getGameOfPlayer(player);
@@ -219,7 +219,7 @@ public class Compass implements Listener {
           } 
         }
       };
-    ProtocolLibrary.getProtocolManager().addPacketListener((PacketListener)packetAdapter);
+    ProtocolLibrary.getProtocolManager().addPacketListener(packetAdapter);
   }
   
   private void sendMessage(Player player, Team team, String message) {
@@ -270,14 +270,14 @@ public class Compass implements Listener {
     itemMeta = itemStack.getItemMeta();
     itemMeta.setDisplayName(Config.compass_item_VI_II);
     itemMeta.setLore(Config.compass_lore_select_team);
-    itemMeta.addItemFlags(new ItemFlag[] { ItemFlag.HIDE_ATTRIBUTES });
+    itemMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
     itemStack.setItemMeta(itemMeta);
     inventory.setItem(14, itemStack);
     itemStack = new ItemStack(Material.IRON_SWORD);
     itemMeta = itemStack.getItemMeta();
     itemMeta.setDisplayName(Config.compass_item_VI_III);
     itemMeta.setLore(Config.compass_lore_select_team);
-    itemMeta.addItemFlags(new ItemFlag[] { ItemFlag.HIDE_ATTRIBUTES });
+    itemMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
     itemStack.setItemMeta(itemMeta);
     inventory.setItem(23, itemStack);
     itemStack = new ItemStack(Material.DIAMOND);
@@ -302,7 +302,7 @@ public class Compass implements Listener {
   }
   
   private void openSelectTeamMenu(Player player, String gui) {
-    Inventory inventory = Bukkit.createInventory(null, 36, String.valueOf(Config.compass_gui_title) + gui);
+    Inventory inventory = Bukkit.createInventory(null, 36, Config.compass_gui_title + gui);
     Game game = BedwarsRel.getInstance().getGameManager().getGameOfPlayer(player);
     if (game == null)
       return; 
@@ -330,7 +330,7 @@ public class Compass implements Listener {
   }
   
   private void openSelectResourcesMenu(Player player, String gui) {
-    Inventory inventory = Bukkit.createInventory(null, 36, String.valueOf(Config.compass_gui_title) + gui);
+    Inventory inventory = Bukkit.createInventory(null, 36, Config.compass_gui_title + gui);
     Game game = BedwarsRel.getInstance().getGameManager().getGameOfPlayer(player);
     if (game == null)
       return; 
@@ -340,7 +340,7 @@ public class Compass implements Listener {
         i = 19; 
       ItemStack itemStack1 = new ItemStack(Material.valueOf(type));
       ItemMeta itemMeta1 = itemStack1.getItemMeta();
-      itemMeta1.setDisplayName((String)Config.compass_resources_name.get(type));
+      itemMeta1.setDisplayName(Config.compass_resources_name.get(type));
       itemMeta1.setLore(Config.compass_lore_send_message);
       itemStack1.setItemMeta(itemMeta1);
       inventory.setItem(i, itemStack1);

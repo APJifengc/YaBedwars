@@ -27,13 +27,13 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class ResourceUpgrade implements Listener {
-  private Map<Material, Integer> Interval;
+  private final Map<Material, Integer> Interval;
   
-  private Map<Material, Integer> SpawnTime;
+  private final Map<Material, Integer> SpawnTime;
   
-  private Map<String, String> UpgTime;
+  private final Map<String, String> UpgTime;
   
-  private Map<Material, String> Level;
+  private final Map<Material, String> Level;
   
   public Map<String, String> getUpgTime() {
     return this.UpgTime;
@@ -68,7 +68,7 @@ public class ResourceUpgrade implements Listener {
               if (game.getState() != GameState.WAITING && game.getState() == GameState.RUNNING) {
                 ResourceUpgrade.this.SpawnTime.put(itemStack.getType(), Integer.valueOf(this.i / 20 + 1));
                 if (this.i <= 0) {
-                  this.i = ((Integer)ResourceUpgrade.this.Interval.get(itemStack.getType())).intValue();
+                  this.i = ResourceUpgrade.this.Interval.get(itemStack.getType()).intValue();
                   int es = 0;
                   for (Entity entity : this.loc.getWorld().getNearbyEntities(this.loc, 2.0D, 2.0D, 2.0D)) {
                     if (entity instanceof Item) {
@@ -90,7 +90,7 @@ public class ResourceUpgrade implements Listener {
                   if (drop || inchest.booleanValue()) {
                     BedwarsResourceSpawnEvent event = new BedwarsResourceSpawnEvent(game, this.loc, 
                         itemStack.clone());
-                    Bukkit.getPluginManager().callEvent((Event)event);
+                    Bukkit.getPluginManager().callEvent(event);
                     if (!event.isCancelled())
                       if (inchest.booleanValue() && spawner.canContainItem(((Chest)block.getState()).getInventory(), 
                           itemStack)) {
@@ -107,7 +107,7 @@ public class ResourceUpgrade implements Listener {
                 cancel();
               } 
             }
-          }).runTaskTimer((Plugin)Main.getInstance(), 0L, 1L);
+          }).runTaskTimer(Main.getInstance(), 0L, 1L);
       } 
     } 
     for (String rs : Main.getInstance().getConfig().getConfigurationSection("resourceupgrade").getKeys(false)) {
@@ -127,14 +127,14 @@ public class ResourceUpgrade implements Listener {
                 return;
               } 
               int remtime = game.getTimeLeft() - this.gametime;
-              String formatremtime = String.valueOf(remtime / 60) + ":" + (
+              String formatremtime = remtime / 60 + ":" + (
                 (remtime % 60 < 10) ? ("0" + (remtime % 60)) : remtime % 60);
               ResourceUpgrade.this.UpgTime.put(rs, formatremtime);
               if (game.getTimeLeft() <= this.gametime) {
                 this.isExecuted = Boolean.valueOf(true);
                 BoardAddonResourceUpgradeEvent resourceUpgradeEvent = new BoardAddonResourceUpgradeEvent(
                     game, this.upgrade);
-                Bukkit.getPluginManager().callEvent((Event)resourceUpgradeEvent);
+                Bukkit.getPluginManager().callEvent(resourceUpgradeEvent);
                 if (resourceUpgradeEvent.isCancelled()) {
                   cancel();
                   return;
@@ -142,7 +142,7 @@ public class ResourceUpgrade implements Listener {
                 for (String upg : resourceUpgradeEvent.getUpgrade()) {
                   String[] ary = upg.split(",");
                   if (ResourceUpgrade.this.Level.containsKey(Material.valueOf(ary[0]))) {
-                    ResourceUpgrade.this.Level.put(Material.valueOf(ary[0]), ResourceUpgrade.this.getLevel((String)ResourceUpgrade.this.Level.get(Material.valueOf(ary[0]))));
+                    ResourceUpgrade.this.Level.put(Material.valueOf(ary[0]), ResourceUpgrade.this.getLevel(ResourceUpgrade.this.Level.get(Material.valueOf(ary[0]))));
                     ResourceUpgrade.this.Interval.put(Material.valueOf(ary[0]), Integer.valueOf(ary[1]));
                   } 
                 } 
@@ -155,7 +155,7 @@ public class ResourceUpgrade implements Listener {
               cancel();
             } 
           }
-        }).runTaskTimer((Plugin)Main.getInstance(), 0L, 21L);
+        }).runTaskTimer(Main.getInstance(), 0L, 21L);
     } 
   }
   

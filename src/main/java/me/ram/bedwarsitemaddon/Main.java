@@ -25,7 +25,7 @@ public class Main extends JavaPlugin {
   private static Plugin instance;
   
   public void onEnable() {
-    instance = (Plugin)this;
+    instance = this;
     Bukkit.getConsoleSender().sendMessage("§f========================================");
     Bukkit.getConsoleSender().sendMessage("§7");
     Bukkit.getConsoleSender().sendMessage("            §bBedwarsItemAddon");
@@ -39,7 +39,7 @@ public class Main extends JavaPlugin {
     Bukkit.getConsoleSender().sendMessage("§7");
     Bukkit.getConsoleSender().sendMessage("§f========================================");
     Config.loadConfig();
-    Bukkit.getPluginCommand("bedwarsitemaddon").setExecutor((CommandExecutor)new Commands());
+    Bukkit.getPluginCommand("bedwarsitemaddon").setExecutor(new Commands());
     if (Bukkit.getPluginManager().getPlugin("BedwarsRel") != null) {
       (new BukkitRunnable() {
           public void run() {
@@ -48,9 +48,9 @@ public class Main extends JavaPlugin {
               Main.this.registerEvents();
             } 
           }
-        }).runTaskTimer((Plugin)this, 0L, 0L);
+        }).runTaskTimer(this, 0L, 0L);
     } else {
-      Bukkit.getPluginManager().disablePlugin((Plugin)this);
+      Bukkit.getPluginManager().disablePlugin(this);
     } 
     try {
     
@@ -66,17 +66,17 @@ public class Main extends JavaPlugin {
   }
   
   private void registerEvents() {
-    Bukkit.getPluginManager().registerEvents((Listener)new FireBall(), (Plugin)this);
-    Bukkit.getPluginManager().registerEvents((Listener)new LightTNT(), (Plugin)this);
-    Bukkit.getPluginManager().registerEvents((Listener)new BridgeEgg(), (Plugin)this);
-    Bukkit.getPluginManager().registerEvents((Listener)new Parachute(), (Plugin)this);
-    Bukkit.getPluginManager().registerEvents((Listener)new TNTLaunch(), (Plugin)this);
-    Bukkit.getPluginManager().registerEvents((Listener)new Trampoline(), (Plugin)this);
-    Bukkit.getPluginManager().registerEvents((Listener)new WalkPlatform(), (Plugin)this);
-    Bukkit.getPluginManager().registerEvents((Listener)new EventListener(), (Plugin)this);
-    Bukkit.getPluginManager().registerEvents((Listener)new TeamIronGolem(), (Plugin)this);
-    Bukkit.getPluginManager().registerEvents((Listener)new TeamSilverFish(), (Plugin)this);
-    Bukkit.getPluginManager().registerEvents((Listener)new ExplosionProof(), (Plugin)this);
-    Bukkit.getPluginManager().registerEvents((Listener)new EnderPearlChair(), (Plugin)this);
+    Bukkit.getPluginManager().registerEvents(new FireBall(), this);
+    Bukkit.getPluginManager().registerEvents(new LightTNT(), this);
+    Bukkit.getPluginManager().registerEvents(new BridgeEgg(), this);
+    Bukkit.getPluginManager().registerEvents(new Parachute(), this);
+    Bukkit.getPluginManager().registerEvents(new TNTLaunch(), this);
+    Bukkit.getPluginManager().registerEvents(new Trampoline(), this);
+    Bukkit.getPluginManager().registerEvents(new WalkPlatform(), this);
+    Bukkit.getPluginManager().registerEvents(new EventListener(), this);
+    Bukkit.getPluginManager().registerEvents(new TeamIronGolem(), this);
+    Bukkit.getPluginManager().registerEvents(new TeamSilverFish(), this);
+    Bukkit.getPluginManager().registerEvents(new ExplosionProof(), this);
+    Bukkit.getPluginManager().registerEvents(new EnderPearlChair(), this);
   }
 }

@@ -35,13 +35,13 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
 public class Trampoline implements Listener {
-  private Map<String, List<Location>> vblocks = new HashMap<>();
+  private final Map<String, List<Location>> vblocks = new HashMap<>();
   
   private Map<String, List<Location>> blocks = new HashMap<>();
   
-  private Map<String, List<Player>> nofall = new HashMap<>();
+  private final Map<String, List<Player>> nofall = new HashMap<>();
   
-  private Map<Player, Long> cooldown = new HashMap<>();
+  private final Map<Player, Long> cooldown = new HashMap<>();
   
   @EventHandler
   public void onOver(BedwarsGameOverEvent e) {
@@ -91,9 +91,9 @@ public class Trampoline implements Listener {
       return; 
     if (game.getState() == GameState.RUNNING && (
       e.getAction().equals(Action.RIGHT_CLICK_AIR) || e.getAction().equals(Action.RIGHT_CLICK_BLOCK)) && e.getItem().getType() == (new ItemStack(Material.valueOf(Config.items_trampoline_item))).getType())
-      if (System.currentTimeMillis() - ((Long)this.cooldown.getOrDefault(player, Long.valueOf(0L))).longValue() <= (Config.items_trampoline_cooldown * 1000)) {
+      if (System.currentTimeMillis() - this.cooldown.getOrDefault(player, Long.valueOf(0L)).longValue() <= (Config.items_trampoline_cooldown * 1000)) {
         e.setCancelled(true);
-        player.sendMessage(Config.message_cooling.replace("{time}", (new StringBuilder(String.valueOf(((Config.items_trampoline_cooldown * 1000) - System.currentTimeMillis() + ((Long)this.cooldown.getOrDefault(player, Long.valueOf(0L))).longValue()) / 1000L + 1L))).toString()));
+        player.sendMessage(Config.message_cooling.replace("{time}", (new StringBuilder(String.valueOf(((Config.items_trampoline_cooldown * 1000) - System.currentTimeMillis() + this.cooldown.getOrDefault(player, Long.valueOf(0L)).longValue()) / 1000L + 1L))).toString()));
       } else {
         ItemStack stack = e.getItem();
         Location location1 = player.getLocation();
@@ -110,7 +110,7 @@ public class Trampoline implements Listener {
         location2.add(-r, 1.0D, -r);
         if (enoughSpace(location1, location2)) {
           BedwarsUseItemEvent bedwarsUseItemEvent = new BedwarsUseItemEvent(game, player, EnumItem.Trampoline, stack);
-          Bukkit.getPluginManager().callEvent((Event)bedwarsUseItemEvent);
+          Bukkit.getPluginManager().callEvent(bedwarsUseItemEvent);
           if (!bedwarsUseItemEvent.isCancelled()) {
             this.cooldown.put(player, Long.valueOf(System.currentTimeMillis()));
             setTrampolineBlock(game, player.getLocation(), player, Config.items_trampoline_size);
@@ -298,8 +298,8 @@ public class Trampoline implements Listener {
       setBlock(game, LocationUtil.getLocation(location, -1, 1, -2), Material.WOOL, (byte)15);
       setBlock(game, LocationUtil.getLocation(location, -2, 1, -2), Material.WOOL, (byte)15);
     } 
-    if (!((List)this.nofall.get(game.getName())).contains(player))
-      ((List<Player>)this.nofall.get(game.getName())).add(player); 
+    if (!this.nofall.get(game.getName()).contains(player))
+      this.nofall.get(game.getName()).add(player);
     player.setAllowFlight(true);
   }
   
@@ -312,14 +312,14 @@ public class Trampoline implements Listener {
     final Block block = location.getBlock();
     block.setType(material);
     block.setData(data);
-    ((List<Location>)this.blocks.get(game.getName())).add(location);
+    this.blocks.get(game.getName()).add(location);
     if (data == 15 || data == 11)
-      ((List<Location>)this.vblocks.get(game.getName())).add(location); 
+      this.vblocks.get(game.getName()).add(location);
     (new BukkitRunnable() {
         public void run() {
           block.setType(Material.AIR);
-          ((List)Trampoline.this.vblocks.get(game.getName())).remove(location);
-          ((List)Trampoline.this.blocks.get(game.getName())).remove(location);
+          Trampoline.this.vblocks.get(game.getName()).remove(location);
+          Trampoline.this.blocks.get(game.getName()).remove(location);
         }
       }).runTaskLater(Main.getInstance(), (Config.items_trampoline_staytime * 20));
   }
@@ -328,13 +328,13 @@ public class Trampoline implements Listener {
     boolean enough = true;
     Location location = location1.getBlock().getLocation();
     for (Iterator<Integer> iterator = getAllNumber((int)location1.getX(), (int)location2.getX()).iterator(); iterator.hasNext(); ) {
-      int X = ((Integer)iterator.next()).intValue();
+      int X = iterator.next().intValue();
       location.setX(X);
       for (Iterator<Integer> iterator1 = getAllNumber((int)location1.getY(), (int)location2.getY()).iterator(); iterator1.hasNext(); ) {
-        int Y = ((Integer)iterator1.next()).intValue();
+        int Y = iterator1.next().intValue();
         location.setY(Y);
         for (Iterator<Integer> iterator2 = getAllNumber((int)location1.getZ(), (int)location2.getZ()).iterator(); iterator2.hasNext(); ) {
-          int Z = ((Integer)iterator2.next()).intValue();
+          int Z = iterator2.next().intValue();
           location.setZ(Z);
           if (location.getBlock() != null && 
             location.getBlock().getType() != Material.AIR)
@@ -383,8 +383,7 @@ public class Trampoline implements Listener {
   @EventHandler
   private void onStart(BedwarsGameStartEvent e) {
     for (Player player : e.getGame().getPlayers()) {
-      if (this.cooldown.containsKey(player))
-        this.cooldown.remove(player); 
+      this.cooldown.remove(player);
     } 
     final Game game = e.getGame();
     this.vblocks.put(game.getName(), new ArrayList<>());
@@ -400,8 +399,8 @@ public class Trampoline implements Listener {
                 for (Location b : Trampoline.this.vblocks.get(game.getName())) {
                   if ((int)location.getX() == (int)b.getX() && (int)location.getY() == (int)b.getY() && (int)location.getZ() == (int)b.getZ()) {
                     player.setVelocity(new Vector(0.0D, Config.items_trampoline_velocity, 0.0D));
-                    if (!((List)Trampoline.this.nofall.get(game.getName())).contains(player))
-                      ((List<Player>)Trampoline.this.nofall.get(game.getName())).add(player); 
+                    if (!Trampoline.this.nofall.get(game.getName()).contains(player))
+                      Trampoline.this.nofall.get(game.getName()).add(player);
                     player.setAllowFlight(true);
                     fb = false;
                   } 
@@ -410,9 +409,8 @@ public class Trampoline implements Listener {
                   Block block = location.getBlock();
                   Material mate = block.getType();
                   if (mate != null && 
-                    mate != Material.AIR && (
-                    (List)Trampoline.this.nofall.get(game.getName())).contains(player)) {
-                    ((List)Trampoline.this.nofall.get(game.getName())).remove(player);
+                    mate != Material.AIR && Trampoline.this.nofall.get(game.getName()).contains(player)) {
+                    Trampoline.this.nofall.get(game.getName()).remove(player);
                     if (player.getGameMode() != GameMode.SPECTATOR)
                       (new BukkitRunnable() {
                           public void run() {

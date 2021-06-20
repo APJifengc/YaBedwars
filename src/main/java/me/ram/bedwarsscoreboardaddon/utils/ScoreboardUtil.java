@@ -21,12 +21,12 @@ import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 
 public class ScoreboardUtil {
-  private static Map<Player, Scoreboard> scoreboards = new HashMap<>();
+  private static final Map<Player, Scoreboard> scoreboards = new HashMap<>();
   
-  private static Map<Player, Map<Player, Integer>> player_health = new HashMap<>();
+  private static final Map<Player, Map<Player, Integer>> player_health = new HashMap<>();
   
   private static String[] cutUnranked(String[] content) {
-    String[] elements = Arrays.<String>copyOf(content, 16);
+    String[] elements = Arrays.copyOf(content, 16);
     if (elements[0] == null)
       elements[0] = "BedWars"; 
     if (elements[0].length() > 32)
@@ -43,10 +43,8 @@ public class ScoreboardUtil {
   }
   
   public static void removePlayer(Player player) {
-    if (scoreboards.containsKey(player))
-      scoreboards.remove(player); 
-    if (player_health.containsKey(player))
-      player_health.remove(player); 
+    scoreboards.remove(player);
+    player_health.remove(player);
   }
   
   public static void setScoreboard(Player p, String[] elements) {
@@ -79,7 +77,7 @@ public class ScoreboardUtil {
         for (j = (arrayOfString = elements).length, b = 0; b < j; ) {
           String element = arrayOfString[b];
           if (element != null && element.equals(entry) && p.getScoreboard().getObjective("bwsba-lobby")
-            .getScore(entry).getScore() == 16 - Arrays.<String>asList(elements).indexOf(element)) {
+            .getScore(entry).getScore() == 16 - Arrays.asList(elements).indexOf(element)) {
             toErase = false;
             break;
           } 
@@ -173,7 +171,7 @@ public class ScoreboardUtil {
         for (j = (arrayOfString = elements).length, b = 0; b < j; ) {
           String element = arrayOfString[b];
           if (element != null && element.equals(entry) && scoreboard.getObjective("bwsba-game")
-            .getScore(entry).getScore() == 16 - Arrays.<String>asList(elements).indexOf(element)) {
+            .getScore(entry).getScore() == 16 - Arrays.asList(elements).indexOf(element)) {
             toErase = false;
             break;
           } 
@@ -188,7 +186,7 @@ public class ScoreboardUtil {
       for (Player pl : game.getPlayers()) {
         DecimalFormat format = new DecimalFormat("##");
         int j = Integer.valueOf(format.format(pl.getHealth())).intValue();
-        if (((Integer)map.getOrDefault(pl, Integer.valueOf(0))).intValue() != j) {
+        if (map.getOrDefault(pl, Integer.valueOf(0)).intValue() != j) {
           if (Config.tab_health)
             try {
               PacketContainer packet = m.createPacket(PacketType.Play.Server.SCOREBOARD_SCORE);
@@ -218,7 +216,7 @@ public class ScoreboardUtil {
       for (io.github.bedwarsrel.game.Team t : game.getTeams().values()) {
         Team team = scoreboard.getTeam(game.getName() + ":" + t.getName());
         if (team == null)
-          team = scoreboard.registerNewTeam(String.valueOf(String.valueOf(game.getName())) + ":" + t.getName()); 
+          team = scoreboard.registerNewTeam(String.valueOf(game.getName()) + ":" + t.getName());
         if (!Config.playertag_prefix.equals(""))
           team.setPrefix(Config.playertag_prefix.replace("{color}", (CharSequence)t.getChatColor()).replace("{team}", 
                 t.getName())); 
@@ -227,13 +225,13 @@ public class ScoreboardUtil {
                 t.getName())); 
         team.setAllowFriendlyFire(false);
         for (Player pl : t.getPlayers()) {
-          if (!team.hasPlayer((OfflinePlayer)pl)) {
+          if (!team.hasPlayer(pl)) {
             if (!players.contains(pl.getUniqueId())) {
-              team.addPlayer((OfflinePlayer)pl);
+              team.addPlayer(pl);
               continue;
             } 
             if (playerteam != null && playerteam.getPlayers().contains(pl))
-              team.addPlayer((OfflinePlayer)pl); 
+              team.addPlayer(pl);
           } 
         } 
       } 

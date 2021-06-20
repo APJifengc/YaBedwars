@@ -31,13 +31,12 @@ import org.bukkit.metadata.MetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class LightTNT implements Listener {
-  private Map<Player, Long> cooldown = new HashMap<>();
+  private final Map<Player, Long> cooldown = new HashMap<>();
   
   @EventHandler
   public void onStart(BedwarsGameStartEvent e) {
     for (Player player : e.getGame().getPlayers()) {
-      if (this.cooldown.containsKey(player))
-        this.cooldown.remove(player); 
+      this.cooldown.remove(player);
     } 
   }
   
@@ -53,20 +52,20 @@ public class LightTNT implements Listener {
       return; 
     if (game.getState() == GameState.RUNNING && 
       e.getBlock().getType() == (new ItemStack(Material.TNT)).getType() && !e.isCancelled())
-      if (System.currentTimeMillis() - ((Long)this.cooldown.getOrDefault(player, Long.valueOf(0L))).longValue() <= (Config.items_tnt_cooldown * 1000)) {
+      if (System.currentTimeMillis() - this.cooldown.getOrDefault(player, Long.valueOf(0L)).longValue() <= (Config.items_tnt_cooldown * 1000)) {
         e.setCancelled(true);
-        player.sendMessage(Config.message_cooling.replace("{time}", (new StringBuilder(String.valueOf(((Config.items_tnt_cooldown * 1000) - System.currentTimeMillis() + ((Long)this.cooldown.getOrDefault(player, Long.valueOf(0L))).longValue()) / 1000L + 1L))).toString()));
+        player.sendMessage(Config.message_cooling.replace("{time}", (new StringBuilder(String.valueOf(((Config.items_tnt_cooldown * 1000) - System.currentTimeMillis() + this.cooldown.getOrDefault(player, Long.valueOf(0L)).longValue()) / 1000L + 1L))).toString()));
       } else {
         BedwarsUseItemEvent bedwarsUseItemEvent = new BedwarsUseItemEvent(game, player, EnumItem.LightTNT, new ItemStack(Material.TNT));
-        Bukkit.getPluginManager().callEvent((Event)bedwarsUseItemEvent);
+        Bukkit.getPluginManager().callEvent(bedwarsUseItemEvent);
         if (!bedwarsUseItemEvent.isCancelled()) {
           this.cooldown.put(player, Long.valueOf(System.currentTimeMillis()));
           e.getBlock().setType(Material.AIR);
-          TNTPrimed tnt = (TNTPrimed)e.getBlock().getLocation().getWorld().spawn(e.getBlock().getLocation().add(0.5D, 0.0D, 0.5D), TNTPrimed.class);
+          TNTPrimed tnt = e.getBlock().getLocation().getWorld().spawn(e.getBlock().getLocation().add(0.5D, 0.0D, 0.5D), TNTPrimed.class);
           tnt.setYield(3.0F);
           tnt.setIsIncendiary(false);
           tnt.setFuseTicks(Config.items_tnt_fuse_ticks);
-          tnt.setMetadata("LightTNT", (MetadataValue)new FixedMetadataValue(Main.getInstance(), String.valueOf(game.getName()) + "." + player.getName()));
+          tnt.setMetadata("LightTNT", new FixedMetadataValue(Main.getInstance(), game.getName() + "." + player.getName()));
         } else {
           e.setCancelled(true);
         } 

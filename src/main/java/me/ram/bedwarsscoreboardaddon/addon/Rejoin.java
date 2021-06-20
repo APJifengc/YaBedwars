@@ -29,11 +29,11 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
 public class Rejoin {
-  private Game game;
+  private final Game game;
   
-  private Map<String, RejoinData> players;
+  private final Map<String, RejoinData> players;
   
-  private Map<String, List<String>> teams;
+  private final Map<String, List<String>> teams;
   
   public Rejoin(Game game) {
     this.game = game;
@@ -46,7 +46,7 @@ public class Rejoin {
     if (team == null)
       return; 
     BoardAddonPlayerAddRejoinEvent event = new BoardAddonPlayerAddRejoinEvent(this.game, player, this);
-    Bukkit.getPluginManager().callEvent((Event)event);
+    Bukkit.getPluginManager().callEvent(event);
     if (!event.isCancelled()) {
       this.players.put(player.getName(), new RejoinData(player, this.game, this));
       List<String> list = this.teams.getOrDefault(team.getName(), new ArrayList<>());
@@ -66,7 +66,7 @@ public class Rejoin {
   public void removePlayer(String player) {
     if (this.players.containsKey(player)) {
       this.players.remove(player);
-      Bukkit.getPluginManager().callEvent((Event)new BoardAddonPlayerRemoveRejoinEvent(this.game, player, this));
+      Bukkit.getPluginManager().callEvent(new BoardAddonPlayerRemoveRejoinEvent(this.game, player, this));
     } 
   }
   
@@ -77,9 +77,9 @@ public class Rejoin {
   public void rejoin(Player player) {
     if (this.players.containsKey(player.getName())) {
       BoardAddonPlayerRejoinEvent event = new BoardAddonPlayerRejoinEvent(this.game, player, this);
-      Bukkit.getPluginManager().callEvent((Event)event);
+      Bukkit.getPluginManager().callEvent(event);
       if (!event.isCancelled())
-        ((RejoinData)this.players.get(player.getName())).rejoin(); 
+        this.players.get(player.getName()).rejoin();
     } 
   }
   
@@ -169,7 +169,7 @@ public class Rejoin {
                 player.getInventory().setLeggings(RejoinData.this.armors.get(2));
                 player.getInventory().setBoots(RejoinData.this.armors.get(3));
               } 
-              Arena arena = (Arena)Main.getInstance().getArenaManager().getArenas().get(RejoinData.this.game.getName());
+              Arena arena = Main.getInstance().getArenaManager().getArenas().get(RejoinData.this.game.getName());
               player.setMaxHealth(arena.getHealthLevel().getNowHealth().intValue());
               player.setHealth(player.getMaxHealth());
               if (Config.respawn_enabled) {
@@ -182,8 +182,8 @@ public class Rejoin {
               } 
             } 
           }
-        }).runTaskLater((Plugin)Main.getInstance(), 16L);
-      Bukkit.getPluginManager().callEvent((Event)new BoardAddonPlayerRejoinedEvent(this.game, player, this.rejoin));
+        }).runTaskLater(Main.getInstance(), 16L);
+      Bukkit.getPluginManager().callEvent(new BoardAddonPlayerRejoinedEvent(this.game, player, this.rejoin));
     }
   }
 }

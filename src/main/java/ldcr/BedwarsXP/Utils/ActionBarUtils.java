@@ -37,24 +37,24 @@ public class ActionBarUtils {
             ".ChatSerializer");
         Class<?> c3 = Class.forName("net.minecraft.server." + nmsver + 
             ".IChatBaseComponent");
-        Method m3 = c2.getDeclaredMethod("a", new Class[] { String.class });
-        Object cbc = c3.cast(m3.invoke(c2, new Object[] { "{\"text\": \"" + message + 
-                "\"}" }));
-        ppoc = c4.getConstructor(new Class[] { c3, byte.class }).newInstance(new Object[] { cbc, Byte.valueOf((byte)2) });
+        Method m3 = c2.getDeclaredMethod("a", String.class);
+        Object cbc = c3.cast(m3.invoke(c2, "{\"text\": \"" + message +
+                "\"}"));
+        ppoc = c4.getConstructor(new Class[] { c3, byte.class }).newInstance(cbc, Byte.valueOf((byte)2));
       } else {
         Class<?> c2 = Class.forName("net.minecraft.server." + nmsver + 
             ".ChatComponentText");
         Class<?> c3 = Class.forName("net.minecraft.server." + nmsver + 
             ".IChatBaseComponent");
-        Object o = c2.getConstructor(new Class[] { String.class }).newInstance(new Object[] { message });
-        ppoc = c4.getConstructor(new Class[] { c3, byte.class }).newInstance(new Object[] { o, Byte.valueOf((byte)2) });
+        Object o = c2.getConstructor(new Class[] { String.class }).newInstance(message);
+        ppoc = c4.getConstructor(new Class[] { c3, byte.class }).newInstance(o, Byte.valueOf((byte)2));
       } 
-      Method m1 = c1.getDeclaredMethod("getHandle", new Class[0]);
-      Object h = m1.invoke(p, new Object[0]);
+      Method m1 = c1.getDeclaredMethod("getHandle");
+      Object h = m1.invoke(p);
       Field f1 = h.getClass().getDeclaredField("playerConnection");
       Object pc = f1.get(h);
-      Method m5 = pc.getClass().getDeclaredMethod("sendPacket", new Class[] { c5 });
-      m5.invoke(pc, new Object[] { ppoc });
+      Method m5 = pc.getClass().getDeclaredMethod("sendPacket", c5);
+      m5.invoke(pc, ppoc);
     } catch (Exception ex) {
       ex.printStackTrace();
       player.sendMessage(message);

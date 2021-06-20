@@ -32,17 +32,16 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
 public class WalkPlatform implements Listener {
-  private Map<Player, Long> cooldown = new HashMap<>();
+  private final Map<Player, Long> cooldown = new HashMap<>();
   
-  private Map<String, Map<Block, BukkitTask>> blocktasks = new HashMap<>();
+  private final Map<String, Map<Block, BukkitTask>> blocktasks = new HashMap<>();
   
-  private Map<String, Map<Player, BukkitTask>> tasks = new HashMap<>();
+  private final Map<String, Map<Player, BukkitTask>> tasks = new HashMap<>();
   
   @EventHandler
   public void onStart(BedwarsGameStartEvent e) {
     for (Player player : e.getGame().getPlayers()) {
-      if (this.cooldown.containsKey(player))
-        this.cooldown.remove(player); 
+      this.cooldown.remove(player);
     } 
     this.blocktasks.put(e.getGame().getName(), new HashMap<>());
     this.tasks.put(e.getGame().getName(), new HashMap<>());
@@ -65,16 +64,16 @@ public class WalkPlatform implements Listener {
     if (game.getState() == GameState.RUNNING && (
       e.getAction().equals(Action.RIGHT_CLICK_AIR) || e.getAction().equals(Action.RIGHT_CLICK_BLOCK)) && e.getItem().getType() == Material.valueOf(Config.items_walk_platform_item)) {
       e.setCancelled(true);
-      if (System.currentTimeMillis() - ((Long)this.cooldown.getOrDefault(player, Long.valueOf(0L))).longValue() <= (Config.items_walk_platform_cooldown * 1000)) {
-        player.sendMessage(Config.message_cooling.replace("{time}", (new StringBuilder(String.valueOf(((Config.items_walk_platform_cooldown * 1000) - System.currentTimeMillis() + ((Long)this.cooldown.getOrDefault(player, Long.valueOf(0L))).longValue()) / 1000L + 1L))).toString()));
+      if (System.currentTimeMillis() - this.cooldown.getOrDefault(player, Long.valueOf(0L)).longValue() <= (Config.items_walk_platform_cooldown * 1000)) {
+        player.sendMessage(Config.message_cooling.replace("{time}", (new StringBuilder(String.valueOf(((Config.items_walk_platform_cooldown * 1000) - System.currentTimeMillis() + this.cooldown.getOrDefault(player, Long.valueOf(0L)).longValue()) / 1000L + 1L))).toString()));
       } else {
         ItemStack stack = e.getItem();
         BedwarsUseItemEvent bedwarsUseItemEvent = new BedwarsUseItemEvent(game, player, EnumItem.WalkPlatform, stack);
-        Bukkit.getPluginManager().callEvent((Event)bedwarsUseItemEvent);
+        Bukkit.getPluginManager().callEvent(bedwarsUseItemEvent);
         if (!bedwarsUseItemEvent.isCancelled()) {
           this.cooldown.put(player, Long.valueOf(System.currentTimeMillis()));
           TakeItemUtil.TakeItem(player, e.getItem());
-          if (((Map)this.tasks.get(game.getName())).containsKey(player))
+          if (this.tasks.get(game.getName()).containsKey(player))
             ((BukkitTask)((Map)this.tasks.get(game.getName())).get(player)).cancel(); 
           runPlatform(player, game, game.getPlayerTeam(player));
         } 
@@ -129,7 +128,7 @@ public class WalkPlatform implements Listener {
               game.getRegion().addPlacedBlock(block, null);
               block.setType(Material.WOOL);
               block.setData(team.getColor().getDyeColor().getWoolData());
-              ((Map<Block, BukkitTask>)WalkPlatform.this.blocktasks.get(game.getName())).put(block, (new BukkitRunnable() {
+              WalkPlatform.this.blocktasks.get(game.getName()).put(block, (new BukkitRunnable() {
                     public void run() {
                       if (block.getType() == Material.WOOL)
                         block.setType(Material.AIR); 
@@ -138,9 +137,9 @@ public class WalkPlatform implements Listener {
                   }).runTaskLater(Main.getInstance(), 1L));
               continue;
             } 
-            if (((Map)WalkPlatform.this.blocktasks.get(game.getName())).containsKey(block)) {
+            if (WalkPlatform.this.blocktasks.get(game.getName()).containsKey(block)) {
               ((BukkitTask)((Map)WalkPlatform.this.blocktasks.get(game.getName())).get(block)).cancel();
-              ((Map<Block, BukkitTask>)WalkPlatform.this.blocktasks.get(game.getName())).put(block, (new BukkitRunnable() {
+              WalkPlatform.this.blocktasks.get(game.getName()).put(block, (new BukkitRunnable() {
                     public void run() {
                       if (block.getType() == Material.WOOL && block.getData() == team.getColor().getDyeColor().getWoolData())
                         block.setType(Material.AIR); 
@@ -152,7 +151,7 @@ public class WalkPlatform implements Listener {
         }
       }).runTaskTimer(Main.getInstance(), 0L, 1L);
     game.addRunningTask(bukkittask);
-    ((Map<Player, BukkitTask>)this.tasks.get(game.getName())).put(player, bukkittask);
+    this.tasks.get(game.getName()).put(player, bukkittask);
   }
   
   @EventHandler

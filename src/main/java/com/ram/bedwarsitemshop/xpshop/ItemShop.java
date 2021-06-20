@@ -50,16 +50,16 @@ public class ItemShop {
       ItemStack is = new ItemStack(category.getMaterial(), 1);
       ItemMeta im = is.getItemMeta();
       if (Utils.isColorable(is))
-        is.setDurability((short)game.getPlayerTeam(player).getColor().getDyeColor().getWoolData()); 
+        is.setDurability(game.getPlayerTeam(player).getColor().getDyeColor().getWoolData());
       if (this.currentCategory != null && this.currentCategory.equals(category)) {
         im.addEnchant(Enchantment.DAMAGE_ALL, 1, true);
-        im.addItemFlags(new ItemFlag[] { ItemFlag.HIDE_ENCHANTS });
+        im.addItemFlags(ItemFlag.HIDE_ENCHANTS);
       } 
       im.setDisplayName(category.getName());
       im.setLore(category.getLores());
-      im.addItemFlags(new ItemFlag[] { ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_POTION_EFFECTS });
+      im.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_POTION_EFFECTS);
       is.setItemMeta(im);
-      inventory.addItem(new ItemStack[] { is });
+      inventory.addItem(is);
     } 
   }
   
@@ -80,7 +80,7 @@ public class ItemShop {
           endAmount = 0; 
         item1ToPay -= stack.getAmount();
         stack.setAmount(endAmount);
-        inventory.setItem(((Integer)entry.getKey()).intValue(), stack);
+        inventory.setItem(entry.getKey().intValue(), stack);
         if (item1ToPay <= 0)
           break; 
       } 
@@ -100,7 +100,7 @@ public class ItemShop {
             endAmount2 = 0; 
           item2ToPay -= stack2.getAmount();
           stack2.setAmount(endAmount2);
-          inventory.setItem(((Integer)entry2.getKey()).intValue(), stack2);
+          inventory.setItem(entry2.getKey().intValue(), stack2);
           if (item2ToPay <= 0)
             break; 
         } 
@@ -116,15 +116,15 @@ public class ItemShop {
     } 
     meta.setLore(lore);
     addingItem.setItemMeta(meta);
-    HashMap<Integer, ItemStack> notStored = inventory.addItem(new ItemStack[] { addingItem });
+    HashMap<Integer, ItemStack> notStored = inventory.addItem(addingItem);
     if (notStored.size() > 0) {
       ItemStack notAddedItem = notStored.get(Integer.valueOf(0));
       int removingAmount = addingItem.getAmount() - notAddedItem.getAmount();
       addingItem.setAmount(removingAmount);
-      inventory.removeItem(new ItemStack[] { addingItem });
-      inventory.addItem(new ItemStack[] { trade.getItem1() });
+      inventory.removeItem(addingItem);
+      inventory.addItem(trade.getItem1());
       if (trade.getItem2() != null)
-        inventory.addItem(new ItemStack[] { trade.getItem2() }); 
+        inventory.addItem(trade.getItem2());
       success = false;
     } 
     player.updateInventory();
@@ -220,11 +220,7 @@ public class ItemShop {
       } 
     } else {
       if (ice.getRawSlot() >= totalSize) {
-        if (ice.isShiftClick()) {
-          ice.setCancelled(true);
-        } else {
-          ice.setCancelled(false);
-        } 
+        ice.setCancelled(ice.isShiftClick());
         return;
       } 
       ice.setCancelled(true);
@@ -236,7 +232,7 @@ public class ItemShop {
         return; 
       player.playSound(player.getLocation(), SoundMachine.get("ITEM_PICKUP", "ENTITY_ITEM_PICKUP"), Float.valueOf("1.0").floatValue(), Float.valueOf("1.0").floatValue());
       if (!hasEnoughRessource(player, trade)) {
-        player.sendMessage(ChatWriter.pluginMessage(ChatColor.RED + BedwarsRel._l((CommandSender)player, "errors.notenoughress")));
+        player.sendMessage(ChatWriter.pluginMessage(ChatColor.RED + BedwarsRel._l(player, "errors.notenoughress")));
         return;
       } 
       if (ice.isShiftClick()) {
@@ -302,12 +298,8 @@ public class ItemShop {
     ItemStack item2 = trade.getItem2();
     PlayerInventory inventory = player.getInventory();
     if (item2 != null) {
-      if (!inventory.contains(item1.getType(), item1.getAmount()) || !inventory.contains(item2.getType(), item2.getAmount()))
-        return false; 
-    } else if (!inventory.contains(item1.getType(), item1.getAmount())) {
-      return false;
-    } 
-    return true;
+      return inventory.contains(item1.getType(), item1.getAmount()) && inventory.contains(item2.getType(), item2.getAmount());
+    } else return inventory.contains(item1.getType(), item1.getAmount());
   }
   
   public boolean hasOpenCategory() {
@@ -324,7 +316,7 @@ public class ItemShop {
     int sizeItems = offers.size();
     int invSize = getBuyInventorySize(sizeCategories, sizeItems);
     this.currentCategory = category;
-    Inventory buyInventory = Bukkit.createInventory((InventoryHolder)player, invSize, BedwarsRel._l((CommandSender)player, "ingame.shop.name"));
+    Inventory buyInventory = Bukkit.createInventory(player, invSize, BedwarsRel._l(player, "ingame.shop.name"));
     addCategoriesToInventory(buyInventory, player, game);
     for (int i = 0; i < offers.size(); i++) {
       VillagerTrade trade = offers.get(i);
@@ -341,12 +333,12 @@ public class ItemShop {
     int catSize = getCategoriesSize(player);
     int nom = (catSize % 9 == 0) ? 9 : (catSize % 9);
     int size = catSize + 9 - nom + 9;
-    Inventory inventory = Bukkit.createInventory((InventoryHolder)player, size, BedwarsRel._l((CommandSender)player, "ingame.shop.name"));
+    Inventory inventory = Bukkit.createInventory(player, size, BedwarsRel._l(player, "ingame.shop.name"));
     Game game = BedwarsRel.getInstance().getGameManager().getGameOfPlayer(player);
     addCategoriesToInventory(inventory, player, game);
     ItemStack slime = new ItemStack(Material.SLIME_BALL, 1);
     ItemMeta slimeMeta = slime.getItemMeta();
-    slimeMeta.setDisplayName(BedwarsRel._l((CommandSender)player, "ingame.shop.oldshop"));
+    slimeMeta.setDisplayName(BedwarsRel._l(player, "ingame.shop.oldshop"));
     slimeMeta.setLore(new ArrayList());
     slime.setItemMeta(slimeMeta);
     ItemStack stack = null;
@@ -354,13 +346,13 @@ public class ItemShop {
       if (game.getPlayerSettings(player).oneStackPerShift()) {
         stack = new ItemStack(Material.BUCKET, 1);
         ItemMeta meta = stack.getItemMeta();
-        meta.setDisplayName(ChatColor.AQUA + BedwarsRel._l((CommandSender)player, "default.currently") + ": " + ChatColor.WHITE + BedwarsRel._l((CommandSender)player, "ingame.shop.onestackpershift"));
+        meta.setDisplayName(ChatColor.AQUA + BedwarsRel._l(player, "default.currently") + ": " + ChatColor.WHITE + BedwarsRel._l(player, "ingame.shop.onestackpershift"));
         meta.setLore(new ArrayList());
         stack.setItemMeta(meta);
       } else {
         stack = new ItemStack(Material.LAVA_BUCKET, 1);
         ItemMeta meta = stack.getItemMeta();
-        meta.setDisplayName(ChatColor.AQUA + BedwarsRel._l((CommandSender)player, "default.currently") + ": " + ChatColor.WHITE + BedwarsRel._l((CommandSender)player, "ingame.shop.fullstackpershift"));
+        meta.setDisplayName(ChatColor.AQUA + BedwarsRel._l(player, "default.currently") + ": " + ChatColor.WHITE + BedwarsRel._l(player, "ingame.shop.fullstackpershift"));
         meta.setLore(new ArrayList());
         stack.setItemMeta(meta);
       } 
@@ -386,11 +378,11 @@ public class ItemShop {
     ItemStack item1 = trade.getItem1();
     ItemStack item2 = trade.getItem2();
     if (Utils.isColorable(tradeStack)) {
-      tradeStack.setDurability((short)game.getPlayerTeam(player).getColor().getDyeColor().getWoolData());
+      tradeStack.setDurability(game.getPlayerTeam(player).getColor().getDyeColor().getWoolData());
     } else if (colorable != null) {
       colorable.setAccessible(true);
       try {
-        colorable.invoke(meta, new Object[] { game.getPlayerTeam(player).getColor().getColor() });
+        colorable.invoke(meta, game.getPlayerTeam(player).getColor().getColor());
       } catch (Exception e) {
         BedwarsRel.getInstance().getBugsnag().notify(e);
         e.printStackTrace();

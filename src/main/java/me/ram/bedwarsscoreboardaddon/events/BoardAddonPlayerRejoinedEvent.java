@@ -7,13 +7,13 @@ import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
 public class BoardAddonPlayerRejoinedEvent extends Event {
-  private static HandlerList handlers = new HandlerList();
+  private static final HandlerList handlers = new HandlerList();
   
-  private Game game;
+  private final Game game;
   
-  private Player player;
+  private final Player player;
   
-  private Rejoin rejoin;
+  private final Rejoin rejoin;
   
   public BoardAddonPlayerRejoinedEvent(Game game, Player player, Rejoin rejoin) {
     this.game = game;

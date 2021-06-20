@@ -26,10 +26,10 @@ public class CommandTabCompleter implements TabCompleter {
   
   private List<String> getSuggest(CommandSender sender, String[] args) {
     if (args.length == 1)
-      return Arrays.asList(new String[] { "help", "shop", "edit", "reload", "upcheck" }); 
+      return Arrays.asList("help", "shop", "edit", "reload", "upcheck");
     if (args.length == 2) {
       if (args[0].equalsIgnoreCase("shop"))
-        return Arrays.asList(new String[] { "list", "remove", "set" }); 
+        return Arrays.asList("list", "remove", "set");
       if (args[0].equalsIgnoreCase("edit")) {
         List<String> list = new ArrayList<>();
         BedwarsRel.getInstance().getGameManager().getGames().forEach(game -> list.add(game.getName()));
@@ -37,7 +37,7 @@ public class CommandTabCompleter implements TabCompleter {
       } 
     } else if (args.length == 3) {
       if (args[0].equalsIgnoreCase("shop") && args[1].equalsIgnoreCase("set"))
-        return Arrays.asList(new String[] { "item", "team" }); 
+        return Arrays.asList("item", "team");
       if (args[0].equalsIgnoreCase("shop") && args[1].equalsIgnoreCase("list") && 
         sender.hasPermission("bedwarsscoreboardaddon.shop.list")) {
         List<String> list = new ArrayList<>();

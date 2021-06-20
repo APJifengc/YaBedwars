@@ -37,9 +37,9 @@ public class Main extends JavaPlugin {
     Bukkit.getConsoleSender().sendMessage("§7");
     Bukkit.getConsoleSender().sendMessage("§f=========================================");
     loadConfig();
-    Bukkit.getPluginManager().registerEvents((Listener)new OldHypixelShop(), (Plugin)this);
-    Bukkit.getPluginManager().registerEvents((Listener)new NewHypixelShop(), (Plugin)this);
-    Bukkit.getPluginManager().registerEvents((Listener)new GHDShop(), (Plugin)this);
+    Bukkit.getPluginManager().registerEvents(new OldHypixelShop(), this);
+    Bukkit.getPluginManager().registerEvents(new NewHypixelShop(), this);
+    Bukkit.getPluginManager().registerEvents(new GHDShop(), this);
   }
   
   public void loadConfig() {

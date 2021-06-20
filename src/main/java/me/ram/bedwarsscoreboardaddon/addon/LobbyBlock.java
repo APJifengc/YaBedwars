@@ -17,9 +17,9 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class LobbyBlock {
-  private Game game;
+  private final Game game;
   
-  private Map<Block, BlockStorage> lobbyblocks = new HashMap<>();
+  private final Map<Block, BlockStorage> lobbyblocks = new HashMap<>();
   
   public LobbyBlock(final Game game) {
     this.game = game;
@@ -39,13 +39,13 @@ public class LobbyBlock {
             LobbyBlock.this.recovery();
           } 
         }
-      }).runTaskTimer((Plugin)Main.getInstance(), 0L, 0L);
+      }).runTaskTimer(Main.getInstance(), 0L, 0L);
   }
   
   public void recovery() {
     for (Block block : this.lobbyblocks.keySet()) {
       this.game.getRegion().removePlacedBlock(block);
-      ((BlockStorage)this.lobbyblocks.get(block)).getBlock(block);
+      this.lobbyblocks.get(block).getBlock(block);
     } 
     this.lobbyblocks.clear();
   }
@@ -61,13 +61,13 @@ public class LobbyBlock {
     Location location2 = location.clone().add(Config.lobby_block_position_2_x, Config.lobby_block_position_2_y, 
         Config.lobby_block_position_2_z);
     for (Iterator<Integer> iterator = getAllNumber((int)location1.getX(), (int)location2.getX()).iterator(); iterator.hasNext(); ) {
-      int X = ((Integer)iterator.next()).intValue();
+      int X = iterator.next().intValue();
       location.setX(X);
       for (Iterator<Integer> iterator1 = getAllNumber((int)location1.getY(), (int)location2.getY()).iterator(); iterator1.hasNext(); ) {
-        int Y = ((Integer)iterator1.next()).intValue();
+        int Y = iterator1.next().intValue();
         location.setY(Y);
         for (Iterator<Integer> iterator2 = getAllNumber((int)location1.getZ(), (int)location2.getZ()).iterator(); iterator2.hasNext(); ) {
-          int Z = ((Integer)iterator2.next()).intValue();
+          int Z = iterator2.next().intValue();
           location.setZ(Z);
           Block block = location.getBlock();
           if (block != null && !block.getType().equals(Material.AIR)) {
@@ -93,11 +93,11 @@ public class LobbyBlock {
   }
   
   private class BlockStorage {
-    private Material type;
+    private final Material type;
     
-    private byte data;
+    private final byte data;
     
-    private MaterialData materialData;
+    private final MaterialData materialData;
     
     private BlockStorage(Block block) {
       this.type = block.getType();

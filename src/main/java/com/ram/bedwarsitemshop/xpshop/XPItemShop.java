@@ -30,7 +30,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.PotionMeta;
 
 public class XPItemShop extends NewItemShop {
-  private Game bedwars;
+  private final Game bedwars;
   
   private List<MerchantCategory> categories;
   
@@ -69,7 +69,7 @@ public class XPItemShop extends NewItemShop {
     int catSize = getCategoriesSize(player);
     int nom = (catSize % 9 == 0) ? 9 : (catSize % 9);
     int size = catSize + 9 - nom + 9;
-    Inventory inventory = Bukkit.createInventory((InventoryHolder)player, size, BedwarsRel._l("ingame.shop.name"));
+    Inventory inventory = Bukkit.createInventory(player, size, BedwarsRel._l("ingame.shop.name"));
     addCategoriesToInventory(inventory, player);
     Game game = BedwarsRel.getInstance().getGameManager().getGameOfPlayer(player);
     ItemStack stack = null;
@@ -108,7 +108,7 @@ public class XPItemShop extends NewItemShop {
       im.setDisplayName(category.getName());
       im.setLore(category.getLores());
       is.setItemMeta(im);
-      inventory.addItem(new ItemStack[] { is });
+      inventory.addItem(is);
     } 
   }
   
@@ -162,7 +162,7 @@ public class XPItemShop extends NewItemShop {
     int sizeItems = offers.size();
     int invSize = getBuyInventorySize(sizeCategories, sizeItems);
     this.currentCategory = category;
-    Inventory buyInventory = Bukkit.createInventory((InventoryHolder)player, invSize, BedwarsRel._l("ingame.shop.name"));
+    Inventory buyInventory = Bukkit.createInventory(player, invSize, BedwarsRel._l("ingame.shop.name"));
     addCategoriesToInventory(buyInventory, player);
     for (int i = 0; i < offers.size(); i++) {
       VillagerTrade trade = offers.get(i);
@@ -186,11 +186,11 @@ public class XPItemShop extends NewItemShop {
     ItemStack item1 = trade.getItem1();
     ItemStack item2 = trade.getItem2();
     if (tradeStack.getType().equals(Material.STAINED_GLASS) || tradeStack.getType().equals(Material.WOOL) || tradeStack.getType().equals(Material.STAINED_CLAY)) {
-      tradeStack.setDurability((short)game.getPlayerTeam(player).getColor().getDyeColor().getWoolData());
+      tradeStack.setDurability(game.getPlayerTeam(player).getColor().getDyeColor().getWoolData());
     } else if (colorable != null) {
       colorable.setAccessible(true);
       try {
-        colorable.invoke(meta, new Object[] { game.getPlayerTeam(player).getColor().getColor() });
+        colorable.invoke(meta, game.getPlayerTeam(player).getColor().getColor());
       } catch (Exception e) {
         e.printStackTrace();
       } 
@@ -235,11 +235,7 @@ public class XPItemShop extends NewItemShop {
       } 
     } else {
       if (ice.getRawSlot() >= totalSize) {
-        if (ice.isShiftClick()) {
-          ice.setCancelled(true);
-        } else {
-          ice.setCancelled(false);
-        } 
+        ice.setCancelled(ice.isShiftClick());
         return;
       } 
       ice.setCancelled(true);
@@ -326,15 +322,15 @@ public class XPItemShop extends NewItemShop {
     } 
     meta.setLore(lore);
     addingItem.setItemMeta(meta);
-    HashMap<Integer, ? extends ItemStack> notStored = inventory.addItem(new ItemStack[] { addingItem });
+    HashMap<Integer, ? extends ItemStack> notStored = inventory.addItem(addingItem);
     if (notStored.size() > 0) {
       ItemStack notAddedItem = notStored.get(Integer.valueOf(0));
       int removingAmount = addingItem.getAmount() - notAddedItem.getAmount();
       addingItem.setAmount(removingAmount);
-      inventory.removeItem(new ItemStack[] { addingItem });
-      inventory.addItem(new ItemStack[] { trade.getItem1() });
+      inventory.removeItem(addingItem);
+      inventory.addItem(trade.getItem1());
       if (trade.getItem2() != null)
-        inventory.addItem(new ItemStack[] { trade.getItem2() }); 
+        inventory.addItem(trade.getItem2());
       success = false;
     } 
     player.updateInventory();
@@ -348,12 +344,8 @@ public class XPItemShop extends NewItemShop {
     ItemStack item2 = trade.getItem2();
     PlayerInventory inventory = player.getInventory();
     if (item2 != null) {
-      if (!inventory.contains(item1.getType(), item1.getAmount()) || !inventory.contains(item2.getType(), item2.getAmount()))
-        return false; 
-    } else if (!inventory.contains(item1.getType(), item1.getAmount())) {
-      return false;
-    } 
-    return true;
+      return inventory.contains(item1.getType(), item1.getAmount()) && inventory.contains(item2.getType(), item2.getAmount());
+    } else return inventory.contains(item1.getType(), item1.getAmount());
   }
   
   private VillagerTrade getTradingItem(MerchantCategory category, ItemStack stack, Game game, Player player) {

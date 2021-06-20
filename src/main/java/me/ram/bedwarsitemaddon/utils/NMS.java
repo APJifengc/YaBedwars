@@ -15,9 +15,9 @@ public class NMS {
   public static void teleportEntity(Game game, Entity entity, Location location) {
     if (BedwarsRel.getInstance().getCurrentVersion().startsWith("v1_8")) {
       try {
-        Constructor<?> constructor = Utils.getNMSClass("PacketPlayOutEntityTeleport").getConstructor(new Class[] { int.class, int.class, int.class, int.class, byte.class, byte.class, boolean.class });
-        Method method = Utils.getNMSClass("MathHelper").getMethod("floor", new Class[] { double.class });
-        Object packet = constructor.newInstance(new Object[] { Integer.valueOf(entity.getEntityId()), method.invoke(null, new Object[] { Double.valueOf(location.getX() * 32.0D) }), method.invoke(null, new Object[] { Double.valueOf(location.getY() * 32.0D) }), method.invoke(null, new Object[] { Double.valueOf(location.getZ() * 32.0D) }), Byte.valueOf((byte)(int)(location.getYaw() * 256.0F / 360.0F)), Byte.valueOf((byte)(int)(location.getPitch() * 256.0F / 360.0F)), Boolean.valueOf(true) });
+        Constructor<?> constructor = Utils.getNMSClass("PacketPlayOutEntityTeleport").getConstructor(int.class, int.class, int.class, int.class, byte.class, byte.class, boolean.class);
+        Method method = Utils.getNMSClass("MathHelper").getMethod("floor", double.class);
+        Object packet = constructor.newInstance(Integer.valueOf(entity.getEntityId()), method.invoke(null, Double.valueOf(location.getX() * 32.0D)), method.invoke(null, Double.valueOf(location.getY() * 32.0D)), method.invoke(null, Double.valueOf(location.getZ() * 32.0D)), Byte.valueOf((byte)(int)(location.getYaw() * 256.0F / 360.0F)), Byte.valueOf((byte)(int)(location.getPitch() * 256.0F / 360.0F)), Boolean.valueOf(true));
         for (Player player : game.getPlayers())
           Utils.sendPacket(player, packet); 
       } catch (Exception exception) {}

@@ -52,13 +52,13 @@ import org.bukkit.scheduler.BukkitRunnable;
 public class Shop implements Listener {
   private WrappedDataWatcher.Serializer booleanserializer;
   
-  private Map<String, List<NPC>> shops = new HashMap<>();
+  private final Map<String, List<NPC>> shops = new HashMap<>();
   
-  private Map<String, List<NPC>> teamshops = new HashMap<>();
+  private final Map<String, List<NPC>> teamshops = new HashMap<>();
   
-  private Map<String, List<HolographicAPI>> titles = new HashMap<>();
+  private final Map<String, List<HolographicAPI>> titles = new HashMap<>();
   
-  private List<Integer> npcid = new ArrayList<>();
+  private final List<Integer> npcid = new ArrayList<>();
   
   public Shop() {
     if (!BedwarsRel.getInstance().getCurrentVersion().startsWith("v1_8")) {
@@ -78,7 +78,7 @@ public class Shop implements Listener {
         for (String loc : Config.shop_item.get(game.getName())) {
           Location location = toLocation(loc);
           if (location != null) {
-            ((List<NPC>)this.shops.get(game.getName())).add(spawnShop(game, location.clone()));
+            this.shops.get(game.getName()).add(spawnShop(game, location.clone()));
             setTitle(game, location.clone().add(0.0D, -0.1D, 0.0D), Config.shop_item_shop_name);
           } 
         }  
@@ -86,7 +86,7 @@ public class Shop implements Listener {
         for (String loc : Config.shop_team.get(game.getName())) {
           Location location = toLocation(loc);
           if (location != null) {
-            ((List<NPC>)this.teamshops.get(game.getName())).add(spawnTeamShop(game, location.clone()));
+            this.teamshops.get(game.getName()).add(spawnTeamShop(game, location.clone()));
             setTitle(game, location.clone().add(0.0D, -0.1D, 0.0D), Config.shop_team_shop_name);
           } 
         }  
@@ -103,7 +103,7 @@ public class Shop implements Listener {
               holo.remove(); 
           } 
         }
-      }).runTaskTimer((Plugin)Main.getInstance(), 0L, 0L);
+      }).runTaskTimer(Main.getInstance(), 0L, 0L);
   }
   
   @EventHandler(priority = EventPriority.HIGHEST)
@@ -121,12 +121,12 @@ public class Shop implements Listener {
       return isCancelled; 
     Game game = BedwarsRel.getInstance().getGameManager().getGameOfPlayer(player);
     if (game != null)
-      if (((List)this.shops.get(game.getName())).contains(npc)) {
+      if (this.shops.get(game.getName()).contains(npc)) {
         if (isGamePlayer(player).booleanValue()) {
           isCancelled = Boolean.valueOf(true);
           BoardAddonPlayerOpenItemShopEvent openItemhopEvent = new BoardAddonPlayerOpenItemShopEvent(game, 
               player);
-          Bukkit.getPluginManager().callEvent((Event)openItemhopEvent);
+          Bukkit.getPluginManager().callEvent(openItemhopEvent);
           if (!openItemhopEvent.isCancelled()) {
             player.closeInventory();
             NewItemShop itemShop = game.openNewItemShop(player);
@@ -134,12 +134,12 @@ public class Shop implements Listener {
             itemShop.openCategoryInventory(player);
           } 
         } 
-      } else if (((List)this.teamshops.get(game.getName())).contains(npc) && 
+      } else if (this.teamshops.get(game.getName()).contains(npc) &&
         isGamePlayer(player).booleanValue()) {
         isCancelled = Boolean.valueOf(true);
         BoardAddonPlayerOpenTeamShopEvent openTeamShopEvent = new BoardAddonPlayerOpenTeamShopEvent(game, 
             player);
-        Bukkit.getPluginManager().callEvent((Event)openTeamShopEvent);
+        Bukkit.getPluginManager().callEvent(openTeamShopEvent);
         if (!openTeamShopEvent.isCancelled()) {
           player.closeInventory();
           Main.getInstance().getArenaManager().getArena(game.getName()).getTeamShop()
@@ -159,7 +159,7 @@ public class Shop implements Listener {
       return;
     } 
     if (e.getEntity() instanceof org.bukkit.entity.Villager && 
-      CitizensAPI.getNPCRegistry().isNPC(e.getEntity()) && ((List)this.teamshops.get(e.getGame().getName()))
+      CitizensAPI.getNPCRegistry().isNPC(e.getEntity()) && this.teamshops.get(e.getGame().getName())
       .contains(CitizensAPI.getNPCRegistry().getNPC(e.getEntity()))) {
       e.setCancelled(true);
       player.closeInventory();
@@ -179,15 +179,15 @@ public class Shop implements Listener {
               for (HolographicAPI holo : Shop.this.titles.get(game.getName()))
                 holo.display(player);  
           }
-        }).runTaskLater((Plugin)Main.getInstance(), 10L); 
+        }).runTaskLater(Main.getInstance(), 10L);
   }
   
   private void packetListener() {
-    ProtocolLibrary.getProtocolManager().addPacketListener((PacketListener)new PacketAdapter((Plugin)Main.getInstance(), 
+    ProtocolLibrary.getProtocolManager().addPacketListener(new PacketAdapter(Main.getInstance(),
           ListenerPriority.HIGHEST, new PacketType[] { PacketType.Play.Server.ENTITY_METADATA }) {
           public void onPacketSending(PacketEvent e) {
             PacketContainer packet = e.getPacket();
-            int id = ((Integer)packet.getIntegers().read(0)).intValue();
+            int id = packet.getIntegers().read(0).intValue();
             if (Shop.this.npcid.contains(Integer.valueOf(id))) {
               WrappedDataWatcher wrappedDataWatcher = new WrappedDataWatcher();
               wrappedDataWatcher.setObject(new WrappedDataWatcher.WrappedDataWatcherObject(3, Shop.this.booleanserializer), 
@@ -214,9 +214,9 @@ public class Shop implements Listener {
       location.getBlock().getChunk().load(true); 
     NPC npc = CitizensAPI.getNPCRegistry().createNPC(EntityType.PLAYER, "");
     npc.setProtected(true);
-    ((Gravity)npc.getTrait(Gravity.class)).toggle();
+    npc.getTrait(Gravity.class).toggle();
     if (Config.shop_item_shop_look)
-      ((LookClose)npc.getTrait(LookClose.class)).toggle(); 
+      npc.getTrait(LookClose.class).toggle();
     npc.spawn(location);
     try {
       EntityType entityType = EntityType.valueOf(Config.shop_item_shop_type);
@@ -239,9 +239,9 @@ public class Shop implements Listener {
       location.getBlock().getChunk().load(true); 
     NPC npc = CitizensAPI.getNPCRegistry().createNPC(EntityType.PLAYER, "");
     npc.setProtected(true);
-    ((Gravity)npc.getTrait(Gravity.class)).toggle();
+    npc.getTrait(Gravity.class).toggle();
     if (Config.shop_team_shop_look)
-      ((LookClose)npc.getTrait(LookClose.class)).toggle(); 
+      npc.getTrait(LookClose.class).toggle();
     npc.spawn(location);
     try {
       EntityType entityType = EntityType.valueOf(Config.shop_team_shop_type);
@@ -281,7 +281,7 @@ public class Shop implements Listener {
             } 
           } 
         }
-      }).runTaskLater((Plugin)Main.getInstance(), 1L);
+      }).runTaskLater(Main.getInstance(), 1L);
   }
   
   private void setTitle(final Game game, Location location, List<String> title) {
@@ -293,13 +293,13 @@ public class Shop implements Listener {
     Collections.reverse(list);
     for (String line : list) {
       final HolographicAPI holo = new HolographicAPI(loc, line);
-      ((List<HolographicAPI>)this.titles.get(game.getName())).add(holo);
+      this.titles.get(game.getName()).add(holo);
       (new BukkitRunnable() {
           public void run() {
             for (Player player : game.getPlayers())
               holo.display(player); 
           }
-        }).runTaskLater((Plugin)Main.getInstance(), 20L);
+        }).runTaskLater(Main.getInstance(), 20L);
       loc.add(0.0D, 0.3D, 0.0D);
     } 
     (new BukkitRunnable() {
@@ -311,7 +311,7 @@ public class Shop implements Listener {
             cancel();
           } 
         }
-      }).runTaskTimer((Plugin)Main.getInstance(), 0L, 0L);
+      }).runTaskTimer(Main.getInstance(), 0L, 0L);
   }
   
   private Location toLocation(String loc) {

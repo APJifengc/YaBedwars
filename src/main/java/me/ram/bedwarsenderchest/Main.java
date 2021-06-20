@@ -18,7 +18,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class Main extends JavaPlugin implements Listener {
   public void onEnable() {
-    Bukkit.getPluginManager().registerEvents(this, (Plugin)this);
+    Bukkit.getPluginManager().registerEvents(this, this);
   }
   
   @EventHandler(priority = EventPriority.HIGHEST)

@@ -15,7 +15,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 public class HolographicManager {
-  private Map<Player, List<HolographicAPI>> holos = new HashMap<>();
+  private final Map<Player, List<HolographicAPI>> holos = new HashMap<>();
   
   public void displayGameLocation(Player player, String g) {
     if (this.holos.containsKey(player))

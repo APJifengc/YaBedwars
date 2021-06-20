@@ -15,7 +15,7 @@ public class EditXPCommandListener implements CommandExecutor {
   public boolean onCommand(CommandSender sender, Command arg1, String arg2, String[] args) {
     int xp;
     if (args.length == 0) {
-      SendMessageUtils.sendMessage(sender, new String[] { "§6§l[BedwarsXP] §b经验起床插件 §lBy.Ldcr", "§6§l[BedwarsXP] §a/editxp <经验值>  设置自己的经验值", "§6§l[BedwarsXP] §a/editxp <玩家> <经验值> 设置其他玩家的经验值" });
+      SendMessageUtils.sendMessage(sender, "§6§l[BedwarsXP] §b经验起床插件 §lBy.Ldcr", "§6§l[BedwarsXP] §a/editxp <经验值>  设置自己的经验值", "§6§l[BedwarsXP] §a/editxp <玩家> <经验值> 设置其他玩家的经验值");
       return true;
     } 
     if (!sender.hasPermission("bedwarsxp.admin")) {
@@ -26,7 +26,7 @@ public class EditXPCommandListener implements CommandExecutor {
     Player player1 = Bukkit.getPlayer(user);
     if (player1 != null) {
       if (args.length < 2) {
-        SendMessageUtils.sendMessage(sender, new String[] { "§6§l[BedwarsXP] §b经验起床插件 §lBy.Ldcr", "§6§l[BedwarsXP] §a/editxp <经验值>  设置自己的经验值", "§6§l[BedwarsXP] §a/editxp <玩家> <经验值> 设置其他玩家的经验值" });
+        SendMessageUtils.sendMessage(sender, "§6§l[BedwarsXP] §b经验起床插件 §lBy.Ldcr", "§6§l[BedwarsXP] §a/editxp <经验值>  设置自己的经验值", "§6§l[BedwarsXP] §a/editxp <玩家> <经验值> 设置其他玩家的经验值");
         return true;
       } 
       if (player1.isOnline()) {
@@ -55,7 +55,7 @@ public class EditXPCommandListener implements CommandExecutor {
       return true;
     } 
     if (!(sender instanceof Player)) {
-      SendMessageUtils.sendMessage(sender, new String[] { "§6§l[BedwarsXP] §b经验起床插件 §lBy.Ldcr", "§6§l[BedwarsXP] §a/editxp <玩家> <经验值> 设置玩家的经验值" });
+      SendMessageUtils.sendMessage(sender, "§6§l[BedwarsXP] §b经验起床插件 §lBy.Ldcr", "§6§l[BedwarsXP] §a/editxp <玩家> <经验值> 设置玩家的经验值");
       return true;
     } 
     Player p = (Player)sender;

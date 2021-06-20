@@ -35,11 +35,11 @@ public class UpdateCheck implements Listener {
                 public void run() {
                   if (Config.update_check && UpdateCheck.version != null && UpdateCheck.post != null && UpdateCheck.update != null && 
                     !UpdateCheck.version.equals(Main.getVersion()))
-                    UpdateCheck.sendInfo((CommandSender)Bukkit.getConsoleSender(), UpdateCheck.version, UpdateCheck.post, UpdateCheck.update); 
+                    UpdateCheck.sendInfo(Bukkit.getConsoleSender(), UpdateCheck.version, UpdateCheck.post, UpdateCheck.update);
                 }
-              }).runTaskLater((Plugin)Main.getInstance(), 100L);
+              }).runTaskLater(Main.getInstance(), 100L);
           }
-        }).runTaskLaterAsynchronously((Plugin)Main.getInstance(), 5L); 
+        }).runTaskLaterAsynchronously(Main.getInstance(), 5L);
   }
   
   @EventHandler
@@ -47,7 +47,7 @@ public class UpdateCheck implements Listener {
     if (Config.update_check && version != null && post != null && update != null && 
       e.getPlayer().hasPermission("bedwarsscoreboardaddon.updatecheck") && 
       !version.equals(Main.getVersion()))
-      sendInfo((CommandSender)e.getPlayer(), version, post, update); 
+      sendInfo(e.getPlayer(), version, post, update);
   }
   
   public static void upCheck(final CommandSender sender) {
@@ -67,7 +67,7 @@ public class UpdateCheck implements Listener {
             sender.sendMessage("§b§lBWSBA §f>> §c检测更新失败，请检查服务器网络连接！");
           } 
         }
-      }).runTaskAsynchronously((Plugin)Main.getInstance());
+      }).runTaskAsynchronously(Main.getInstance());
   }
   
   private static void sendInfo(final CommandSender sender, final String ver, final String p, final String[] u) {
@@ -88,6 +88,6 @@ public class UpdateCheck implements Listener {
           sender.sendMessage("");
           sender.sendMessage("§f===========================================================");
         }
-      }).runTaskLaterAsynchronously((Plugin)Main.getInstance(), 5L);
+      }).runTaskLaterAsynchronously(Main.getInstance(), 5L);
   }
 }

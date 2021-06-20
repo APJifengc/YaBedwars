@@ -41,7 +41,7 @@ public class DeathItem implements Listener {
               Boolean l = Boolean.valueOf(true);
               for (ItemStack item : playeritems.keySet()) {
                 if (item.getType() == itemStack.getType()) {
-                  playeritems.put(item, Integer.valueOf(((Integer)playeritems.get(item)).intValue() + itemStack.getAmount()));
+                  playeritems.put(item, Integer.valueOf(playeritems.get(item).intValue() + itemStack.getAmount()));
                   l = Boolean.valueOf(false);
                   break;
                 } 
@@ -54,12 +54,12 @@ public class DeathItem implements Listener {
     } 
     for (ItemStack item : playeritems.keySet()) {
       ItemStack itemStack = item.clone();
-      itemStack.setAmount((Integer) playeritems.get(item));
+      itemStack.setAmount(playeritems.get(item));
       killer.getInventory().addItem(itemStack);
       String itemName = item.getType().name();
       if (Config.deathitem_item_name_chinesize)
         itemName = ItemUtil.getRealName(item);
-      killer.sendMessage(String.valueOf(ItemUtil.getRealColor(item)) + Config.deathitem_message
+      killer.sendMessage(ItemUtil.getRealColor(item) + Config.deathitem_message
           .replace("{amount}", playeritems.get(item).toString()).replace("{item}", itemName));
     } 
   }

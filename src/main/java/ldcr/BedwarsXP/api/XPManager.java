@@ -7,7 +7,7 @@ import ldcr.BedwarsXP.Utils.ActionBarUtils;
 import org.bukkit.entity.Player;
 
 public class XPManager {
-  private static HashMap<String, XPManager> managerMap = new HashMap<>();
+  private static final HashMap<String, XPManager> managerMap = new HashMap<>();
   
   private final HashMap<UUID, Integer> xp = new HashMap<>();
   
@@ -73,10 +73,10 @@ public class XPManager {
       this.messageTimeMap.put(player.getUniqueId(), Long.valueOf(System.currentTimeMillis())); 
     if (!this.messageCountMap.containsKey(player.getUniqueId()))
       this.messageCountMap.put(player.getUniqueId(), Integer.valueOf(0)); 
-    if (System.currentTimeMillis() - ((Long)this.messageTimeMap.get(player.getUniqueId())).longValue() > 500L)
+    if (System.currentTimeMillis() - this.messageTimeMap.get(player.getUniqueId()).longValue() > 500L)
       this.messageCountMap.put(player.getUniqueId(), Integer.valueOf(0)); 
     this.messageTimeMap.put(player.getUniqueId(), Long.valueOf(System.currentTimeMillis()));
-    int c = ((Integer)this.messageCountMap.get(player.getUniqueId())).intValue() + count;
+    int c = this.messageCountMap.get(player.getUniqueId()).intValue() + count;
     this.messageCountMap.put(player.getUniqueId(), Integer.valueOf(c));
     if (!Config.xpMessage.equals(""))
       ActionBarUtils.sendActionBar(player, Config.xpMessage.replaceAll("%xp%", Integer.toString(c))); 

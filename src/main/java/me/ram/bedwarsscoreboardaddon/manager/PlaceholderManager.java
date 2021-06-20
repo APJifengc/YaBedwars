@@ -4,11 +4,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class PlaceholderManager {
-  private Map<String, String> GamePlaceholder = new HashMap<>();
+  private final Map<String, String> GamePlaceholder = new HashMap<>();
   
-  private Map<String, Map<String, String>> TeamPlaceholder = new HashMap<>();
+  private final Map<String, Map<String, String>> TeamPlaceholder = new HashMap<>();
   
-  private Map<String, Map<String, String>> PlayerPlaceholder = new HashMap<>();
+  private final Map<String, Map<String, String>> PlayerPlaceholder = new HashMap<>();
   
   public void setGamePlaceholder(String placeholder, String info) {
     this.GamePlaceholder.put(placeholder, info);

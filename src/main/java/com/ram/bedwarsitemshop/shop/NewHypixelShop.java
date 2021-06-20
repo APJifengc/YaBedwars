@@ -38,7 +38,7 @@ public class NewHypixelShop implements Listener {
     Player player = (Player)e.getPlayer();
     Inventory shop = e.getInventory();
     Game game = BedwarsRel.getInstance().getGameManager().getGameOfPlayer(player);
-    if (game != null && shop.getName().equals(BedwarsRel._l((CommandSender)player, "ingame.shop.name"))) {
+    if (game != null && shop.getName().equals(BedwarsRel._l(player, "ingame.shop.name"))) {
       if (shop.getSize() >= 54 && shop.getItem(53) != null)
         return; 
       e.setCancelled(true);
@@ -58,7 +58,7 @@ public class NewHypixelShop implements Listener {
         if (shop.getItem(i) != null && shop.getItem(i).getItemMeta().getLore() != null && shop.getItem(i).getItemMeta().getLore().size() > 0) {
           String lore = shop.getItem(i).getItemMeta().getLore().get(shop.getItem(i).getItemMeta().getLore().size() - 1);
           String[] args = lore.split(" ");
-          if (args.length > 1 && ColorUtil.remcolor(args[0].replaceAll("\\d+", "")).length() == 0 && resname.contains(lore.substring(args[0].length() + 1, lore.length()))) {
+          if (args.length > 1 && ColorUtil.remcolor(args[0].replaceAll("\\d+", "")).length() == 0 && resname.contains(lore.substring(args[0].length() + 1))) {
             shopitems.add(shop.getItem(i));
             isShopItem = Boolean.valueOf(true);
           } 
@@ -66,7 +66,7 @@ public class NewHypixelShop implements Listener {
         if (shop.getItem(i) != null && !isOptionItem(shop.getItem(i)).booleanValue() && !isShopItem.booleanValue())
           shops.add(shop.getItem(i)); 
       } 
-      Inventory inventory = Bukkit.createInventory(null, 54, String.valueOf(BedwarsRel._l((CommandSender)player, "ingame.shop.name")) + "§n§e§w");
+      Inventory inventory = Bukkit.createInventory(null, 54, BedwarsRel._l(player, "ingame.shop.name") + "§n§e§w");
       int slot = 0;
       for (ItemStack item : shops) {
         inventory.setItem(slot, item);
@@ -103,14 +103,14 @@ public class NewHypixelShop implements Listener {
       if (shopitems.size() < 1 && shops.size() > 0)
         if (Bukkit.getPluginManager().isPluginEnabled("BedwarsXP")) {
           XPItemShop itemShop = new XPItemShop(game.getNewItemShop(player).getCategories(), game);
-          MerchantCategory clickedCategory = itemShop.getCategoryByMaterial(((ItemStack)shops.get(0)).getType());
+          MerchantCategory clickedCategory = itemShop.getCategoryByMaterial(shops.get(0).getType());
           if (clickedCategory != null) {
             itemShop.openBuyInventory(clickedCategory, player, game);
             return;
           } 
         } else {
           ItemShop itemShop = new ItemShop(game.getNewItemShop(player).getCategories());
-          MerchantCategory clickedCategory = itemShop.getCategoryByMaterial(((ItemStack)shops.get(0)).getType());
+          MerchantCategory clickedCategory = itemShop.getCategoryByMaterial(shops.get(0).getType());
           if (clickedCategory != null) {
             itemShop.openBuyInventory(clickedCategory, player, game);
             return;
@@ -127,7 +127,7 @@ public class NewHypixelShop implements Listener {
     Player player = (Player)e.getWhoClicked();
     Inventory inventory = e.getInventory();
     Game game = BedwarsRel.getInstance().getGameManager().getGameOfPlayer(player);
-    if (e.getCurrentItem() != null && e.getCurrentItem().getType() != Material.AIR && game != null && inventory.getName().equals(String.valueOf(BedwarsRel._l((CommandSender)player, "ingame.shop.name")) + "§n§e§w")) {
+    if (e.getCurrentItem() != null && e.getCurrentItem().getType() != Material.AIR && game != null && inventory.getName().equals(BedwarsRel._l(player, "ingame.shop.name") + "§n§e§w")) {
       e.setCancelled(true);
       Map<String, ItemStack> resname = new HashMap<>();
       for (ItemStack res : getResource()) {
@@ -139,7 +139,7 @@ public class NewHypixelShop implements Listener {
       if (e.getCurrentItem() != null && e.getCurrentItem().getItemMeta().getLore() != null && e.getCurrentItem().getItemMeta().getLore().size() > 0) {
         String lore = e.getCurrentItem().getItemMeta().getLore().get(e.getCurrentItem().getItemMeta().getLore().size() - 1);
         String[] args = lore.split(" ");
-        if (args.length > 1 && ColorUtil.remcolor(args[0].replaceAll("\\d+", "")).length() == 0 && resname.containsKey(lore.substring(args[0].length() + 1, lore.length())))
+        if (args.length > 1 && ColorUtil.remcolor(args[0].replaceAll("\\d+", "")).length() == 0 && resname.containsKey(lore.substring(args[0].length() + 1)))
           isShopItem = Boolean.valueOf(true); 
       } 
       if (isShopItem.booleanValue()) {
@@ -163,15 +163,15 @@ public class NewHypixelShop implements Listener {
     String lore = itemStack.getItemMeta().getLore().get(itemStack.getItemMeta().getLore().size() - 1);
     String[] args = lore.split(" ");
     for (int i = 0; i < a; i++) {
-      if (isEnough(game, player, lore.substring(args[0].length() + 1, lore.length()), Integer.valueOf(ColorUtil.remcolor(args[0])).intValue(), resname)) {
-        takeItem(game, player, lore.substring(args[0].length() + 1, lore.length()), Integer.valueOf(ColorUtil.remcolor(args[0])).intValue(), resname);
+      if (isEnough(game, player, lore.substring(args[0].length() + 1), Integer.valueOf(ColorUtil.remcolor(args[0])).intValue(), resname)) {
+        takeItem(game, player, lore.substring(args[0].length() + 1), Integer.valueOf(ColorUtil.remcolor(args[0])).intValue(), resname);
         ItemStack item = itemStack.clone();
         List<String> lores = item.getItemMeta().getLore();
         lores.remove(lores.size() - 1);
         ItemMeta meta = item.getItemMeta();
         meta.setLore(lores);
         item.setItemMeta(meta);
-        player.getInventory().addItem(new ItemStack[] { item });
+        player.getInventory().addItem(item);
         if (i < 1)
           player.playSound(player.getLocation(), SoundMachine.get("ITEM_PICKUP", "ENTITY_ITEM_PICKUP"), Float.valueOf("1.0").floatValue(), Float.valueOf("1.0").floatValue()); 
         if (i < 1 && Main.message_buy.length() > 0) {
@@ -184,15 +184,14 @@ public class NewHypixelShop implements Listener {
           player.sendMessage(Main.message_buy.replace("{item}", name));
         } 
       } else if (i < 1) {
-        player.sendMessage("§c" + ColorUtil.color(BedwarsRel._l((CommandSender)player, "errors.notenoughress")));
+        player.sendMessage("§c" + ColorUtil.color(BedwarsRel._l(player, "errors.notenoughress")));
       } 
     } 
   }
   
   private boolean isEnough(Game game, Player player, String type, int amount, Map<String, ItemStack> resname) {
     if (type.equals("经验") && Bukkit.getPluginManager().isPluginEnabled("BedwarsXP")) {
-      if (XPManager.getXPManager(game.getName()).getXP(player) >= amount)
-        return true; 
+      return XPManager.getXPManager(game.getName()).getXP(player) >= amount;
     } else {
       int k = 0;
       int i = (player.getInventory().getContents()).length;
@@ -200,13 +199,11 @@ public class NewHypixelShop implements Listener {
       for (int j = 0; j < i; j++) {
         ItemStack stack = stacks[j];
         if (stack != null && 
-          stack.getType().equals(((ItemStack)resname.get(type)).getType()))
+          stack.getType().equals(resname.get(type).getType()))
           k += stack.getAmount(); 
-      } 
-      if (k >= amount)
-        return true; 
-    } 
-    return false;
+      }
+      return k >= amount;
+    }
   }
   
   private void takeItem(Game game, Player player, String type, int amount, Map<String, ItemStack> resname) {
@@ -219,7 +216,7 @@ public class NewHypixelShop implements Listener {
       for (int j = 0; j < i; j++) {
         ItemStack stack = stacks[j];
         if (stack != null && 
-          stack.getType().equals(((ItemStack)resname.get(type)).getType()) && ta > 0) {
+          stack.getType().equals(resname.get(type).getType()) && ta > 0) {
           if (stack.getAmount() >= ta) {
             stack.setAmount(stack.getAmount() - ta);
             ta = 0;
@@ -236,7 +233,7 @@ public class NewHypixelShop implements Listener {
   private ItemStack getFrame(int damage) {
     ItemStack itemStack = new ItemStack(Material.STAINED_GLASS_PANE, 1, (short)damage);
     ItemMeta itemMeta = itemStack.getItemMeta();
-    itemMeta.setDisplayName(String.valueOf(getItemName(Main.item_frame)) + "§f§r§a§m§e");
+    itemMeta.setDisplayName(getItemName(Main.item_frame) + "§f§r§a§m§e");
     itemMeta.setLore(getItemLore(Main.item_frame));
     itemStack.setItemMeta(itemMeta);
     return itemStack;
@@ -258,28 +255,28 @@ public class NewHypixelShop implements Listener {
   private Boolean isOptionItem(ItemStack item) {
     ItemStack slime = new ItemStack(Material.SLIME_BALL, 1);
     ItemMeta slimeMeta = slime.getItemMeta();
-    slimeMeta.setDisplayName(BedwarsRel._l((CommandSender)Bukkit.getConsoleSender(), "ingame.shop.oldshop"));
+    slimeMeta.setDisplayName(BedwarsRel._l(Bukkit.getConsoleSender(), "ingame.shop.oldshop"));
     slimeMeta.setLore(new ArrayList());
     slime.setItemMeta(slimeMeta);
     if (item.isSimilar(slime))
       return Boolean.valueOf(true); 
     ItemStack snow = new ItemStack(Material.SNOW_BALL, 1);
     ItemMeta snowMeta = snow.getItemMeta();
-    snowMeta.setDisplayName(BedwarsRel._l((CommandSender)Bukkit.getConsoleSender(), "ingame.shop.newshop"));
+    snowMeta.setDisplayName(BedwarsRel._l(Bukkit.getConsoleSender(), "ingame.shop.newshop"));
     snowMeta.setLore(new ArrayList());
     snow.setItemMeta(snowMeta);
     if (item.isSimilar(snow))
       return Boolean.valueOf(true); 
     ItemStack bucket = new ItemStack(Material.BUCKET, 1);
     ItemMeta bucketMeta = bucket.getItemMeta();
-    bucketMeta.setDisplayName(ChatColor.AQUA + BedwarsRel._l((CommandSender)Bukkit.getConsoleSender(), "default.currently") + ": " + ChatColor.WHITE + BedwarsRel._l((CommandSender)Bukkit.getConsoleSender(), "ingame.shop.onestackpershift"));
+    bucketMeta.setDisplayName(ChatColor.AQUA + BedwarsRel._l(Bukkit.getConsoleSender(), "default.currently") + ": " + ChatColor.WHITE + BedwarsRel._l(Bukkit.getConsoleSender(), "ingame.shop.onestackpershift"));
     bucketMeta.setLore(new ArrayList());
     bucket.setItemMeta(bucketMeta);
     if (item.isSimilar(bucket))
       return Boolean.valueOf(true); 
     ItemStack lavaBucket = new ItemStack(Material.LAVA_BUCKET, 1);
     ItemMeta lavaBucketMeta = lavaBucket.getItemMeta();
-    lavaBucketMeta.setDisplayName(ChatColor.AQUA + BedwarsRel._l((CommandSender)Bukkit.getConsoleSender(), "default.currently") + ": " + ChatColor.WHITE + BedwarsRel._l((CommandSender)Bukkit.getConsoleSender(), "ingame.shop.fullstackpershift"));
+    lavaBucketMeta.setDisplayName(ChatColor.AQUA + BedwarsRel._l(Bukkit.getConsoleSender(), "default.currently") + ": " + ChatColor.WHITE + BedwarsRel._l(Bukkit.getConsoleSender(), "ingame.shop.fullstackpershift"));
     lavaBucketMeta.setLore(new ArrayList());
     lavaBucket.setItemMeta(lavaBucketMeta);
     if (item.isSimilar(lavaBucket))

@@ -49,13 +49,13 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
 public class Spectator implements Listener {
-  private List<Player> players = new ArrayList<>();
+  private final List<Player> players = new ArrayList<>();
   
   private ItemStack speeditem;
   
   private ItemStack joinitem;
   
-  private List<Material> resitems = new ArrayList<>();
+  private final List<Material> resitems = new ArrayList<>();
   
   @EventHandler
   public void onJoin(PlayerJoinEvent e) {
@@ -217,7 +217,7 @@ public class Spectator implements Listener {
             cancel();
           } 
         }
-      }).runTaskTimer((Plugin)Main.getInstance(), 0L, 0L);
+      }).runTaskTimer(Main.getInstance(), 0L, 0L);
     (new BukkitRunnable() {
         public void run() {
           if (e.getGame().getState() == GameState.RUNNING) {
@@ -251,7 +251,7 @@ public class Spectator implements Listener {
             cancel();
           } 
         }
-      }).runTaskTimer((Plugin)Main.getInstance(), 0L, 5L);
+      }).runTaskTimer(Main.getInstance(), 0L, 5L);
     Timer logTimer = new Timer();
     TimerTask task = new TimerTask() {
         public void run() {
@@ -330,7 +330,7 @@ public class Spectator implements Listener {
                 player.teleport(location);
               } 
             }
-          }).runTaskLater((Plugin)Main.getInstance(), 1L);
+          }).runTaskLater(Main.getInstance(), 1L);
       } 
       (new BukkitRunnable() {
           public void run() {
@@ -341,7 +341,7 @@ public class Spectator implements Listener {
                   true);
             } 
           }
-        }).runTaskLater((Plugin)Main.getInstance(), 20L);
+        }).runTaskLater(Main.getInstance(), 20L);
     } 
   }
   
@@ -376,7 +376,7 @@ public class Spectator implements Listener {
                 player.teleport(location);
               } 
             }
-          }).runTaskLater((Plugin)Main.getInstance(), 20L);
+          }).runTaskLater(Main.getInstance(), 20L);
       } 
       (new BukkitRunnable() {
           public void run() {
@@ -384,7 +384,7 @@ public class Spectator implements Listener {
             player.setAllowFlight(true);
             player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 2147483647, 0), true);
           }
-        }).runTaskLater((Plugin)Main.getInstance(), 20L);
+        }).runTaskLater(Main.getInstance(), 20L);
     } 
   }
   

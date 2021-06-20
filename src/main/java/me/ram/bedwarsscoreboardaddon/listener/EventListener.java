@@ -76,7 +76,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scoreboard.Scoreboard;
 
 public class EventListener implements Listener {
-  private Map<String, Map<Event, PacketListener>> deathevents;
+  private final Map<String, Map<Event, PacketListener>> deathevents;
   
   public EventListener() {
     this.deathevents = new HashMap<>();
@@ -97,16 +97,16 @@ public class EventListener implements Listener {
     (new BukkitRunnable() {
         public void run() {
           if (Main.getInstance().getArenaManager().getArenas().containsKey(game.getName()))
-            ((Arena)Main.getInstance().getArenaManager().getArenas().get(game.getName())).getScoreBoard().updateScoreboard(); 
+            Main.getInstance().getArenaManager().getArenas().get(game.getName()).getScoreBoard().updateScoreboard();
         }
-      }).runTaskLater((Plugin)Main.getInstance(), 2L);
+      }).runTaskLater(Main.getInstance(), 2L);
   }
   
   @EventHandler
   public void onOver(BedwarsGameOverEvent e) {
     Game game = e.getGame();
     if (Main.getInstance().getArenaManager().getArenas().containsKey(game.getName()))
-      ((Arena)Main.getInstance().getArenaManager().getArenas().get(game.getName())).onOver(e); 
+      Main.getInstance().getArenaManager().getArenas().get(game.getName()).onOver(e);
   }
   
   @EventHandler(priority = EventPriority.HIGHEST)
@@ -117,7 +117,7 @@ public class EventListener implements Listener {
     if (args[0].equalsIgnoreCase("/bwsbatp")) {
       e.setCancelled(true);
       if (args.length == 8 && player.hasPermission("bedwarsscoreboardaddon.shop.teleport")) {
-        String loc = message.substring(10 + args[1].length(), message.length());
+        String loc = message.substring(10 + args[1].length());
         Location location = toLocation(loc);
         if (location != null) {
           player.teleport(location);
@@ -135,7 +135,7 @@ public class EventListener implements Listener {
                 Game game = BedwarsRel.getInstance().getGameManager().getGame(args[2]);
                 EditGame.editGame(player, game);
               }
-            }).runTask((Plugin)Main.getInstance());
+            }).runTask(Main.getInstance());
         } catch (Exception exception) {} 
       return;
     } 
@@ -161,7 +161,7 @@ public class EventListener implements Listener {
     Player player = e.getPlayer();
     Game game = e.getGame();
     if (Main.getInstance().getArenaManager().getArenas().containsKey(game.getName()))
-      ((Arena)Main.getInstance().getArenaManager().getArenas().get(game.getName())).onPlayerJoined(player); 
+      Main.getInstance().getArenaManager().getArenas().get(game.getName()).onPlayerJoined(player);
     if (game.getState() == GameState.WAITING)
       for (Arena arena : Main.getInstance().getArenaManager().getArenas().values())
         arena.getRejoin().removePlayer(player.getName());  
@@ -181,15 +181,15 @@ public class EventListener implements Listener {
         players++; 
     } 
     if (game.getState() == GameState.RUNNING && !game.isSpectator(player) && players <= 1) {
-      Bukkit.getPluginManager().callEvent((Event)new BedwarsTeamDeadEvent(game, team));
+      Bukkit.getPluginManager().callEvent(new BedwarsTeamDeadEvent(game, team));
       if (Config.rejoin_enabled) {
         destroyBlock(game, team);
         if (Main.getInstance().getArenaManager().getArenas().containsKey(game.getName()))
-          ((Arena)Main.getInstance().getArenaManager().getArenas().get(game.getName())).getRejoin().removeTeam(team.getName()); 
+          Main.getInstance().getArenaManager().getArenas().get(game.getName()).getRejoin().removeTeam(team.getName());
       } 
     } 
     if (Main.getInstance().getArenaManager().getArenas().containsKey(game.getName()))
-      ((Arena)Main.getInstance().getArenaManager().getArenas().get(game.getName())).onPlayerLeave(e.getPlayer()); 
+      Main.getInstance().getArenaManager().getArenas().get(game.getName()).onPlayerLeave(e.getPlayer());
     if (player.isOnline()) {
       ProtocolManager m = ProtocolLibrary.getProtocolManager();
       try {
@@ -219,7 +219,7 @@ public class EventListener implements Listener {
   public void onEnd(BedwarsGameEndEvent e) {
     Game game = e.getGame();
     if (Main.getInstance().getArenaManager().getArenas().containsKey(game.getName()))
-      ((Arena)Main.getInstance().getArenaManager().getArenas().get(game.getName())).onEnd(); 
+      Main.getInstance().getArenaManager().getArenas().get(game.getName()).onEnd();
     Main.getInstance().getArenaManager().removeArena(game.getName());
     game.kickAllPlayers();
   }
@@ -228,13 +228,13 @@ public class EventListener implements Listener {
   public void onTargetBlockDestroyed(BedwarsTargetBlockDestroyedEvent e) {
     final Game game = e.getGame();
     if (Main.getInstance().getArenaManager().getArenas().containsKey(game.getName())) {
-      ((Arena)Main.getInstance().getArenaManager().getArenas().get(game.getName())).onTargetBlockDestroyed(e);
+      Main.getInstance().getArenaManager().getArenas().get(game.getName()).onTargetBlockDestroyed(e);
       (new BukkitRunnable() {
           public void run() {
             if (Main.getInstance().getArenaManager().getArenas().containsKey(game.getName()))
-              ((Arena)Main.getInstance().getArenaManager().getArenas().get(game.getName())).getScoreBoard().updateScoreboard(); 
+              Main.getInstance().getArenaManager().getArenas().get(game.getName()).getScoreBoard().updateScoreboard();
           }
-        }).runTaskLater((Plugin)Main.getInstance(), 1L);
+        }).runTaskLater(Main.getInstance(), 1L);
     } 
   }
   
@@ -245,7 +245,7 @@ public class EventListener implements Listener {
     if (game == null)
       return; 
     if (Main.getInstance().getArenaManager().getArenas().containsKey(game.getName()))
-      ((Arena)Main.getInstance().getArenaManager().getArenas().get(game.getName())).onDeath(player); 
+      Main.getInstance().getArenaManager().getArenas().get(game.getName()).onDeath(player);
     Team team = game.getPlayerTeam(player);
     if (team == null)
       return; 
@@ -255,9 +255,9 @@ public class EventListener implements Listener {
         players++; 
     } 
     if (game.getState() == GameState.RUNNING && team != null && players <= 1 && !game.isSpectator(player) && team.isDead(game)) {
-      Bukkit.getPluginManager().callEvent((Event)new BedwarsTeamDeadEvent(game, team));
+      Bukkit.getPluginManager().callEvent(new BedwarsTeamDeadEvent(game, team));
       if (Main.getInstance().getArenaManager().getArenas().containsKey(game.getName()))
-        ((Arena)Main.getInstance().getArenaManager().getArenas().get(game.getName())).getRejoin().removeTeam(team.getName()); 
+        Main.getInstance().getArenaManager().getArenas().get(game.getName()).getRejoin().removeTeam(team.getName());
     } 
   }
   
@@ -266,14 +266,14 @@ public class EventListener implements Listener {
     Player player = e.getPlayer();
     Game game = BedwarsRel.getInstance().getGameManager().getGameOfPlayer(player);
     if (game != null && Main.getInstance().getArenaManager().getArenas().containsKey(game.getName()))
-      ((Arena)Main.getInstance().getArenaManager().getArenas().get(game.getName())).onRespawn(player); 
+      Main.getInstance().getArenaManager().getArenas().get(game.getName()).onRespawn(player);
   }
   
   @EventHandler
   public void onPlayerKilled(BedwarsPlayerKilledEvent e) {
     Game game = BedwarsRel.getInstance().getGameManager().getGameOfPlayer(e.getKiller());
     if (game != null && Main.getInstance().getArenaManager().getArenas().containsKey(game.getName()))
-      ((Arena)Main.getInstance().getArenaManager().getArenas().get(game.getName())).onPlayerKilled(e); 
+      Main.getInstance().getArenaManager().getArenas().get(game.getName()).onPlayerKilled(e);
   }
   
   @EventHandler(priority = EventPriority.LOWEST)
@@ -333,11 +333,11 @@ public class EventListener implements Listener {
   }
   
   private PacketListener addPacketListener(final Player killer, final Team killerTeam, final Player player, final Team deathTeam) {
-    PacketAdapter packetAdapter = new PacketAdapter((Plugin)Main.getInstance(), 
-        new PacketType[] { PacketType.Play.Server.CHAT }) {
+    PacketAdapter packetAdapter = new PacketAdapter(Main.getInstance(),
+            PacketType.Play.Server.CHAT) {
         public void onPacketSending(PacketEvent e) {
           Player p = e.getPlayer();
-          WrappedChatComponent chat = (WrappedChatComponent)e.getPacket().getChatComponents().read(0);
+          WrappedChatComponent chat = e.getPacket().getChatComponents().read(0);
           String hearts = "";
           DecimalFormat format = new DecimalFormat("#");
           double health = killer.getHealth() / killer.getMaxHealth() * killer.getHealthScale();
@@ -348,10 +348,10 @@ public class EventListener implements Listener {
           if (BedwarsRel.getInstance().getBooleanConfig("hearts-on-death", true))
             hearts = "[" + ChatColor.RED + "❤" + format.format(health) + ChatColor.GOLD + "]"; 
           WrappedChatComponent[] chats = WrappedChatComponent.fromChatMessage(
-              ChatWriter.pluginMessage(ChatColor.GOLD + BedwarsRel._l((CommandSender)p, "ingame.player.killed", 
-                  (Map)ImmutableMap.of("killer", 
-                    Game.getPlayerWithTeamString(killer, killerTeam, ChatColor.GOLD, hearts), 
-                    "player", Game.getPlayerWithTeamString(player, deathTeam, ChatColor.GOLD)))));
+              ChatWriter.pluginMessage(ChatColor.GOLD + BedwarsRel._l(p, "ingame.player.killed",
+                      ImmutableMap.of("killer",
+                        Game.getPlayerWithTeamString(killer, killerTeam, ChatColor.GOLD, hearts),
+                        "player", Game.getPlayerWithTeamString(player, deathTeam, ChatColor.GOLD)))));
           byte b;
           int i;
           WrappedChatComponent[] arrayOfWrappedChatComponent1;
@@ -365,8 +365,8 @@ public class EventListener implements Listener {
           } 
         }
       };
-    ProtocolLibrary.getProtocolManager().addPacketListener((PacketListener)packetAdapter);
-    return (PacketListener)packetAdapter;
+    ProtocolLibrary.getProtocolManager().addPacketListener(packetAdapter);
+    return packetAdapter;
   }
   
   @EventHandler
@@ -439,18 +439,18 @@ public class EventListener implements Listener {
             public void run() {
               if (player.hasPotionEffect(PotionEffectType.INVISIBILITY) && 
                 this.duration < EventListener.this.getPotionEffect(player, PotionEffectType.INVISIBILITY).getDuration())
-                ((Arena)Main.getInstance().getArenaManager().getArenas().get(game.getName())).getInvisiblePlayer()
+                Main.getInstance().getArenaManager().getArenas().get(game.getName()).getInvisiblePlayer()
                   .hidePlayer(player); 
             }
-          }).runTaskLater((Plugin)Main.getInstance(), 1L);
+          }).runTaskLater(Main.getInstance(), 1L);
       } else {
         (new BukkitRunnable() {
             public void run() {
               if (player.hasPotionEffect(PotionEffectType.INVISIBILITY))
-                ((Arena)Main.getInstance().getArenaManager().getArenas().get(game.getName())).getInvisiblePlayer()
+                Main.getInstance().getArenaManager().getArenas().get(game.getName()).getInvisiblePlayer()
                   .hidePlayer(player); 
             }
-          }).runTaskLater((Plugin)Main.getInstance(), 1L);
+          }).runTaskLater(Main.getInstance(), 1L);
       }  
     (new BukkitRunnable() {
         public void run() {
@@ -460,7 +460,7 @@ public class EventListener implements Listener {
               player.addPotionEffect(new PotionEffect(effect.getType(), effect.getDuration(), 
                     effect.getAmplifier(), true, false), true);  
         }
-      }).runTaskLater((Plugin)Main.getInstance(), 1L);
+      }).runTaskLater(Main.getInstance(), 1L);
   }
   
   @EventHandler(priority = EventPriority.HIGHEST)
@@ -484,10 +484,10 @@ public class EventListener implements Listener {
     if (!Main.getInstance().getArenaManager().getArenas().containsKey(game.getName()))
       return; 
     if (Config.invisibility_player_damage_show_player) {
-      ((Arena)Main.getInstance().getArenaManager().getArenas().get(game.getName())).getInvisiblePlayer()
+      Main.getInstance().getArenaManager().getArenas().get(game.getName()).getInvisiblePlayer()
         .removePlayer(player);
     } else {
-      ((Arena)Main.getInstance().getArenaManager().getArenas().get(game.getName())).getInvisiblePlayer()
+      Main.getInstance().getArenaManager().getArenas().get(game.getName()).getInvisiblePlayer()
         .showPlayerArmor(player);
     } 
   }
@@ -532,7 +532,7 @@ public class EventListener implements Listener {
           if (player.getInventory().getItemInHand().getType() == Material.GLASS_BOTTLE)
             player.getInventory().setItemInHand(new ItemStack(Material.AIR));
         }
-      }).runTaskLater((Plugin)Main.getInstance(), 0L);
+      }).runTaskLater(Main.getInstance(), 0L);
   }
   
   @EventHandler(priority = EventPriority.HIGHEST)
@@ -571,19 +571,19 @@ public class EventListener implements Listener {
   }
   
   private void onPacketReceiving() {
-    PacketAdapter packetAdapter = new PacketAdapter((Plugin)Main.getInstance(), ListenerPriority.HIGHEST, 
-        new PacketType[] { PacketType.Play.Client.BLOCK_DIG, PacketType.Play.Client.WINDOW_CLICK }) {
+    PacketAdapter packetAdapter = new PacketAdapter(Main.getInstance(), ListenerPriority.HIGHEST,
+            PacketType.Play.Client.BLOCK_DIG, PacketType.Play.Client.WINDOW_CLICK) {
         public void onPacketReceiving(PacketEvent e) {
           final Player player = e.getPlayer();
           PacketContainer packet = e.getPacket();
           if (e.getPacketType() == PacketType.Play.Client.BLOCK_DIG) {
-            if (!((EnumWrappers.PlayerDigType)packet.getPlayerDigTypes().read(0)).equals(EnumWrappers.PlayerDigType.STOP_DESTROY_BLOCK))
+            if (!packet.getPlayerDigTypes().read(0).equals(EnumWrappers.PlayerDigType.STOP_DESTROY_BLOCK))
               return; 
             Game game = BedwarsRel.getInstance().getGameManager().getGameOfPlayer(player);
             if (game == null || game.getState() != GameState.RUNNING || !game.isSpectator(player))
               return; 
             e.setCancelled(true);
-            BlockPosition position = (BlockPosition)packet.getBlockPositionModifier().read(0);
+            BlockPosition position = packet.getBlockPositionModifier().read(0);
             Location location = new Location(e.getPlayer().getWorld(), position.getX(), position.getY(), 
                 position.getZ());
             location.getBlock().getState().update();
@@ -591,7 +591,7 @@ public class EventListener implements Listener {
             Game game = BedwarsRel.getInstance().getGameManager().getGameOfPlayer(player);
             if (game == null || game.getState() != GameState.RUNNING || game.isSpectator(player))
               return; 
-            int slot = ((Integer)packet.getIntegers().read(1)).intValue();
+            int slot = packet.getIntegers().read(1).intValue();
             if (slot < 0)
               return; 
             ItemStack itemStack = player.getOpenInventory().getItem(slot);
@@ -620,28 +620,26 @@ public class EventListener implements Listener {
                     if (player.isOnline())
                       player.updateInventory(); 
                   }
-                }).runTaskLater((Plugin)Main.getInstance(), 1L);
+                }).runTaskLater(Main.getInstance(), 1L);
             } 
           } 
         }
       };
-    ProtocolLibrary.getProtocolManager().addPacketListener((PacketListener)packetAdapter);
+    ProtocolLibrary.getProtocolManager().addPacketListener(packetAdapter);
   }
   
   private void onPacketSending() {
-    PacketAdapter packetAdapter = new PacketAdapter((Plugin)Main.getInstance(), ListenerPriority.HIGHEST, 
-        new PacketType[] { PacketType.Play.Server.SCOREBOARD_DISPLAY_OBJECTIVE, 
-          PacketType.Play.Server.SCOREBOARD_OBJECTIVE, PacketType.Play.Server.SCOREBOARD_SCORE, 
-          PacketType.Play.Server.SCOREBOARD_TEAM }) {
+    PacketAdapter packetAdapter = new PacketAdapter(Main.getInstance(), ListenerPriority.HIGHEST,
+            PacketType.Play.Server.SCOREBOARD_DISPLAY_OBJECTIVE,
+            PacketType.Play.Server.SCOREBOARD_OBJECTIVE, PacketType.Play.Server.SCOREBOARD_SCORE,
+            PacketType.Play.Server.SCOREBOARD_TEAM) {
         public void onPacketSending(PacketEvent e) {
           PacketContainer packet = e.getPacket();
-          if (e.getPacketType().equals(PacketType.Play.Server.SCOREBOARD_SCORE) && (
-            (EnumWrappers.ScoreboardAction)packet.getScoreboardActions().read(0)).equals(EnumWrappers.ScoreboardAction.REMOVE) && (
-            (String)packet.getStrings().read(1)).equals("") && EventListener.this.getPlayer((String)packet.getStrings().read(0)) != null)
+          if (e.getPacketType().equals(PacketType.Play.Server.SCOREBOARD_SCORE) && packet.getScoreboardActions().read(0).equals(EnumWrappers.ScoreboardAction.REMOVE) && packet.getStrings().read(1).equals("") && EventListener.this.getPlayer(packet.getStrings().read(0)) != null)
             e.setCancelled(true); 
         }
       };
-    ProtocolLibrary.getProtocolManager().addPacketListener((PacketListener)packetAdapter);
+    ProtocolLibrary.getProtocolManager().addPacketListener(packetAdapter);
   }
   
   private void destroyBlock(Game game, Team team) {

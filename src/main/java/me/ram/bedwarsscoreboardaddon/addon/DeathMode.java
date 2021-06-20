@@ -39,7 +39,7 @@ public class DeathMode {
               if (game.getTimeLeft() <= Config.deathmode_gametime) {
                 this.isExecuted = Boolean.valueOf(true);
                 BoardAddonDeathModeEvent deathModeEvent = new BoardAddonDeathModeEvent(game);
-                Bukkit.getPluginManager().callEvent((Event)deathModeEvent);
+                Bukkit.getPluginManager().callEvent(deathModeEvent);
                 if (deathModeEvent.isCancelled()) {
                   cancel();
                   return;
@@ -60,7 +60,7 @@ public class DeathMode {
             cancel();
           } 
         }
-      }).runTaskTimer((Plugin)Main.getInstance(), 0L, 21L);
+      }).runTaskTimer(Main.getInstance(), 0L, 21L);
   }
   
   private void destroyBlock(Game game, Team team) {

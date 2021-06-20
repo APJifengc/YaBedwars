@@ -30,9 +30,9 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
 public class Respawn {
-  private Game game;
+  private final Game game;
   
-  private List<Player> players;
+  private final List<Player> players;
   
   public Respawn(Game game) {
     this.players = new ArrayList<>();
@@ -68,7 +68,7 @@ public class Respawn {
             player.teleport(location);
           } 
         }
-      }).runTaskLater((Plugin)Main.getInstance(), 1L);
+      }).runTaskLater(Main.getInstance(), 1L);
   }
   
   public void onDeath(final Player player, boolean rejoin) {
@@ -108,7 +108,7 @@ public class Respawn {
               cancel();
             } 
           }
-        }).runTaskTimer((Plugin)Main.getInstance(), 1L, 1L); 
+        }).runTaskTimer(Main.getInstance(), 1L, 1L);
     player.setGameMode(GameMode.SPECTATOR);
     player.setVelocity(new Vector(0, 0, 0));
     (new BukkitRunnable() {
@@ -162,7 +162,7 @@ public class Respawn {
                     if (!Config.respawn_respawned_message.equals(""))
                       player.sendMessage(Config.respawn_respawned_message); 
                     player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 5, 0), true);
-                    Bukkit.getPluginManager().callEvent((Event)new BoardAddonPlayerRespawnEvent(Respawn.this.game, player));
+                    Bukkit.getPluginManager().callEvent(new BoardAddonPlayerRespawnEvent(Respawn.this.game, player));
                     if (Config.invisibility_player_enabled)
                       for (Player p : invplayers) {
                         if (p.isOnline()) {
@@ -189,7 +189,7 @@ public class Respawn {
                           packet.getBytes().write(1, 
                               Byte.valueOf((byte)(int)(p.getLocation().getPitch() * 256.0F / 360.0F)));
                           packet.getDataWatcherModifier().write(0, 
-                              WrappedDataWatcher.getEntityWatcher((Entity)p));
+                              WrappedDataWatcher.getEntityWatcher(p));
                           try {
                             protocolManager.sendServerPacket(player, packet);
                           } catch (InvocationTargetException e1) {
@@ -201,10 +201,10 @@ public class Respawn {
                   } 
                   this.respawntime--;
                 }
-              }).runTaskTimer((Plugin)Main.getInstance(), 30L, 21L);
+              }).runTaskTimer(Main.getInstance(), 30L, 21L);
             cancel();
           } 
         }
-      }).runTaskTimer((Plugin)Main.getInstance(), 0L, 0L);
+      }).runTaskTimer(Main.getInstance(), 0L, 0L);
   }
 }

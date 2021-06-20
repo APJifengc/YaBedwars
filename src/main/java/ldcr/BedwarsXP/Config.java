@@ -14,7 +14,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
 
 public class Config {
-  private static int configVersion = 2;
+  private static final int configVersion = 2;
   
   protected static YamlConfiguration yaml_config;
   
@@ -42,7 +42,7 @@ public class Config {
   
   public static HashSet<String> resourceskey = new HashSet<>();
   
-  private static HashSet<String> enabledGameList = new HashSet<>();
+  private static final HashSet<String> enabledGameList = new HashSet<>();
   
   public static void loadConfig() {
     BedwarsXP.sendConsoleMessage("§6§l[BedwarsXP] &b开始加载配置文件");

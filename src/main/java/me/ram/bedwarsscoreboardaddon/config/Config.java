@@ -559,26 +559,26 @@ public class Config {
   public static void loadConfig() {
     Main.getInstance().getHolographicManager().removeAll();
     String prefix = "[" + Main.getInstance().getDescription().getName() + "] ";
-    Bukkit.getConsoleSender().sendMessage(String.valueOf(prefix) + "§f正在加载配置文件...");
+    Bukkit.getConsoleSender().sendMessage(prefix + "§f正在加载配置文件...");
     File folder = new File(Main.getInstance().getDataFolder(), "/");
     if (!folder.exists())
       folder.mkdirs(); 
-    File cfile = new File(String.valueOf(folder.getAbsolutePath()) + "/config.yml");
+    File cfile = new File(folder.getAbsolutePath() + "/config.yml");
     if (!cfile.exists())
       Main.getInstance().saveResource("config.yml", false); 
-    File tsfile = new File(String.valueOf(folder.getAbsolutePath()) + "/team_shop.yml");
+    File tsfile = new File(folder.getAbsolutePath() + "/team_shop.yml");
     if (!tsfile.exists())
       Main.getInstance().saveResource("team_shop.yml", false); 
     YamlConfiguration yamlConfiguration1 = YamlConfiguration.loadConfiguration(cfile);
     if (yamlConfiguration1.getString("version") == null || !yamlConfiguration1.getString("version").equals(Main.getVersion())) {
-      cfile.renameTo(new File(String.valueOf(folder.getAbsolutePath()) + "/config_" + (
+      cfile.renameTo(new File(folder.getAbsolutePath() + "/config_" + (
             new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss")).format(new Date()) + ".yml"));
       Main.getInstance().saveResource("config.yml", false);
       yamlConfiguration1 = YamlConfiguration.loadConfiguration(cfile);
     } 
-    language_config = (FileConfiguration)YamlConfiguration.loadConfiguration(getLanguageFile());
+    language_config = YamlConfiguration.loadConfiguration(getLanguageFile());
     YamlConfiguration yamlConfiguration2 = YamlConfiguration.loadConfiguration(tsfile);
-    Bukkit.getConsoleSender().sendMessage(String.valueOf(prefix) + "§a默认配置文件已保存！");
+    Bukkit.getConsoleSender().sendMessage(prefix + "§a默认配置文件已保存！");
     Main.getInstance().reloadConfig();
     FileConfiguration config = Main.getInstance().getConfig();
     update_check = config.getBoolean("update_check");
@@ -678,12 +678,12 @@ public class Config {
     spectator_speed_enabled = config.getBoolean("spectator.speed.enabled");
     spectator_speed_slot = config.getInt("spectator.speed.slot");
     spectator_speed_item = config.getInt("spectator.speed.item");
-    spectator_speed_item_name = 
-      String.valueOf(ColorUtil.color(Main.getInstance().getConfig().getString("spectator.speed.item_name"))) + "§7";
+    spectator_speed_item_name =
+            ColorUtil.color(Main.getInstance().getConfig().getString("spectator.speed.item_name")) + "§7";
     spectator_speed_item_lore = 
       ColorUtil.listcolor(Main.getInstance().getConfig().getStringList("spectator.speed.item_lore"));
-    spectator_speed_gui_title = 
-      String.valueOf(ColorUtil.color(Main.getInstance().getConfig().getString("spectator.speed.gui_title"))) + "§s§s";
+    spectator_speed_gui_title =
+            ColorUtil.color(Main.getInstance().getConfig().getString("spectator.speed.gui_title")) + "§s§s";
     spectator_speed_no_speed = 
       ColorUtil.color(Main.getInstance().getConfig().getString("spectator.speed.no_speed"));
     spectator_speed_speed_1 = ColorUtil.color(Main.getInstance().getConfig().getString("spectator.speed.speed_1"));
@@ -693,8 +693,8 @@ public class Config {
     spectator_fast_join_enabled = config.getBoolean("spectator.fast_join.enabled");
     spectator_fast_join_slot = config.getInt("spectator.fast_join.slot");
     spectator_fast_join_item = config.getInt("spectator.fast_join.item");
-    spectator_fast_join_item_name = 
-      String.valueOf(ColorUtil.color(Main.getInstance().getConfig().getString("spectator.fast_join.item_name"))) + "§7";
+    spectator_fast_join_item_name =
+            ColorUtil.color(Main.getInstance().getConfig().getString("spectator.fast_join.item_name")) + "§7";
     spectator_fast_join_item_lore = 
       ColorUtil.listcolor(Main.getInstance().getConfig().getStringList("spectator.fast_join.item_lore"));
     spectator_fast_join_group = config.getString("spectator.fast_join.group");
@@ -715,7 +715,7 @@ public class Config {
       compass_resources.add(type);
     } 
     compass_back = ColorUtil.color(Main.getInstance().getConfig().getString("compass.back"));
-    compass_gui_title = String.valueOf(ColorUtil.color(Main.getInstance().getConfig().getString("compass.gui_title"))) + "§c§g";
+    compass_gui_title = ColorUtil.color(Main.getInstance().getConfig().getString("compass.gui_title")) + "§c§g";
     compass_item_III_II = ColorUtil.color(Main.getInstance().getConfig().getString("compass.item.III_II"));
     compass_item_IV_II = ColorUtil.color(Main.getInstance().getConfig().getString("compass.item.IV_II"));
     compass_item_V_II = ColorUtil.color(Main.getInstance().getConfig().getString("compass.item.V_II"));
@@ -769,7 +769,7 @@ public class Config {
       ColorUtil.color(Main.getInstance().getConfig().getString("sethealth.start.subtitle"));
     sethealth_start_message = ColorUtil.color(Main.getInstance().getConfig().getString("sethealth.start.message"));
     resourcelimit_enabled = config.getBoolean("resourcelimit.enabled");
-    resourcelimit_limit = (List)new ArrayList<>();
+    resourcelimit_limit = new ArrayList<>();
     for (String w : Main.getInstance().getConfig().getStringList("resourcelimit.limit")) {
       String[] ary = w.split(",");
       resourcelimit_limit.add(ary);
@@ -786,7 +786,7 @@ public class Config {
     witherbow_subtitle = ColorUtil.color(Main.getInstance().getConfig().getString("witherbow.subtitle"));
     witherbow_message = ColorUtil.color(Main.getInstance().getConfig().getString("witherbow.message"));
     teamshop_enabled = yamlConfiguration2.getBoolean("enabled");
-    teamshop_title = ColorUtil.color(String.valueOf(yamlConfiguration2.getString("title")) + "§1§0§0§0§0§0");
+    teamshop_title = ColorUtil.color(yamlConfiguration2.getString("title") + "§1§0§0§0§0§0");
     teamshop_message = ColorUtil.color(yamlConfiguration2.getString("message"));
     teamshop_no_resource = ColorUtil.color(yamlConfiguration2.getString("no_resource"));
     teamshop_frame = ColorUtil.listcolor(yamlConfiguration2.getStringList("frame"));
@@ -932,13 +932,13 @@ public class Config {
       } 
     } 
     updataShop();
-    Bukkit.getConsoleSender().sendMessage(String.valueOf(prefix) + "§a配置文件加载成功！");
+    Bukkit.getConsoleSender().sendMessage(prefix + "§a配置文件加载成功！");
   }
   
   private static String conflict(List<String> lines, String line) {
     String l = line;
     for (int i = 0; i == 0; ) {
-      l = String.valueOf(l) + "§r";
+      l = l + "§r";
       if (!lines.contains(l))
         return l; 
     } 
@@ -951,7 +951,7 @@ public class Config {
     List<String> loc = new ArrayList<>();
     if (yamlConfiguration.getStringList("shop." + game + "." + type) != null)
       loc.addAll(yamlConfiguration.getStringList("shop." + game + "." + type)); 
-    loc.add(String.valueOf(location.getWorld().getName()) + ", " + location.getX() + ", " + location.getY() + ", " + location.getZ() + 
+    loc.add(location.getWorld().getName() + ", " + location.getX() + ", " + location.getY() + ", " + location.getZ() +
         ", " + location.getYaw() + ", " + location.getPitch());
     yamlConfiguration.set("shop." + game + "." + type, loc);
     try {
@@ -983,7 +983,7 @@ public class Config {
     File folder = new File(Main.getInstance().getDataFolder(), "/");
     if (!folder.exists())
       folder.mkdirs(); 
-    File file = new File(String.valueOf(folder.getAbsolutePath()) + "/game.yml");
+    File file = new File(folder.getAbsolutePath() + "/game.yml");
     shop_item = new HashMap<>();
     shop_team = new HashMap<>();
     shop_shops = new HashMap<>();
@@ -1028,7 +1028,7 @@ public class Config {
     File folder = new File(CitizensAPI.getDataFolder(), "/");
     if (!folder.exists())
       folder.mkdirs(); 
-    File file = new File(String.valueOf(folder.getAbsolutePath()) + "/npcs.yml");
+    File file = new File(folder.getAbsolutePath() + "/npcs.yml");
     if (!file.exists())
       try {
         file.createNewFile();
@@ -1040,7 +1040,7 @@ public class Config {
     File folder = new File(Main.getInstance().getDataFolder(), "/");
     if (!folder.exists())
       folder.mkdirs(); 
-    File file = new File(String.valueOf(folder.getAbsolutePath()) + "/game.yml");
+    File file = new File(folder.getAbsolutePath() + "/game.yml");
     if (!file.exists())
       try {
         file.createNewFile();
@@ -1064,7 +1064,7 @@ public class Config {
     File folder = new File(Main.getInstance().getDataFolder(), "/");
     if (!folder.exists())
       folder.mkdirs(); 
-    File file = new File(String.valueOf(folder.getAbsolutePath()) + "/language.yml");
+    File file = new File(folder.getAbsolutePath() + "/language.yml");
     if (!file.exists())
       Main.getInstance().saveResource("language.yml", false); 
     return file;

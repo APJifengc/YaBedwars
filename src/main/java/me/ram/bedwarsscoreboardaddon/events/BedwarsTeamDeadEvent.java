@@ -6,11 +6,11 @@ import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
 public class BedwarsTeamDeadEvent extends Event {
-  private static HandlerList handlers = new HandlerList();
+  private static final HandlerList handlers = new HandlerList();
   
-  private Game game;
+  private final Game game;
   
-  private Team team;
+  private final Team team;
   
   public BedwarsTeamDeadEvent(Game game, Team team) {
     this.game = game;

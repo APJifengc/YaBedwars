@@ -6,11 +6,11 @@ import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
 public class BoardAddonPlayerRespawnEvent extends Event {
-  private static HandlerList handlers = new HandlerList();
+  private static final HandlerList handlers = new HandlerList();
   
-  private Game game;
+  private final Game game;
   
-  private Player player;
+  private final Player player;
   
   public BoardAddonPlayerRespawnEvent(Game game, Player player) {
     this.game = game;

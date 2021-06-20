@@ -5,17 +5,17 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class PlayerGameStorage {
-  private Game game;
+  private final Game game;
   
-  private Map<String, Integer> totalkills;
+  private final Map<String, Integer> totalkills;
   
-  private Map<String, Integer> kills;
+  private final Map<String, Integer> kills;
   
-  private Map<String, Integer> finalkills;
+  private final Map<String, Integer> finalkills;
   
-  private Map<String, Integer> dies;
+  private final Map<String, Integer> dies;
   
-  private Map<String, Integer> beds;
+  private final Map<String, Integer> beds;
   
   public PlayerGameStorage(Game game) {
     this.game = game;

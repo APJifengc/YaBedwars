@@ -94,7 +94,7 @@ public class ChatFormat implements Listener {
       }
       if (all) {
         String playermsg = e.getMessage();
-        playermsg = playermsg.substring(prefix.length(), playermsg.length());
+        playermsg = playermsg.substring(prefix.length());
         msg = msg.replace("{player}", player.getName()).replace("{message}", playermsg)
           .replace("{color}", (CharSequence)game.getPlayerTeam(player).getChatColor())
           .replace("{team}", game.getPlayerTeam(player).getName());

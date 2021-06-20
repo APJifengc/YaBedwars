@@ -27,23 +27,23 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class Holographic {
-  private Game game;
+  private final Game game;
   
-  private List<HolographicAPI> ablocks;
+  private final List<HolographicAPI> ablocks;
   
-  private List<HolographicAPI> atitles;
+  private final List<HolographicAPI> atitles;
   
-  private List<HolographicAPI> btitles;
+  private final List<HolographicAPI> btitles;
   
-  private Map<String, HolographicAPI> pbtitles;
+  private final Map<String, HolographicAPI> pbtitles;
   
-  private ResourceUpgrade resourceupgrade;
+  private final ResourceUpgrade resourceupgrade;
   
-  private HashMap<HolographicAPI, Location> armorloc = new HashMap<>();
+  private final HashMap<HolographicAPI, Location> armorloc = new HashMap<>();
   
-  private HashMap<HolographicAPI, Boolean> armorupward = new HashMap<>();
+  private final HashMap<HolographicAPI, Boolean> armorupward = new HashMap<>();
   
-  private HashMap<HolographicAPI, Integer> armoralgebra = new HashMap<>();
+  private final HashMap<HolographicAPI, Integer> armoralgebra = new HashMap<>();
   
   public Holographic(final Game game, ResourceUpgrade resourceupgrade) {
     this.game = game;
@@ -71,10 +71,10 @@ public class Holographic {
                     holo.remove();
                   } 
                 }
-              }).runTaskTimer((Plugin)Main.getInstance(), 1L, 1L);
+              }).runTaskTimer(Main.getInstance(), 1L, 1L);
           } 
         }
-      }).runTaskLater((Plugin)Main.getInstance(), 20L);
+      }).runTaskLater(Main.getInstance(), 20L);
     (new BukkitRunnable() {
         public void run() {
           if (game.getState() != GameState.RUNNING || game.getPlayers().size() < 1) {
@@ -89,7 +89,7 @@ public class Holographic {
               holo.remove(); 
           } 
         }
-      }).runTaskTimer((Plugin)Main.getInstance(), 1L, 1L);
+      }).runTaskTimer(Main.getInstance(), 1L, 1L);
   }
   
   public Game getGame() {
@@ -101,7 +101,7 @@ public class Holographic {
       Team team = e.getTeam();
       final Game game = e.getGame();
       if (this.pbtitles.containsKey(team.getName()))
-        ((HolographicAPI)this.pbtitles.get(team.getName())).remove(); 
+        this.pbtitles.get(team.getName()).remove();
       Location loc = team.getTargetHeadBlock().clone().add(0.0D, -1.0D, 0.0D);
       if (loc.getX() == loc.getBlock().getLocation().getX())
         loc.add(0.5D, 0.0D, 0.0D); 
@@ -123,7 +123,7 @@ public class Holographic {
               cancel();
             } 
           }
-        }).runTaskTimer((Plugin)Main.getInstance(), 0L, 0L);
+        }).runTaskTimer(Main.getInstance(), 0L, 0L);
     } 
   }
   
@@ -136,14 +136,14 @@ public class Holographic {
             spawner.getLocation().getBlock().getChunk().load(true); 
           final HolographicAPI holo = new HolographicAPI(spawner.getLocation().clone().add(0.0D, Main.getInstance()
                 .getConfig().getDouble("holographic.resource.resources." + res + ".height"), 0.0D), null);
-          holo.setEquipment(Arrays.asList(new ItemStack[] { new ItemStack(Material.getMaterial(Main.getInstance().getConfig()
-                      .getInt("holographic.resource.resources." + res + ".block"))) }));
+          holo.setEquipment(Arrays.asList(new ItemStack(Material.getMaterial(Main.getInstance().getConfig()
+                      .getInt("holographic.resource.resources." + res + ".block")))));
           (new BukkitRunnable() {
               public void run() {
                 for (Player player : game.getPlayers())
                   holo.display(player); 
               }
-            }).runTaskLater((Plugin)Main.getInstance(), 20L);
+            }).runTaskLater(Main.getInstance(), 20L);
           ArrayList<String> titles = new ArrayList<>();
           Iterator<String> iterator = Main.getInstance().getConfig().getStringList("holographic.resource.resources." + res + ".title").iterator();
           while (iterator.hasNext()) {
@@ -181,7 +181,7 @@ public class Holographic {
             cancel();
           } 
         }
-      }).runTaskTimer((Plugin)Main.getInstance(), 1L, 1L);
+      }).runTaskTimer(Main.getInstance(), 1L, 1L);
   }
   
   private void setTitle(final Game game, Location location, final String title, final ItemStack itemStack) {
@@ -194,7 +194,7 @@ public class Holographic {
           for (Player player : game.getPlayers())
             holo.display(player); 
         }
-      }).runTaskLater((Plugin)Main.getInstance(), 20L);
+      }).runTaskLater(Main.getInstance(), 20L);
     (new BukkitRunnable() {
         public void run() {
           if (game.getState() == GameState.RUNNING) {
@@ -215,7 +215,7 @@ public class Holographic {
             return;
           } 
         }
-      }).runTaskTimer((Plugin)Main.getInstance(), 5L, 5L);
+      }).runTaskTimer(Main.getInstance(), 5L, 5L);
   }
   
   public void onPlayerLeave(Player player) {
@@ -240,11 +240,11 @@ public class Holographic {
             if (arena.getRejoin().getPlayers().containsKey(player.getName())) {
               Team team = Holographic.this.game.getPlayerTeam(player);
               if (team != null && !team.isDead(Holographic.this.game))
-                ((HolographicAPI)Holographic.this.pbtitles.get(team.getName())).display(player); 
+                Holographic.this.pbtitles.get(team.getName()).display(player);
             } 
           } 
         }
-      }).runTaskLater((Plugin)Main.getInstance(), 10L);
+      }).runTaskLater(Main.getInstance(), 10L);
   }
   
   public void remove() {
@@ -276,7 +276,7 @@ public class Holographic {
       this.armorupward.put(holo, Boolean.valueOf(true)); 
     if (!this.armoralgebra.containsKey(holo))
       this.armoralgebra.put(holo, Integer.valueOf(0)); 
-    this.armoralgebra.put(holo, Integer.valueOf(((Integer)this.armoralgebra.get(holo)).intValue() + 1));
+    this.armoralgebra.put(holo, Integer.valueOf(this.armoralgebra.get(holo).intValue() + 1));
     Location location = this.armorloc.get(holo);
     if (location.getY() >= height + 0.3D) {
       this.armoralgebra.put(holo, Integer.valueOf(0));
@@ -287,17 +287,17 @@ public class Holographic {
     } 
     Integer algebra = this.armoralgebra.get(holo);
     if (39 > algebra.intValue()) {
-      if (((Boolean)this.armorupward.get(holo)).booleanValue()) {
+      if (this.armorupward.get(holo).booleanValue()) {
         location.setY(location.getY() + 0.015D);
       } else {
         location.setY(location.getY() - 0.015D);
       } 
     } else if (algebra.intValue() >= 50) {
       this.armoralgebra.put(holo, Integer.valueOf(0));
-      this.armorupward.put(holo, Boolean.valueOf(!((Boolean)this.armorupward.get(holo)).booleanValue()));
+      this.armorupward.put(holo, Boolean.valueOf(!this.armorupward.get(holo).booleanValue()));
     } 
     Float turn = Float.valueOf(1.0F);
-    if (!((Boolean)this.armorupward.get(holo)).booleanValue())
+    if (!this.armorupward.get(holo).booleanValue())
       turn = Float.valueOf(-turn.floatValue()); 
     Float changeyaw = Float.valueOf(0.0F);
     if (algebra.intValue() == 1 || algebra.intValue() == 40) {

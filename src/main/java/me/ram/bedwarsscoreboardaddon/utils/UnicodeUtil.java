@@ -8,7 +8,7 @@ public final class UnicodeUtil {
   private static final String pattern = "[0-9|a-f|A-F][0-9|a-f|A-F][0-9|a-f|A-F][0-9|a-f|A-F]";
   
   private static String ustartToCn(String str) {
-    StringBuilder sb = (new StringBuilder()).append("0x").append(str.substring(2, 6));
+    StringBuilder sb = (new StringBuilder()).append("0x").append(str, 2, 6);
     Integer codeInteger = Integer.decode(sb.toString());
     int code = codeInteger.intValue();
     char c = (char)code;
@@ -37,7 +37,7 @@ public final class UnicodeUtil {
         i += 6;
         continue;
       } 
-      sb.append(str.substring(i, i + 1));
+      sb.append(str.charAt(i));
       i++;
     } 
     return sb.toString();

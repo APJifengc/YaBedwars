@@ -35,7 +35,7 @@ public class Metrics {
   
   private static final String URL = "https://bStats.org/submitData/bukkit";
   
-  private boolean enabled;
+  private final boolean enabled;
   
   private static boolean logFailedRequests;
   
@@ -150,7 +150,7 @@ public class Metrics {
   private JsonObject getServerData() {
     int playerAmount;
     try {
-      Method onlinePlayersMethod = Class.forName("org.bukkit.Server").getMethod("getOnlinePlayers", new Class[0]);
+      Method onlinePlayersMethod = Class.forName("org.bukkit.Server").getMethod("getOnlinePlayers");
       playerAmount = onlinePlayersMethod.getReturnType().equals(Collection.class) ? (
         (Collection)onlinePlayersMethod.invoke(Bukkit.getServer(), new Object[0])).size() : (
         (Player[])onlinePlayersMethod.invoke(Bukkit.getServer(), new Object[0])).length;
@@ -187,7 +187,7 @@ public class Metrics {
         service.getField("B_STATS_VERSION");
         for (RegisteredServiceProvider<?> provider : Bukkit.getServicesManager().getRegistrations(service)) {
           try {
-            Object plugin = provider.getService().getMethod("getPluginData", new Class[0]).invoke(provider.getProvider(), new Object[0]);
+            Object plugin = provider.getService().getMethod("getPluginData", new Class[0]).invoke(provider.getProvider());
             if (plugin instanceof JsonObject) {
               pluginData.add((JsonElement)plugin);
               continue;
@@ -195,7 +195,7 @@ public class Metrics {
             try {
               Class<?> jsonObjectJsonSimple = Class.forName("org.json.simple.JSONObject");
               if (plugin.getClass().isAssignableFrom(jsonObjectJsonSimple)) {
-                Method jsonStringGetter = jsonObjectJsonSimple.getDeclaredMethod("toJSONString", new Class[0]);
+                Method jsonStringGetter = jsonObjectJsonSimple.getDeclaredMethod("toJSONString");
                 jsonStringGetter.setAccessible(true);
                 String jsonString = (String)jsonStringGetter.invoke(plugin, new Object[0]);
                 JsonObject object = (new JsonParser()).parse(jsonString).getAsJsonObject();
@@ -464,7 +464,8 @@ public class Metrics {
         allSkipped = false;
         JsonArray categoryValues = new JsonArray();
         byte b;
-        int i, arrayOfInt[];
+        int i;
+        int[] arrayOfInt;
         for (i = (arrayOfInt = entry.getValue()).length, b = 0; b < i; ) {
           int categoryValue = arrayOfInt[b];
           categoryValues.add(new JsonPrimitive(categoryValue));

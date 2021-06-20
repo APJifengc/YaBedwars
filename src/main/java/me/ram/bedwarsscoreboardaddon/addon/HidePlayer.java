@@ -82,6 +82,6 @@ public class HidePlayer implements Listener {
             } 
           } 
         }
-      }).runTaskTimer((Plugin)Main.getInstance(), 1L, 1L);
+      }).runTaskTimer(Main.getInstance(), 1L, 1L);
   }
 }

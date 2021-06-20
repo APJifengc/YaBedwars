@@ -32,31 +32,31 @@ import org.bukkit.event.player.PlayerArmorStandManipulateEvent;
 import org.bukkit.event.server.PluginDisableEvent;
 
 public class Arena {
-  private Game game;
+  private final Game game;
   
-  private ScoreBoard scoreboard;
+  private final ScoreBoard scoreboard;
   
-  private PlayerGameStorage playergamestorage;
+  private final PlayerGameStorage playergamestorage;
   
-  private DeathMode deathmode;
+  private final DeathMode deathmode;
   
-  private HealthLevel healthlevel;
+  private final HealthLevel healthlevel;
   
-  private NoBreakBed nobreakbed;
+  private final NoBreakBed nobreakbed;
   
-  private ResourceUpgrade resourceupgrade;
+  private final ResourceUpgrade resourceupgrade;
   
-  private Holographic holographic;
+  private final Holographic holographic;
   
-  private TeamShop teamshop;
+  private final TeamShop teamshop;
   
-  private InvisibilityPlayer invisiblePlayer;
+  private final InvisibilityPlayer invisiblePlayer;
   
-  private LobbyBlock lobbyblock;
+  private final LobbyBlock lobbyblock;
   
-  private Respawn respawn;
+  private final Respawn respawn;
   
-  private Rejoin rejoin;
+  private final Rejoin rejoin;
   
   private Boolean isover;
   
@@ -139,7 +139,7 @@ public class Arena {
     Map<String, Integer> beds = this.playergamestorage.getPlayerBeds();
     Player player = e.getPlayer();
     if (beds.containsKey(player.getName())) {
-      beds.put(player.getName(), Integer.valueOf(((Integer)beds.get(player.getName())).intValue() + 1));
+      beds.put(player.getName(), Integer.valueOf(beds.get(player.getName()).intValue() + 1));
     } else {
       beds.put(player.getName(), Integer.valueOf(1));
     } 
@@ -151,7 +151,7 @@ public class Arena {
       return; 
     Map<String, Integer> dies = this.playergamestorage.getPlayerDies();
     if (dies.containsKey(player.getName())) {
-      dies.put(player.getName(), Integer.valueOf(((Integer)dies.get(player.getName())).intValue() + 1));
+      dies.put(player.getName(), Integer.valueOf(dies.get(player.getName()).intValue() + 1));
     } else {
       dies.put(player.getName(), Integer.valueOf(1));
     } 
@@ -178,18 +178,18 @@ public class Arena {
     Map<String, Integer> finalkills = this.playergamestorage.getPlayerFinalKills();
     if (!this.game.getPlayerTeam(player).isDead(this.game))
       if (kills.containsKey(killer.getName())) {
-        kills.put(killer.getName(), Integer.valueOf(((Integer)kills.get(killer.getName())).intValue() + 1));
+        kills.put(killer.getName(), Integer.valueOf(kills.get(killer.getName()).intValue() + 1));
       } else {
         kills.put(killer.getName(), Integer.valueOf(1));
       }  
     if (this.game.getPlayerTeam(player).isDead(this.game))
       if (finalkills.containsKey(killer.getName())) {
-        finalkills.put(killer.getName(), Integer.valueOf(((Integer)finalkills.get(killer.getName())).intValue() + 1));
+        finalkills.put(killer.getName(), Integer.valueOf(finalkills.get(killer.getName()).intValue() + 1));
       } else {
         finalkills.put(killer.getName(), Integer.valueOf(1));
       }  
     if (totalkills.containsKey(killer.getName())) {
-      totalkills.put(killer.getName(), Integer.valueOf(((Integer)totalkills.get(killer.getName())).intValue() + 1));
+      totalkills.put(killer.getName(), Integer.valueOf(totalkills.get(killer.getName()).intValue() + 1));
     } else {
       totalkills.put(killer.getName(), Integer.valueOf(1));
     } 
@@ -209,21 +209,21 @@ public class Arena {
         String kills_2_player = "none";
         String kills_3_player = "none";
         for (String player : totalkills.keySet()) {
-          int k = ((Integer)totalkills.get(player)).intValue();
+          int k = totalkills.get(player).intValue();
           if (k > 0 && k > kills_1) {
             kills_1_player = player;
             kills_1 = k;
           } 
         } 
         for (String player : totalkills.keySet()) {
-          int k = ((Integer)totalkills.get(player)).intValue();
+          int k = totalkills.get(player).intValue();
           if (k > kills_2 && k <= kills_1 && !player.equals(kills_1_player)) {
             kills_2_player = player;
             kills_2 = k;
           } 
         } 
         for (String player : totalkills.keySet()) {
-          int k = ((Integer)totalkills.get(player)).intValue();
+          int k = totalkills.get(player).intValue();
           if (k > kills_3 && k <= kills_2 && !player.equals(kills_1_player) && 
             !player.equals(kills_2_player)) {
             kills_3_player = player;

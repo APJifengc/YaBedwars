@@ -6,9 +6,9 @@ import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
 public class BoardAddonResourceUpgradeEvent extends Event {
-  private static HandlerList handlers = new HandlerList();
+  private static final HandlerList handlers = new HandlerList();
   
-  private Game game;
+  private final Game game;
   
   private List<String> upgrade;
   

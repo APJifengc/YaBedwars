@@ -226,11 +226,11 @@ public class EditGame implements Listener {
     if (!itemMeta.hasLore())
       return; 
     Player player = e.getPlayer();
-    String l = ((String)itemMeta.getLore().get(0)).replace("§", "");
+    String l = itemMeta.getLore().get(0).replace("§", "");
     if (l.startsWith("bwsba-editgame-menu-")) {
       e.setCancelled(true);
       if (player.hasPermission("bedwarsscoreboardaddon.edit")) {
-        Game game = BedwarsRel.getInstance().getGameManager().getGame(l.substring(20, l.length()));
+        Game game = BedwarsRel.getInstance().getGameManager().getGame(l.substring(20));
         if (game != null)
           openMenu(player, game); 
       } 
@@ -255,11 +255,11 @@ public class EditGame implements Listener {
     ItemMeta itemMeta = itemStack.getItemMeta();
     if (!itemMeta.hasLore())
       return; 
-    String l = ((String)itemMeta.getLore().get(0)).replace("§", "");
+    String l = itemMeta.getLore().get(0).replace("§", "");
     if (l.startsWith("bwsba-editgame-menu-")) {
       e.setCancelled(true);
       if (player.hasPermission("bedwarsscoreboardaddon.edit")) {
-        Game game = BedwarsRel.getInstance().getGameManager().getGame(l.substring(20, l.length()));
+        Game game = BedwarsRel.getInstance().getGameManager().getGame(l.substring(20));
         if (game != null)
           openMenu(player, game); 
       } 
@@ -279,9 +279,9 @@ public class EditGame implements Listener {
     BigDecimal bd = new BigDecimal((new StringBuilder(String.valueOf(location.getX()))).toString());
     BigDecimal[] result = bd.divideAndRemainder(BigDecimal.valueOf(1L));
     double xd = Double.valueOf(result[1].toString()).doubleValue();
-    List<Double> list = Arrays.asList(new Double[] { Double.valueOf(-1.0D), Double.valueOf(-0.5D), Double.valueOf(0.0D), Double.valueOf(0.5D), Double.valueOf(1.0D) });
-    double a = Math.abs(((Double)list.get(0)).doubleValue() - xd);
-    double nxd = ((Double)list.get(0)).doubleValue();
+    List<Double> list = Arrays.asList(Double.valueOf(-1.0D), Double.valueOf(-0.5D), Double.valueOf(0.0D), Double.valueOf(0.5D), Double.valueOf(1.0D));
+    double a = Math.abs(list.get(0).doubleValue() - xd);
+    double nxd = list.get(0).doubleValue();
     for (Double i : list) {
       double j = Math.abs(i.doubleValue() - xd);
       if (j < a) {
@@ -293,9 +293,9 @@ public class EditGame implements Listener {
     bd = new BigDecimal((new StringBuilder(String.valueOf(location.getZ()))).toString());
     result = bd.divideAndRemainder(BigDecimal.valueOf(1L));
     double zd = Double.valueOf(result[1].toString()).doubleValue();
-    list = Arrays.asList(new Double[] { Double.valueOf(-1.0D), Double.valueOf(-0.5D), Double.valueOf(0.0D), Double.valueOf(0.5D), Double.valueOf(1.0D) });
-    a = Math.abs(((Double)list.get(0)).doubleValue() - zd);
-    double nzd = ((Double)list.get(0)).doubleValue();
+    list = Arrays.asList(Double.valueOf(-1.0D), Double.valueOf(-0.5D), Double.valueOf(0.0D), Double.valueOf(0.5D), Double.valueOf(1.0D));
+    a = Math.abs(list.get(0).doubleValue() - zd);
+    double nzd = list.get(0).doubleValue();
     for (Double i : list) {
       double j = Math.abs(i.doubleValue() - zd);
       if (j < a) {
@@ -313,8 +313,8 @@ public class EditGame implements Listener {
     for (double d1 = -360.0D; d1 <= 360.0D; d1 += 22.5D)
       list.add(Double.valueOf(d1)); 
     double yaw = player.getLocation().getYaw();
-    double a = Math.abs(((Double)list.get(0)).doubleValue() - yaw);
-    double nyaw = ((Double)list.get(0)).doubleValue();
+    double a = Math.abs(list.get(0).doubleValue() - yaw);
+    double nyaw = list.get(0).doubleValue();
     for (Double double_ : list) {
       double j = Math.abs(double_.doubleValue() - yaw);
       if (j < a) {
@@ -327,8 +327,8 @@ public class EditGame implements Listener {
     for (double i = -90.0D; i <= 90.0D; i += 22.5D)
       list.add(Double.valueOf(i)); 
     double pitch = player.getLocation().getPitch();
-    a = Math.abs(((Double)list.get(0)).doubleValue() - pitch);
-    double npitch = ((Double)list.get(0)).doubleValue();
+    a = Math.abs(list.get(0).doubleValue() - pitch);
+    double npitch = list.get(0).doubleValue();
     for (Double double_ : list) {
       double j = Math.abs(double_.doubleValue() - pitch);
       if (j < a) {
@@ -349,13 +349,13 @@ public class EditGame implements Listener {
     String tit = Config.getLanguage("inventory.edit_game");
     if (title.startsWith("§e§d§i§t§8" + tit + " - ")) {
       e.setCancelled(true);
-      String game_name = title.substring(13 + tit.length(), title.length());
+      String game_name = title.substring(13 + tit.length());
       Game game = BedwarsRel.getInstance().getGameManager().getGame(game_name);
       if (game != null)
         switch (slot) {
           case 11:
             player.closeInventory();
-            Bukkit.dispatchCommand((CommandSender)player, "bedwarsrel:bw setlobby " + game_name);
+            Bukkit.dispatchCommand(player, "bedwarsrel:bw setlobby " + game_name);
             Main.getInstance().getHolographicManager().displayGameLocation(player, game.getName());
             break;
           case 12:
@@ -373,12 +373,12 @@ public class EditGame implements Listener {
             break;
           case 20:
             player.closeInventory();
-            Bukkit.dispatchCommand((CommandSender)player, "bedwarsscoreboardaddon:bwsba shop set item " + game_name);
+            Bukkit.dispatchCommand(player, "bedwarsscoreboardaddon:bwsba shop set item " + game_name);
             Main.getInstance().getHolographicManager().displayGameLocation(player, game.getName());
             break;
           case 21:
             player.closeInventory();
-            Bukkit.dispatchCommand((CommandSender)player, "bedwarsscoreboardaddon:bwsba shop set team " + game_name);
+            Bukkit.dispatchCommand(player, "bedwarsscoreboardaddon:bwsba shop set team " + game_name);
             Main.getInstance().getHolographicManager().displayGameLocation(player, game.getName());
             break;
           case 22:
@@ -386,30 +386,30 @@ public class EditGame implements Listener {
             break;
           case 23:
             player.closeInventory();
-            Bukkit.dispatchCommand((CommandSender)player, "bedwarsrel:bw setregion " + game_name + " loc1");
+            Bukkit.dispatchCommand(player, "bedwarsrel:bw setregion " + game_name + " loc1");
             Main.getInstance().getHolographicManager().displayGameLocation(player, game.getName());
             break;
           case 24:
             player.closeInventory();
-            Bukkit.dispatchCommand((CommandSender)player, "bedwarsrel:bw setregion " + game_name + " loc2");
+            Bukkit.dispatchCommand(player, "bedwarsrel:bw setregion " + game_name + " loc2");
             Main.getInstance().getHolographicManager().displayGameLocation(player, game.getName());
             break;
           case 39:
             player.closeInventory();
-            Bukkit.dispatchCommand((CommandSender)player, "bedwarsrel:bw save " + game_name);
+            Bukkit.dispatchCommand(player, "bedwarsrel:bw save " + game_name);
             break;
           case 40:
             player.closeInventory();
-            Bukkit.dispatchCommand((CommandSender)player, "bedwarsrel:bw start " + game_name);
+            Bukkit.dispatchCommand(player, "bedwarsrel:bw start " + game_name);
             break;
           case 41:
             player.closeInventory();
-            Bukkit.dispatchCommand((CommandSender)player, "bedwarsrel:bw stop " + game_name);
+            Bukkit.dispatchCommand(player, "bedwarsrel:bw stop " + game_name);
             break;
         }  
     } else if (title.startsWith("§e§d§i§t§t§e§a§m§8" + tit + " - ")) {
       e.setCancelled(true);
-      String game_name = title.substring(21 + tit.length(), title.length());
+      String game_name = title.substring(21 + tit.length());
       Game game = BedwarsRel.getInstance().getGameManager().getGame(game_name);
       if (game != null) {
         if (slot == 49) {
@@ -419,13 +419,13 @@ public class EditGame implements Listener {
         ItemStack itemStack = e.getCurrentItem();
         if (itemStack != null && !itemStack.getType().equals(Material.AIR)) {
           ItemMeta itemMeta = itemStack.getItemMeta();
-          if (((String)itemMeta.getLore().get(0)).equals("§0")) {
+          if (itemMeta.getLore().get(0).equals("§0")) {
             openAnvilInventory(player, Config.getLanguage("anvil.edit_game.set_team_name"), 
                 "bedwarsrel:bw addteam " + game_name + " {value} " + 
                 ColorUtil.remcolor(itemMeta.getDisplayName()));
-          } else if (((String)itemMeta.getLore().get(0)).equals("§1")) {
+          } else if (itemMeta.getLore().get(0).equals("§1")) {
             player.closeInventory();
-            Bukkit.dispatchCommand((CommandSender)player, "bedwarsrel:bw removeteam " + game_name + " " + 
+            Bukkit.dispatchCommand(player, "bedwarsrel:bw removeteam " + game_name + " " +
                 ColorUtil.remcolor(itemMeta.getDisplayName()));
             Main.getInstance().getHolographicManager().displayGameLocation(player, game.getName());
           } 
@@ -433,7 +433,7 @@ public class EditGame implements Listener {
       } 
     } else if (title.startsWith("§e§d§i§t§t§e§a§m§l§8" + tit + " - ")) {
       e.setCancelled(true);
-      String game_name = title.substring(23 + tit.length(), title.length());
+      String game_name = title.substring(23 + tit.length());
       Game game = BedwarsRel.getInstance().getGameManager().getGame(game_name);
       if (game != null) {
         if (slot == 49) {
@@ -443,14 +443,14 @@ public class EditGame implements Listener {
         ItemStack itemStack = e.getCurrentItem();
         if (itemStack != null && !itemStack.getType().equals(Material.AIR)) {
           ItemMeta itemMeta = itemStack.getItemMeta();
-          if (((String)itemMeta.getLore().get(0)).equals("§0")) {
+          if (itemMeta.getLore().get(0).equals("§0")) {
             player.closeInventory();
-            Bukkit.dispatchCommand((CommandSender)player, "bedwarsrel:bw setbed " + game_name + " " + 
+            Bukkit.dispatchCommand(player, "bedwarsrel:bw setbed " + game_name + " " +
                 ColorUtil.remcolor(itemMeta.getDisplayName()));
             Main.getInstance().getHolographicManager().displayGameLocation(player, game.getName());
-          } else if (((String)itemMeta.getLore().get(0)).equals("§1")) {
+          } else if (itemMeta.getLore().get(0).equals("§1")) {
             player.closeInventory();
-            Bukkit.dispatchCommand((CommandSender)player, "bedwarsrel:bw setspawn " + game_name + " " + 
+            Bukkit.dispatchCommand(player, "bedwarsrel:bw setspawn " + game_name + " " +
                 ColorUtil.remcolor(itemMeta.getDisplayName()));
             Main.getInstance().getHolographicManager().displayGameLocation(player, game.getName());
           } 
@@ -458,7 +458,7 @@ public class EditGame implements Listener {
       } 
     } else if (title.startsWith("§e§d§i§t§s§8" + tit + " - ")) {
       e.setCancelled(true);
-      String game_name = title.substring(15 + tit.length(), title.length());
+      String game_name = title.substring(15 + tit.length());
       Game game = BedwarsRel.getInstance().getGameManager().getGame(game_name);
       if (game != null) {
         if (slot == 49) {
@@ -469,8 +469,8 @@ public class EditGame implements Listener {
         if (itemStack != null && !itemStack.getType().equals(Material.AIR)) {
           ItemMeta itemMeta = itemStack.getItemMeta();
           player.closeInventory();
-          Bukkit.dispatchCommand((CommandSender)player, 
-              "bedwarsrel:bw setspawner " + game_name + " " + ((String)itemMeta.getLore().get(0)).replace("§", ""));
+          Bukkit.dispatchCommand(player,
+              "bedwarsrel:bw setspawner " + game_name + " " + itemMeta.getLore().get(0).replace("§", ""));
           Main.getInstance().getHolographicManager().displayGameLocation(player, game.getName());
         } 
       } 
@@ -483,7 +483,7 @@ public class EditGame implements Listener {
         public void run() {
           EditGame.removeEditItem(e.getPlayer());
         }
-      }).runTaskLater((Plugin)Main.getInstance(), 1L);
+      }).runTaskLater(Main.getInstance(), 1L);
   }
   
   @EventHandler
@@ -492,7 +492,7 @@ public class EditGame implements Listener {
         public void run() {
           EditGame.removeEditItem(e.getPlayer());
         }
-      }).runTaskLater((Plugin)Main.getInstance(), 1L);
+      }).runTaskLater(Main.getInstance(), 1L);
   }
   
   @EventHandler
@@ -510,7 +510,7 @@ public class EditGame implements Listener {
         if (itemStack != null && !itemStack.getType().equals(Material.AIR)) {
           ItemMeta itemMeta = itemStack.getItemMeta();
           if (itemMeta.hasLore()) {
-            String l = ((String)itemMeta.getLore().get(0)).replace("§", "");
+            String l = itemMeta.getLore().get(0).replace("§", "");
             if (l.startsWith("bwsba-editgame-"))
               try {
                 player.getInventory().setItem(i, new ItemStack(Material.AIR));
@@ -661,28 +661,27 @@ public class EditGame implements Listener {
   
   private void onPacketSending() {
     ProtocolManager pm = ProtocolLibrary.getProtocolManager();
-    PacketAdapter packetAdapter = new PacketAdapter((Plugin)Main.getInstance(), ListenerPriority.HIGHEST, 
-        new PacketType[] { PacketType.Play.Client.WINDOW_CLICK }) {
+    PacketAdapter packetAdapter = new PacketAdapter(Main.getInstance(), ListenerPriority.HIGHEST,
+            PacketType.Play.Client.WINDOW_CLICK) {
         public void onPacketReceiving(PacketEvent e) {
           PacketContainer packet = e.getPacket();
           final Player player = e.getPlayer();
-          if (e.getPacketType().equals(PacketType.Play.Client.WINDOW_CLICK) && (
-            (Integer)packet.getIntegers().read(0)).intValue() == 0) {
-            ItemStack itemStack = (ItemStack)packet.getItemModifier().read(0);
-            if (((Integer)packet.getIntegers().read(1)).intValue() == 2 && 
+          if (e.getPacketType().equals(PacketType.Play.Client.WINDOW_CLICK) && packet.getIntegers().read(0).intValue() == 0) {
+            ItemStack itemStack = packet.getItemModifier().read(0);
+            if (packet.getIntegers().read(1).intValue() == 2 &&
               itemStack != null && !itemStack.getType().equals(Material.AIR)) {
               final ItemMeta itemMeta = itemStack.getItemMeta();
               player.closeInventory();
               if (itemMeta.getDisplayName() != null) {
-                String command = ((String)itemMeta.getLore().get(0)).replace("§", "").replace("{value}", 
+                String command = itemMeta.getLore().get(0).replace("§", "").replace("{value}",
                     itemMeta.getDisplayName());
                 String[] args = command.split(" ");
                 if (args.length == 5 && args[1].equalsIgnoreCase("addteam")) {
                   EditGame.openAnvilInventory(player, 
-                      Config.getLanguage("anvil.edit_game.set_team_max_players"), 
-                      String.valueOf(command) + " {value}");
+                      Config.getLanguage("anvil.edit_game.set_team_max_players"),
+                          command + " {value}");
                 } else {
-                  Bukkit.dispatchCommand((CommandSender)player, command);
+                  Bukkit.dispatchCommand(player, command);
                   Game game = BedwarsRel.getInstance().getGameManager().getGame(args[2]);
                   if (game != null)
                     Main.getInstance().getHolographicManager().displayGameLocation(player, 
@@ -690,19 +689,19 @@ public class EditGame implements Listener {
                 } 
               } 
             } 
-            if (((Integer)packet.getIntegers().read(1)).intValue() == 0 && itemStack != null && 
+            if (packet.getIntegers().read(1).intValue() == 0 && itemStack != null &&
               !itemStack.getType().equals(Material.AIR)) {
               final ItemMeta itemMeta = itemStack.getItemMeta();
               (new BukkitRunnable() {
                   public void run() {
                     EditGame.setAnvilItem(player, itemMeta.getDisplayName(), itemMeta.getLore().get(0));
                   }
-                }).runTaskLater((Plugin)Main.getInstance(), 1L);
+                }).runTaskLater(Main.getInstance(), 1L);
             } 
           } 
         }
       };
-    pm.addPacketListener((PacketListener)packetAdapter);
+    pm.addPacketListener(packetAdapter);
   }
   
   private static void openAnvilInventory(final Player player, final String game, final String str) {
@@ -722,7 +721,7 @@ public class EditGame implements Listener {
         public void run() {
           EditGame.setAnvilItem(player, game, str);
         }
-      }).runTaskLater((Plugin)Main.getInstance(), 1L);
+      }).runTaskLater(Main.getInstance(), 1L);
   }
   
   private static void setAnvilItem(Player player, String game, String str) {
@@ -736,7 +735,7 @@ public class EditGame implements Listener {
       itemMeta.setDisplayName(game);
       String lore = str;
       lore = "§" + lore.replaceAll("(.{1})", "$1§");
-      itemMeta.setLore(Arrays.asList(new String[] { lore.substring(0, lore.length() - 1) }));
+      itemMeta.setLore(Arrays.asList(lore.substring(0, lore.length() - 1)));
       itemStack.setItemMeta(itemMeta);
       pack.getItemModifier().write(0, itemStack);
       pm.sendServerPacket(player, pack);

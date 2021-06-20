@@ -42,7 +42,7 @@ public class Commands implements CommandExecutor {
       } 
       if (args[0].equalsIgnoreCase("upcheck")) {
         if (!sender.hasPermission("bedwarsscoreboardaddon.updatecheck")) {
-          sender.sendMessage(String.valueOf(Config.getLanguage("commands.message.prefix")) + 
+          sender.sendMessage(Config.getLanguage("commands.message.prefix") +
               Config.getLanguage("commands.message.no_permission"));
           return true;
         } 
@@ -57,32 +57,32 @@ public class Commands implements CommandExecutor {
               for (Arena arena : Main.getInstance().getArenaManager().getArenas().values())
                 arena.getTeamShop().setTeamShopItem(p, p.getOpenInventory().getTopInventory());  
           } 
-          sender.sendMessage(String.valueOf(Config.getLanguage("commands.message.prefix")) + 
+          sender.sendMessage(Config.getLanguage("commands.message.prefix") +
               Config.getLanguage("commands.message.reloaded"));
           return true;
         } 
-        sender.sendMessage(String.valueOf(Config.getLanguage("commands.message.prefix")) + 
+        sender.sendMessage(Config.getLanguage("commands.message.prefix") +
             Config.getLanguage("commands.message.no_permission"));
         return true;
       } 
       if (args[0].equalsIgnoreCase("shop") && args.length > 1) {
         if (!(sender instanceof Player)) {
-          sender.sendMessage(String.valueOf(Config.getLanguage("commands.message.prefix")) + 
+          sender.sendMessage(Config.getLanguage("commands.message.prefix") +
               Config.getLanguage("commands.message.not_player"));
           return true;
         } 
         Player player = (Player)sender;
         if (args[1].equalsIgnoreCase("set")) {
           if (!player.hasPermission("bedwarsscoreboardaddon.shop.set")) {
-            sender.sendMessage(String.valueOf(Config.getLanguage("commands.message.prefix")) + 
+            sender.sendMessage(Config.getLanguage("commands.message.prefix") +
                 Config.getLanguage("commands.message.no_permission"));
             return true;
           } 
           if (args.length == 2) {
             sender.sendMessage("");
-            sender.sendMessage(String.valueOf(Config.getLanguage("commands.message.prefix")) + 
+            sender.sendMessage(Config.getLanguage("commands.message.prefix") +
                 Config.getLanguage("commands.message.help.set_item_shop"));
-            sender.sendMessage(String.valueOf(Config.getLanguage("commands.message.prefix")) + 
+            sender.sendMessage(Config.getLanguage("commands.message.prefix") +
                 Config.getLanguage("commands.message.help.set_team_shop"));
             return true;
           } 
@@ -90,19 +90,19 @@ public class Commands implements CommandExecutor {
             if (args.length == 4) {
               if (Bukkit.getPluginManager().isPluginEnabled("Citizens")) {
                 Config.setShop(args[3], player.getLocation(), "item");
-                player.sendMessage(String.valueOf(Config.getLanguage("commands.message.prefix")) + 
+                player.sendMessage(Config.getLanguage("commands.message.prefix") +
                     Config.getLanguage("commands.message.set_item_shop"));
                 Main.getInstance().getHolographicManager().displayGameLocation(player, args[3]);
               } else {
-                player.sendMessage(String.valueOf(Config.getLanguage("commands.message.prefix")) + 
+                player.sendMessage(Config.getLanguage("commands.message.prefix") +
                     Config.getLanguage("commands.message.set_shop_error"));
-                player.sendMessage(String.valueOf(Config.getLanguage("commands.message.prefix")) + 
+                player.sendMessage(Config.getLanguage("commands.message.prefix") +
                     Config.getLanguage("commands.message.failed_set_shop"));
               } 
               return true;
             } 
             sender.sendMessage("");
-            sender.sendMessage(String.valueOf(Config.getLanguage("commands.message.prefix")) + 
+            sender.sendMessage(Config.getLanguage("commands.message.prefix") +
                 Config.getLanguage("commands.message.help.set_item_shop"));
             return true;
           } 
@@ -110,43 +110,43 @@ public class Commands implements CommandExecutor {
             if (args.length == 4) {
               if (Bukkit.getPluginManager().isPluginEnabled("Citizens")) {
                 Config.setShop(args[3], player.getLocation(), "team");
-                player.sendMessage(String.valueOf(Config.getLanguage("commands.message.prefix")) + 
+                player.sendMessage(Config.getLanguage("commands.message.prefix") +
                     Config.getLanguage("commands.message.set_item_shop"));
                 Main.getInstance().getHolographicManager().displayGameLocation(player, args[3]);
               } else {
-                player.sendMessage(String.valueOf(Config.getLanguage("commands.message.prefix")) + 
+                player.sendMessage(Config.getLanguage("commands.message.prefix") +
                     Config.getLanguage("commands.message.set_shop_error"));
-                player.sendMessage(String.valueOf(Config.getLanguage("commands.message.prefix")) + 
+                player.sendMessage(Config.getLanguage("commands.message.prefix") +
                     Config.getLanguage("commands.message.failed_set_shop"));
               } 
               return true;
             } 
             sender.sendMessage("");
-            sender.sendMessage(String.valueOf(Config.getLanguage("commands.message.prefix")) + 
+            sender.sendMessage(Config.getLanguage("commands.message.prefix") +
                 Config.getLanguage("commands.message.help.set_team_shop"));
             return true;
           } 
           sender.sendMessage("");
-          sender.sendMessage(String.valueOf(Config.getLanguage("commands.message.prefix")) + 
+          sender.sendMessage(Config.getLanguage("commands.message.prefix") +
               Config.getLanguage("commands.message.help.set_item_shop"));
-          sender.sendMessage(String.valueOf(Config.getLanguage("commands.message.prefix")) + 
+          sender.sendMessage(Config.getLanguage("commands.message.prefix") +
               Config.getLanguage("commands.message.help.set_team_shop"));
           return true;
         } 
         if (args[1].equalsIgnoreCase("list")) {
           if (!player.hasPermission("bedwarsscoreboardaddon.shop.list")) {
-            sender.sendMessage(String.valueOf(Config.getLanguage("commands.message.prefix")) + 
+            sender.sendMessage(Config.getLanguage("commands.message.prefix") +
                 Config.getLanguage("commands.message.no_permission"));
             return true;
           } 
           if (args.length == 2) {
             sender.sendMessage("");
-            sender.sendMessage(String.valueOf(Config.getLanguage("commands.message.prefix")) + 
+            sender.sendMessage(Config.getLanguage("commands.message.prefix") +
                 Config.getLanguage("commands.message.help.shop_list"));
             return true;
           } 
           if (!Config.shop_item.containsKey(args[2]) && !Config.shop_team.containsKey(args[2])) {
-            player.sendMessage(String.valueOf(Config.getLanguage("commands.message.prefix")) + 
+            player.sendMessage(Config.getLanguage("commands.message.prefix") +
                 Config.getLanguage("commands.message.shop_list_error"));
             return true;
           } 
@@ -156,69 +156,69 @@ public class Commands implements CommandExecutor {
         } 
         if (args[1].equalsIgnoreCase("remove")) {
           if (!player.hasPermission("bedwarsscoreboardaddon.shop.remove")) {
-            sender.sendMessage(String.valueOf(Config.getLanguage("commands.message.prefix")) + 
+            sender.sendMessage(Config.getLanguage("commands.message.prefix") +
                 Config.getLanguage("commands.message.no_permission"));
             return true;
           } 
           if (args.length == 2) {
-            sender.sendMessage(String.valueOf(Config.getLanguage("commands.message.prefix")) + 
+            sender.sendMessage(Config.getLanguage("commands.message.prefix") +
                 Config.getLanguage("commands.message.help.remove_shop"));
             return true;
           } 
           if (Config.shop_shops.containsKey(args[2])) {
-            String shop = (String)Config.shop_shops.get(args[2]);
+            String shop = Config.shop_shops.get(args[2]);
             Config.removeShop(shop);
             String game = shop.split("\\.")[1];
             Main.getInstance().getHolographicManager().displayGameLocation(player, game);
             if (args.length > 3 && args[3].equalsIgnoreCase("true"))
               sendShopList(player, game); 
-            player.sendMessage(String.valueOf(Config.getLanguage("commands.message.prefix")) + 
+            player.sendMessage(Config.getLanguage("commands.message.prefix") +
                 Config.getLanguage("commands.message.remove_shop"));
             return true;
           } 
-          player.sendMessage(String.valueOf(Config.getLanguage("commands.message.prefix")) + 
+          player.sendMessage(Config.getLanguage("commands.message.prefix") +
               Config.getLanguage("commands.message.failed_remove_shop"));
           return true;
         } 
       } 
       if (args[0].equalsIgnoreCase("shop")) {
         sender.sendMessage("");
-        sender.sendMessage(String.valueOf(Config.getLanguage("commands.message.prefix")) + 
+        sender.sendMessage(Config.getLanguage("commands.message.prefix") +
             Config.getLanguage("commands.message.help.shop_list"));
-        sender.sendMessage(String.valueOf(Config.getLanguage("commands.message.prefix")) + 
+        sender.sendMessage(Config.getLanguage("commands.message.prefix") +
             Config.getLanguage("commands.message.help.remove_shop"));
-        sender.sendMessage(String.valueOf(Config.getLanguage("commands.message.prefix")) + 
+        sender.sendMessage(Config.getLanguage("commands.message.prefix") +
             Config.getLanguage("commands.message.help.set_item_shop"));
-        sender.sendMessage(String.valueOf(Config.getLanguage("commands.message.prefix")) + 
+        sender.sendMessage(Config.getLanguage("commands.message.prefix") +
             Config.getLanguage("commands.message.help.set_team_shop"));
         return true;
       } 
       if (args[0].equalsIgnoreCase("edit")) {
         if (!(sender instanceof Player)) {
-          sender.sendMessage(String.valueOf(Config.getLanguage("commands.message.prefix")) + 
+          sender.sendMessage(Config.getLanguage("commands.message.prefix") +
               Config.getLanguage("commands.message.not_player"));
           return true;
         } 
         if (!sender.hasPermission("bedwarsscoreboardaddon.edit")) {
-          sender.sendMessage(String.valueOf(Config.getLanguage("commands.message.prefix")) + 
+          sender.sendMessage(Config.getLanguage("commands.message.prefix") +
               Config.getLanguage("commands.message.no_permission"));
           return true;
         } 
         if (args.length == 1) {
-          sender.sendMessage(String.valueOf(Config.getLanguage("commands.message.prefix")) + 
+          sender.sendMessage(Config.getLanguage("commands.message.prefix") +
               Config.getLanguage("commands.message.help.edit_game"));
           return true;
         } 
         Game game = BedwarsRel.getInstance().getGameManager().getGame(args[1]);
         if (game == null) {
-          sender.sendMessage(String.valueOf(Config.getLanguage("commands.message.prefix")) + 
+          sender.sendMessage(Config.getLanguage("commands.message.prefix") +
               Config.getLanguage("commands.message.edit_game_error"));
         } else {
           EditGame.editGame((Player)sender, game);
         } 
         return true;
       } 
-      sender.sendMessage(String.valueOf(Config.getLanguage("commands.message.prefix")) + 
+      sender.sendMessage(Config.getLanguage("commands.message.prefix") +
           Config.getLanguage("commands.message.help.unknown"));
     } 
     return true;

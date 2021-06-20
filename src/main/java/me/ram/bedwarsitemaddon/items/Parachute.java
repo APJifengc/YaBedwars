@@ -42,15 +42,14 @@ import org.bukkit.util.Vector;
 public class Parachute implements Listener {
   private Map<String, List<ArmorStand>> armorstands = new HashMap<>();
   
-  private Map<Player, Long> cooldown = new HashMap<>();
+  private final Map<Player, Long> cooldown = new HashMap<>();
   
-  private Map<String, Map<Player, Integer>> ejection = new HashMap<>();
+  private final Map<String, Map<Player, Integer>> ejection = new HashMap<>();
   
   @EventHandler
   public void onStart(BedwarsGameStartEvent e) {
     for (Player player : e.getGame().getPlayers()) {
-      if (this.cooldown.containsKey(player))
-        this.cooldown.remove(player); 
+      this.cooldown.remove(player);
     } 
     Game game = e.getGame();
     this.armorstands.put(game.getName(), new ArrayList<>());
@@ -121,16 +120,16 @@ public class Parachute implements Listener {
       return; 
     if (game.getState() == GameState.RUNNING && (
       e.getAction().equals(Action.RIGHT_CLICK_AIR) || e.getAction().equals(Action.RIGHT_CLICK_BLOCK)) && e.getItem().getType() == (new ItemStack(Material.valueOf(Config.items_parachute_item))).getType())
-      if (System.currentTimeMillis() - ((Long)this.cooldown.getOrDefault(player, Long.valueOf(0L))).longValue() <= (Config.items_parachute_cooldown * 1000)) {
+      if (System.currentTimeMillis() - this.cooldown.getOrDefault(player, Long.valueOf(0L)).longValue() <= (Config.items_parachute_cooldown * 1000)) {
         e.setCancelled(true);
-        player.sendMessage(Config.message_cooling.replace("{time}", (new StringBuilder(String.valueOf(((Config.items_parachute_cooldown * 1000) - System.currentTimeMillis() + ((Long)this.cooldown.getOrDefault(player, Long.valueOf(0L))).longValue()) / 1000L + 1L))).toString()));
+        player.sendMessage(Config.message_cooling.replace("{time}", (new StringBuilder(String.valueOf(((Config.items_parachute_cooldown * 1000) - System.currentTimeMillis() + this.cooldown.getOrDefault(player, Long.valueOf(0L)).longValue()) / 1000L + 1L))).toString()));
       } else {
         ItemStack stack = e.getItem();
         BedwarsUseItemEvent bedwarsUseItemEvent = new BedwarsUseItemEvent(game, player, EnumItem.Parachute, stack);
-        Bukkit.getPluginManager().callEvent((Event)bedwarsUseItemEvent);
+        Bukkit.getPluginManager().callEvent(bedwarsUseItemEvent);
         if (!bedwarsUseItemEvent.isCancelled()) {
           this.cooldown.put(player, Long.valueOf(System.currentTimeMillis()));
-          ((Map<Player, Integer>)this.ejection.get(game.getName())).put(player, Integer.valueOf(((Integer)((Map)this.ejection.get(game.getName())).getOrDefault(player, Integer.valueOf(0))).intValue() + 1));
+          this.ejection.get(game.getName()).put(player, Integer.valueOf(((Integer)((Map)this.ejection.get(game.getName())).getOrDefault(player, Integer.valueOf(0))).intValue() + 1));
           player.getWorld().playSound(player.getLocation(), SoundMachine.get("FIREWORK_LARGE_BLAST", "ENTITY_FIREWORK_LARGE_BLAST"), 1.0F, 1.0F);
           player.getWorld().playEffect(player.getLocation(), Effect.EXPLOSION_LARGE, 1);
           player.setSneaking(true);
@@ -186,7 +185,7 @@ public class Parachute implements Listener {
               this.armorStand4.remove();
               this.armorStand5.remove();
             } 
-            ((Map<Player, Integer>)Parachute.this.ejection.get(game.getName())).put(player, Integer.valueOf(0));
+            Parachute.this.ejection.get(game.getName()).put(player, Integer.valueOf(0));
             cancel();
             return;
           } 
@@ -221,30 +220,30 @@ public class Parachute implements Listener {
           if (!this.po)
             player.setVelocity(player.getVelocity()); 
           if (!this.po && player.getVelocity().getY() < 0.0D) {
-            this.armorStand1 = (ArmorStand)player.getWorld().spawn(LocationUtil.getLocationYaw(player.getLocation(), 0.0D, 2.0D, 0.0D), ArmorStand.class);
+            this.armorStand1 = player.getWorld().spawn(LocationUtil.getLocationYaw(player.getLocation(), 0.0D, 2.0D, 0.0D), ArmorStand.class);
             this.armorStand1.setVisible(false);
             this.armorStand1.setGravity(false);
             this.armorStand1.setBasePlate(false);
             this.armorStand1.setHelmet(new ItemStack(Material.CARPET));
-            this.armorStand2 = (ArmorStand)player.getWorld().spawn(LocationUtil.getLocationYaw(player.getLocation(), 0.61D, 1.97D, 0.0D), ArmorStand.class);
+            this.armorStand2 = player.getWorld().spawn(LocationUtil.getLocationYaw(player.getLocation(), 0.61D, 1.97D, 0.0D), ArmorStand.class);
             this.armorStand2.setVisible(false);
             this.armorStand2.setGravity(false);
             this.armorStand2.setBasePlate(false);
             this.armorStand2.setHelmet(new ItemStack(Material.CARPET));
             this.armorStand2.setHeadPose(EulerAngle.ZERO.setZ(0.1D));
-            this.armorStand3 = (ArmorStand)player.getWorld().spawn(LocationUtil.getLocationYaw(player.getLocation(), 1.2D, 1.85D, 0.0D), ArmorStand.class);
+            this.armorStand3 = player.getWorld().spawn(LocationUtil.getLocationYaw(player.getLocation(), 1.2D, 1.85D, 0.0D), ArmorStand.class);
             this.armorStand3.setVisible(false);
             this.armorStand3.setGravity(false);
             this.armorStand3.setBasePlate(false);
             this.armorStand3.setHelmet(new ItemStack(Material.CARPET));
             this.armorStand3.setHeadPose(EulerAngle.ZERO.setZ(0.3D));
-            this.armorStand4 = (ArmorStand)player.getWorld().spawn(LocationUtil.getLocationYaw(player.getLocation(), -0.61D, 1.97D, 0.0D), ArmorStand.class);
+            this.armorStand4 = player.getWorld().spawn(LocationUtil.getLocationYaw(player.getLocation(), -0.61D, 1.97D, 0.0D), ArmorStand.class);
             this.armorStand4.setVisible(false);
             this.armorStand4.setGravity(false);
             this.armorStand4.setBasePlate(false);
             this.armorStand4.setHelmet(new ItemStack(Material.CARPET));
             this.armorStand4.setHeadPose(EulerAngle.ZERO.setZ(-0.1D));
-            this.armorStand5 = (ArmorStand)player.getWorld().spawn(LocationUtil.getLocationYaw(player.getLocation(), -1.2D, 1.85D, 0.0D), ArmorStand.class);
+            this.armorStand5 = player.getWorld().spawn(LocationUtil.getLocationYaw(player.getLocation(), -1.2D, 1.85D, 0.0D), ArmorStand.class);
             this.armorStand5.setVisible(false);
             this.armorStand5.setGravity(false);
             this.armorStand5.setBasePlate(false);
@@ -252,11 +251,11 @@ public class Parachute implements Listener {
             this.armorStand5.setHeadPose(EulerAngle.ZERO.setZ(-0.3D));
             this.po = true;
             player.getWorld().playSound(player.getLocation(), SoundMachine.get("HORSE_ARMOR", "ENTITY_HORSE_ARMOR"), 1.0F, 1.0F);
-            ((List<ArmorStand>)Parachute.this.armorstands.get(game.getName())).add(this.armorStand1);
-            ((List<ArmorStand>)Parachute.this.armorstands.get(game.getName())).add(this.armorStand2);
-            ((List<ArmorStand>)Parachute.this.armorstands.get(game.getName())).add(this.armorStand3);
-            ((List<ArmorStand>)Parachute.this.armorstands.get(game.getName())).add(this.armorStand4);
-            ((List<ArmorStand>)Parachute.this.armorstands.get(game.getName())).add(this.armorStand5);
+            Parachute.this.armorstands.get(game.getName()).add(this.armorStand1);
+            Parachute.this.armorstands.get(game.getName()).add(this.armorStand2);
+            Parachute.this.armorstands.get(game.getName()).add(this.armorStand3);
+            Parachute.this.armorstands.get(game.getName()).add(this.armorStand4);
+            Parachute.this.armorstands.get(game.getName()).add(this.armorStand5);
           } 
           if (player.getVelocity().getY() > 0.0D && this.po) {
             if (player.getGameMode() != GameMode.SPECTATOR)
@@ -287,11 +286,11 @@ public class Parachute implements Listener {
               this.armorStand4.getLocation().getBlock().getChunk().load(true); 
             if (!this.armorStand5.getLocation().getBlock().getChunk().isLoaded())
               this.armorStand5.getLocation().getBlock().getChunk().load(true); 
-            NMS.teleportEntity(game, (Entity)this.armorStand1, LocationUtil.getLocationYaw(player.getLocation(), 0.0D, 2.5D, 0.0D));
-            NMS.teleportEntity(game, (Entity)this.armorStand2, LocationUtil.getLocationYaw(player.getLocation(), 0.61D, 2.47D, 0.0D));
-            NMS.teleportEntity(game, (Entity)this.armorStand3, LocationUtil.getLocationYaw(player.getLocation(), 1.2D, 2.35D, 0.0D));
-            NMS.teleportEntity(game, (Entity)this.armorStand4, LocationUtil.getLocationYaw(player.getLocation(), -0.61D, 2.47D, 0.0D));
-            NMS.teleportEntity(game, (Entity)this.armorStand5, LocationUtil.getLocationYaw(player.getLocation(), -1.2D, 2.35D, 0.0D));
+            NMS.teleportEntity(game, this.armorStand1, LocationUtil.getLocationYaw(player.getLocation(), 0.0D, 2.5D, 0.0D));
+            NMS.teleportEntity(game, this.armorStand2, LocationUtil.getLocationYaw(player.getLocation(), 0.61D, 2.47D, 0.0D));
+            NMS.teleportEntity(game, this.armorStand3, LocationUtil.getLocationYaw(player.getLocation(), 1.2D, 2.35D, 0.0D));
+            NMS.teleportEntity(game, this.armorStand4, LocationUtil.getLocationYaw(player.getLocation(), -0.61D, 2.47D, 0.0D));
+            NMS.teleportEntity(game, this.armorStand5, LocationUtil.getLocationYaw(player.getLocation(), -1.2D, 2.35D, 0.0D));
           } 
           Location blockloc = player.getLocation();
           blockloc = blockloc.add(0.0D, -1.0D, 0.0D);

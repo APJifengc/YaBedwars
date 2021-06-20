@@ -1,0 +1,2646 @@
+#商店模式 0-3 0 为原版
+mode: 1
+
+#信息
+message:
+
+  #冷却提示
+  # 变量:
+  #   {time}    冷却时间
+  cooling: "&e冷却中，请等待 &c{time} &e秒后使用！"
+
+  #购买
+  buy: "&a你购买了 &6{item}"
+
+#物品
+item:
+
+  #装饰栏
+  frame:
+    - "&8\u2b06 &7类别"
+    - "&8\u2b07 &7物品"
+
+  #返回
+  back:
+    - "&f返回"
+
+#道具
+items:
+
+
+  #火球
+  fireball:
+  
+    #启用
+    enabled: true
+    
+    #冷却时间(秒)
+    cooldown: 1
+    
+    #伤害
+    damage: 3
+    
+    #弹射模式
+    ejection: true
+    
+    #弹射速度
+    velocity: 1
+
+  #TNT自动点燃
+  tnt:
+  
+    #启用
+    enabled: true
+    
+    #冷却时间(秒)
+    cooldown: 0
+    
+    #爆炸延迟
+    fuse_ticks: 80
+    
+    #伤害
+    damage: 1
+    
+    #弹射模式
+    ejection: true
+    
+    #弹射速度
+    velocity: 1
+
+
+  #降落伞
+  parachute:
+  
+    #启用
+    enabled: true
+    
+    #冷却时间(秒)
+    cooldown: 5
+    
+    #物品
+    item: FEATHER
+    
+    #弹射速度(高度)
+    velocity: 3
+    
+    #降落速度
+    landing_velocity: 0.2
+    
+    #滑翔速度
+    gliding_velocity: 0.3
+
+
+  #蹦床
+  trampoline:
+  
+    #启用
+    enabled: true
+    
+    #冷却时间(秒)
+    cooldown: 5
+    
+    #物品
+    item: DOUBLE_PLANT
+    
+    #蹦床大小 1-3
+    size: 2
+    
+    #弹射速度(高度)
+    velocity: 3
+    
+    #蹦床多少秒后消失
+    staytime: 20
+    
+    #空间不足提示
+    lack_space: "没有足够的空间使用此道具！"
+
+
+  #搭桥蛋
+  bridge_egg:
+  
+    #启用
+    enabled: true
+    
+    #冷却时间(秒)
+    cooldown: 5
+    
+    #每次最大放置方块数量
+    maxblock: 50
+
+
+  #骑行末影珍珠
+  ender_pearl_chair:
+  
+    #启用
+    enabled: true
+    
+    #冷却时间(秒)
+    cooldown: 0
+
+  #队伍防守铁傀儡
+  team_iron_golem:
+  
+    #启用
+    enabled: true
+    
+    #物品
+    item: MONSTER_EGG
+    
+    #冷却时间(秒)
+    cooldown: 0
+    
+    #铁傀儡有效时间
+    # -1 禁用此功能
+    staytime: 120
+    
+    #血量
+    health: 20
+    
+    #对玩家造成的伤害
+    damage: 3
+    
+    #铁傀儡名称
+    name: "{color}{team} 铁傀儡 {time}秒"
+
+
+  #队伍防守蠹虫
+  team_silver_fish:
+  
+    #启用
+    enabled: true
+    
+    #铁傀儡有效时间
+    # -1 禁用此功能
+    staytime: 120
+    
+    #血量
+    health: 20
+    
+    #对玩家造成的伤害
+    damage: 2
+    
+    #铁傀儡名称
+    name: "{color}{team} 蠹虫 {time}秒"
+
+
+  #防爆玻璃
+  explosion_proof:
+  
+    #启用
+    enabled: true
+
+  #行走平台
+  walk_platform:
+    
+    #启用
+    enabled: true
+    
+    #物品
+    item: PAPER
+    
+    #冷却时间(秒)
+    cooldown: 30
+    
+    #消失时间
+    break_time: 5
+
+
+  #TNT发射器
+  tnt_launch:
+  
+    #启用
+    enabled: true
+    
+    #物品
+    item: DISPENSER
+    
+    #冷却时间(秒)
+    cooldown: 5
+    
+    #爆炸延迟
+    fuse_ticks: 20
+    
+    #伤害
+    damage: 1
+    
+    #发射速度
+    launch_velocity: 2
+    
+    #弹射模式
+    ejection: true
+    
+    #弹射速度
+    velocity: 1
+
+
+# ###############################
+# ####### BEDWARS CONFIG ########
+# ##### CREATED BY YANNICI ######
+# ###############################
+# ###### EXPLANATION ABOUT ######
+# ##### EVERY CONFIGURATION #####
+# ### YOU CAN FIND ON GITHUB ####
+# ############ WIKI #############
+# ###############################
+
+# # TYPE HELP # #
+# int: number (not decimal)
+# string: a normal text (in most cases you can use colorcodes with a beginning ยง)
+# boolean: true or false (IMPORTANT: true OR false ONLY)
+# list<?>: a list of type ? (? is the type of the list items)
+# byte: a int but limited between -128 ... 127
+# short: a int but limited between -32768 ... 32767
+# char: one character
+
+chat-prefix: "&7[&bBedWars&7]&f"
+
+# Enabled Metrics
+# type: boolean
+# Plugin Metrics sending anonymous data about your server
+# to store statistics about the bedwars plugin. This is really
+# helpful for the developers of this plugin. You can
+# disable it anyway, that won't be a disadvantage
+plugin-metrics: true
+
+# Send Error Data
+# type: boolean
+# If enabled, the plugin will automatically send error reports to "BugSnag".
+# This is really helpful for fixing issues with the plugin. You can
+# disable it anyway, that won't be a disadvantage
+send-error-data: true
+
+# Global send messages
+# type: boolean
+# Send messages (like game started messages)
+# in global chat
+global-messages: true
+
+# Global autobalance
+# type: boolean
+# Enables autobalancing in every game
+global-autobalance: false
+
+# Global chat after end
+# type: boolean
+# When true, after game ends all players + spectators can chat
+global-chat-after-end: true
+
+# game length
+# Type: int
+# The time the game should maximum run (in minutes). When the countdown expires
+# the game will end without a winner.
+gamelength: 60
+
+# Allow crafting
+# type: boolean
+# When true, crafting is allowed ingame
+allow-crafting: false
+
+# Override player name
+# type: boolean
+# If true, all player display names will be overwritten (prefix etc. will be removed)
+# If false, it'll try to change the name color only, but will leave prefix which maybe causes
+# wrong colors in tablist or chat
+overwrite-names: false
+
+# Gamemode in lobby
+# type: int
+# The gamemode which should the players have in lobby
+lobby-gamemode: 0
+
+# Holographic Stats configs
+holographic-stats:
+  # Show prefx
+  # type: boolean
+  # If true, the bedwars prefix will be shown on the bedwars
+  # holographic stats.
+  show-prefix: false
+
+  # Statistic names color
+  # type: string
+  # The color of the statistic names (like "Kills", "Deaths" ...)
+  name-color: "&7"
+
+  # Statstic value color
+  # type: string
+  # The color of the statistic values
+  value-color: "&e"
+
+  # statistics headline
+  # type: string
+  # Leave the headline empty to remove the headline
+  head-line: "Your &eBEDWARS&f stats"
+
+# Add teamname in tablist
+# type: boolean
+# Adds the teamname before the player name
+# in the tablist
+teamname-on-tab: false
+
+# Teamname after player name
+# type: boolean
+# If true, the teamname will be added behind the player name
+# in chat messages. If false, teamname won't be visible
+teamname-in-chat: false
+
+# Show hearts on death
+# type: boolean
+# If true the remaining hearts of the killing player
+# will be displayed in the chat. If false, it is not visible
+hearts-on-death: true
+
+# Die on void damage
+# type: boolean
+# If true, player will die directly when get damage from void
+die-on-void: false
+
+# type: boolean
+# If true the Ressourcespawner spawns items inside a chest if it is on top of a ressource spawner
+# If the chest is full, the items will drop naturally
+spawn-ressources-in-chest: true
+
+# Lobby Time
+# Type: int
+# The lobby time defines how long you have to
+# wait in the lobby until the game starts (when enough players) in seconds.
+lobbytime: 60
+
+# Chat format (waiting)
+# type: string
+# The chat format for messages in lobby (waiting mode) when
+# player is not in a team
+lobby-chatformat: "$player$: $msg$"
+
+# Chat format (all)
+# type: string
+# The chat format for messages which will be sent to all ingame players
+# if player is spectator $team$ will be "Spectator" (translated, of course!)
+ingame-chatformat-all: "[$all$] <$team$>$player$: $msg$"
+
+# Chat format
+# type: string
+# The chat format for the normal ingame chat between team-players
+ingame-chatformat: "<$team$>$player$: $msg$"
+
+# The main game block
+# type: string or int
+# The block which should be the main block for the game (respawn block)
+game-block: BED_BLOCK
+
+# Save game records
+# type: boolean
+# If true, the time records for every game will be stored.
+store-game-records: true
+
+# Save game records holder
+# type: boolean
+# If true, the record holders will be saved and displayed
+store-game-records-holder: true
+
+# Bed sound
+# type: string
+# The sound which should be played when a bed will be destroyed
+# Which sound are available you can find here: https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Sound.html
+# (in the Enum Constant Summery)
+bed-sound: ENDERDRAGON_GROWL
+
+# Player drops
+# type: boolean
+# If true, player will drop his items
+player-drops: false
+
+# KeepInventory
+# type: boolean
+# If true, player will keep his inventory on death
+keep-inventory-on-death: false
+
+# Place in liquid
+# type: boolean
+# If true, it's possible to set blocks in liquid (like water, lava ...)
+# If false, it will be prevented to set blocks in liquid
+place-in-liquid: true
+
+# Breakable blocks
+breakable-blocks:
+  # Use as blacklist
+  # type: boolean
+  # If true, it's possible to break all blocks except the blocks on the list below
+  # If false, it's only possible to break the blocks on the list below
+  use-as-blacklist: false
+
+  # type: list<int> or list<string>
+  # Defines the block types which are allowed to be broken
+  list:
+    - 'none'
+
+# Join team with entity config
+jointeam-entity:
+  # Team name visible
+  # type: boolean
+  # Should the name of the team be displayed above
+  # the entity? If so: true, if not: false
+  show-name: true
+
+# Lobby Scoreboard settings
+# ONLY 1.8 OR HIGHER
+lobby-scoreboard:
+  # Enable lobby scoreboard
+  # type: boolean
+  # If true, the lobby scoreboard will be used (configurable in this section)
+  # If false, the normal scoreboard (with team display) will be used
+  enabled: true
+
+  # Lobby scoreboard title
+  # type: string
+  # The title of the lobby scoreboard
+  # Placeholders:
+  #  $regionname$ = Region name (or map name)
+  #  $gamename$  = Name of the game
+  #  $players$  = Current number of players
+  #  $maxplayers$ = The maximum players for this game
+  title: "&eBEDWARS"
+
+  # Lobby scoreboard content
+  # type: List<string>
+  # The content of the lobby scoreboard (list of texts)
+  # Use " " (see example) for an empty row
+  # Placeholders:
+  #  $regionname$ = Region name (or map name)
+  #  $gamename$  = Name of the game
+  #  $players$  = Current number of players
+  #  $maxplayers$ = The maximum players for this game
+  content:
+    - " "
+    - "&fMap: &2$regionname$"
+    - "&fPlayers: &2$players$&f/&2$maxplayers$"
+    - " "
+    - "&fWaiting ..."
+    - " "
+
+# Scoreboard settings
+scoreboard:
+
+  #计分板刷新间隔(tick)
+  # 1 秒 = 20 tick
+  interval: 2
+
+  #计分板标题
+  #变量:
+  # {game}             游戏名称
+  # {time}             游戏时间
+  title:
+    - "&e&l起床战争"
+    - "&e&l起床战争"
+    - "&e&l起床战争"
+    - "&e&l起床战争"
+    - "&e&l起床战争"
+    - "&e&l起床战争"
+    - "&e&l起床战争"
+    - "&e&l起床战争"
+    - "&e&l起床战争"
+    - "&e&l起床战争"
+    - "&e&l起床战争"
+    - "&e&l起床战争"
+    - "&e&l起床战争"
+    - "&e&l起床战争"
+    - "&e&l起床战争"
+    - "&e&l起床战争"
+    - "&e&l起床战争"
+    - "&e&l起床战争"
+    - "&e&l起床战争"
+    - "&e&l起床战争"
+    - "&6&l起&e&l床战争"
+    - "&f&l起&6&l床&e&l战争"
+    - "&e&l起&f&l床&6&l战&e&l争"
+    - "&e&l起床&f&l战&6&l争"
+    - "&e&l起床战&f&l争"
+    - "&e&l起床战争"
+    - "&f&l起床战争"
+    - "&e&l起床战争"
+    - "&f&l起床战争"
+
+  #变量 {you} 的值
+  you: "&7(你)"
+
+  #队伍床状态
+  team_bed_status:
+
+    #床存在
+    bed_alive: "&a\u2714"
+
+    #床被摧毁
+    bed_destroyed: "&c\u2718"
+
+  #队伍状态格式
+  #变量:
+  # {color}            队伍颜色
+  # {team}             队伍名称
+  # {players}          队伍人数
+  # {bed_status}       队伍床状态
+  team_status_format:
+
+    #床存在
+    bed_alive: "{color} {team} &a\u2714 &8(&f&l{players}&8) {you}"
+
+    #床被摧毁
+    bed_destroyed: "{color} {team} &c\u2718 &8(&f&l{players}&8) {you}"
+
+    #队伍被消灭
+    team_dead: "{color} {team} &c\u2718 &8(&f&l{players}&8) {you}"
+
+  #计分板信息
+  #变量:
+  # {date}                    日期
+  # {time}                    游戏时间(分钟)
+  # {formattime}              格式化游戏时间
+  # {game}                    游戏地图
+  # {online}                  当局游戏人数
+  # {bowtime}                 凋零弓时间
+  # {sethealthtime_<编号>}    指定编号血量设置时间
+  # {planinfo}                计划信息
+  # {plantime}                计划信息
+  # {kills}                   击杀数
+  # {finalkills}              最终击杀数
+  # {totalkills}              总击杀数
+  # {dies}                    死亡数
+  # {beds}                    破坏床数
+  # {team}                    玩家队伍名称
+  # {color}                   玩家队伍颜色
+  # {teams}                   队伍数量
+  # {player_name}             玩家名称
+  # {team_peoples}            玩家队伍人数
+  # {team_bed_status}         玩家队伍床状态
+  # {remain_teams}            未被消灭队伍数量
+  # {alive_teams}             床存在的队伍数量
+  # {team_status}             所有队伍状态
+  # {no_break_bed}            允许破坏床倒计时
+  # {resource_upgrade_<编号>} 资源生成点升级时间
+  # {team_<team>_status}      指定队伍状态
+  # {team_<team>_bed_status}  指定队伍床状态
+  # {team_<team>_peoples}     指定队伍人数
+  # {timer_<编号>}            自定义倒计时
+  lines:
+
+    #默认
+    default:
+      - "&7{date}"
+      - ""
+      - "&f{planinfo}"
+      - "&a{plantime}"
+      - ""
+      - "{team_status}"
+      - ""
+      - "&f击杀数: &a{kills}"
+      - "&f最终击杀: &a{finalkills}"
+      - "&f已破坏床数: &a{beds}"
+      - ""
+      - "&ewww.minecraft.net"
+
+    #当8个队伍时
+    8:
+      - "&7{date}"
+      - ""
+      - "&f{planinfo}"
+      - "&a{plantime}"
+      - ""
+      - "{team_status}"
+      - ""
+      - "&ewww.minecraft.net"
+
+  # Format for scoreboard teams (bed destroyed)
+  # type: string
+  # The format how the teams on the scoreboard will be displayed
+  # Possible placeholders:
+  # - $status$ (bed status => destroyed/not destroyed)
+  # - $team$ (Colored team name)
+  format-bed-destroyed: "&c$status$ $team$"
+
+  # Format for scoreboard teams (bed alive)
+  # type: string
+  # The format how the teams on the scoreboard will be displayed
+  # Possible placeholders:
+  # - $status$ (bed status => destroyed/not destroyed)
+  # - $team$ (Colored team name)
+  format-bed-alive: "&a$status$ $team$"
+
+  # Format for scoreboard title
+  # type: string
+  # The format for the scoreboard title (above teams)
+  # Possible placeholders:
+  # - $game$ (game name)
+  # - $region$ (game's region- or worldname)
+  # - $time$ (the countdown-timer)
+  format-title: "&e$region$&f - $time$"
+
+# Titles configuration (only compatible with >= 1.8)
+titles:
+  # Win title
+  win:
+    # Enable win title (default: true)
+    # type: boolean
+    # If true, the title configured in this section will be displayed
+    enabled: true
+
+    # io.github.bedwarsrel.com.v1_8_r1.Title Fade-In time
+    # type: double
+    # The time how long the title fade-in should take in seconds
+    title-fade-in: 1.5
+
+    # io.github.bedwarsrel.com.v1_8_r1.Title Stay time
+    # type: double
+    # The time how long the title will stay in seconds
+    title-stay: 5.0
+
+    # io.github.bedwarsrel.com.v1_8_r1.Title Fade-Out time
+    # type: double
+    # The time how long the title fade-out should take in seconds
+    title-fade-out: 2.0
+
+    # SubTitle Fade-In time
+    # type: double
+    # The time how long the subtitle fade-in should take in seconds
+    subtitle-fade-in: 1.5
+
+    # SubTitle Stay time
+    # type: double
+    # The time how long the subtitle will stay in seconds
+    subtitle-stay: 5.0
+
+    # SubTitle Fade-Out time
+    # type: double
+    # The time how long the subtitle fade-out should take in seconds
+    subtitle-fade-out: 2.0
+
+  # Map title with builder
+  map:
+    # Enable map title (default: false)
+    # type: boolean
+    # If true, a title will be displayed on start
+    # with the region name displayed and if set, the builder
+    # as subtitle. (/bw setbuilder {game})
+    enabled: false
+
+    # io.github.bedwarsrel.com.v1_8_r1.Title Fade-In time
+    # type: double
+    # The time how long the title fade-in should take in seconds
+    title-fade-in: 1.5
+
+    # io.github.bedwarsrel.com.v1_8_r1.Title Stay time
+    # type: double
+    # The time how long the title will stay in seconds
+    title-stay: 2.0
+
+    # io.github.bedwarsrel.com.v1_8_r1.Title Fade-Out time
+    # type: double
+    # The time how long the title fade-out should take in seconds
+    title-fade-out: 1.5
+
+    # SubTitle Fade-In time
+    # type: double
+    # The time how long the subtitle fade-in should take in seconds
+    subtitle-fade-in: 1.5
+
+    # SubTitle Stay time
+    # type: double
+    # The time how long the subtitle will stay in seconds
+    subtitle-stay: 2.0
+
+    # SubTitle Fade-Out time
+    # type: double
+    # The time how long the subtitle fade-out should take in seconds
+    subtitle-fade-out: 1.5
+
+  # Countdown title
+  countdown:
+    # Enabled countdown title
+    # type: boolean
+    # If true, the countdown will be displayed as title when game is
+    # in countdown (from 10) in lobby
+    enabled: true
+
+    # io.github.bedwarsrel.com.v1_8_r1.Title format
+    # type: string
+    # The format of the countdown (colors addable)
+    format: "&3{countdown}"
+
+# Explode Behaviour
+explodes:
+  # Destroy world blocks
+  # type: boolean
+  # Set to true to allow destroying region blocks
+  # Set to false to prevent block destroying in region
+  destroy-worldblocks: false
+
+  # Destroy beds
+  # type: boolean
+  # Set to true, to allow players to destroy beds with tnt
+  destroy-beds: false
+
+  # Block drops
+  # type: boolean
+  # If set to true, blocks will be dropping on explosions
+  # on false, exploded blocks won't drop anything
+  drop-blocking: false
+
+# Friendly Fire
+# Type: boolean (true or false)
+# Sets if friendlyfire is enabled (damage team mates)
+friendlyfire: false
+
+# Prevent breaking under team mate
+# type: boolean
+# If true, you can break the block right under a team-member
+# If false, it will be prevented to break block under team-member
+friendlybreak: true
+
+# game over delay
+# Type: int
+# How much time (in seconds) should be waited until all players
+# will be teleported after a game ends.
+gameoverdelay: 10
+
+# Use the Bedwars shopvillager
+# Type: boolean
+# Decide if you want to use the internal bedwars shop
+use-internal-shop: true
+
+# Restore inventory after game ends
+# type boolean
+# If true the inventory gets restore after the game ends
+save-inventory: true
+
+# Show team in io.github.bedwarsrel.com.v1_8_r1.ActionBar
+# Type: boolean
+# Sets if the name of a player's team should be displayed
+# in the io.github.bedwarsrel.com.v1_8_r1.ActionBar
+show-team-in-actionbar: false
+
+# Chat to all prefix
+# type: list
+# The prefix character which indicates to chat
+# to all ingame players (not only team)
+chat-to-all-prefix:
+  - '@'
+  - '@a'
+  - '@all'
+
+# Seperate game chat
+# type: boolean
+# Configure to false if players in games can read all messages of server
+# Configure to true if players receive only game messages
+seperate-game-chat: true
+
+# Seperate spectator chat
+# type: boolean
+# If set to true, spectators and game-players are seperated
+# and players don't see spectators chat
+seperate-spectator-chat: false
+
+# Statistic-Configuration
+statistics:
+  # statistics enable
+  # type: boolean
+  # Set to true to enable statistics. Otherwise set to false
+  enabled: false
+
+  # Show on game end
+  # type: boolean
+  # If true, the stats will be displayed after the game ends
+  show-on-game-end: true
+
+  # Achievements storage type
+  # type: string
+  # yaml or database
+  # Set to yaml to store statistics in a Yaml-Configuration file or
+  # set to database to store statistics in the defined database. If no database
+  # configured, the statistics will be stored in Yaml-Files
+  storage: yaml
+
+  # Bed destroy kill
+  # type: boolean
+  # If true, kills will only count if the bed is destroyed
+  # If false, every kill will count as a kill
+  bed-destroyed-kills: false
+
+  # Scores configuration
+  scores:
+    # Score per kill
+    # type: int
+    # Sets the score which a player gets when he kills someone
+    kill: 10
+
+    # Score per death
+    # type: int
+    # Sets the score which a player gets when he dies
+    die: 0
+
+    # Score per win
+    # type: int
+    # Sets the score which all team-players gets when a team wins
+    win: 50
+
+    # Score per bed destroy
+    # type: int
+    # Sets the score which a player gets when he destroys a bed
+    bed-destroy: 25
+
+    # Score per lose
+    # type: int
+    # Sets the score which all team-players gets when a lose
+    lose: 0
+
+    # New record set
+    # type: int
+    # Sets the score which all team-players gets when they made a new record
+    record: 100
+
+# database (currently only mysql) configuration
+database:
+
+  # database host
+  # type: string
+  # Hostname of your database
+  host: localhost
+
+  # database port
+  # type: int
+  # Port of your database. Default mysql port: 3306
+  port: 3306
+
+  # database name
+  # type: string
+  # The name of your database
+  db: database
+
+  # database user
+  # type: string
+  # User for database authentication
+  user: root
+
+  # database password
+  # type: string
+  # Password of database user for authentication
+  password: secret
+
+  # Table prefix
+  # type: string
+  # A prefix for the database tables
+  table-prefix: bw_
+
+# Spectation enabled
+# Type: boolean
+# Defines if spectators are allowed
+spectation-enabled: false
+
+# Respawn protection
+# Type: int
+# The time which players are protected after respawn in seconds
+# Set it to 0 to disable respawn protection.
+respawn-protection: 0
+
+# Allowed ingame commands
+# type: List<String>
+# Defines a list of commands which are allowed for all for default.
+# Can be set with an starting / or without
+allowed-commands:
+  - /help
+
+endgame:
+  ### Main lobby enabled
+  ### Type: boolean
+  ### Not available with bungeecord!
+  ### If you want, that all players will be teleported to a specific
+  ### location (you can set with /bw setmainlobby {game}) after a game or when a player
+  ### uses /bw leave. If this is set to false, the players will be teleported to the location
+  ### where they joined the game!
+  mainlobby-enabled: false
+
+  ### All players to mainlobby
+  ### Type: boolean
+  ### Not available with bungeecord!
+  ### Configures if all players will be teleported to mainlobby after game.
+  ### If false, all players will be teleported back to lobby to restart
+  ### a new game. This is only recognized if mainlobby-enabled set to true
+  all-players-to-mainlobby: false
+
+# Bungeecord configurations
+bungeecord:
+  # Enable Bungeecord
+  # Type: boolean
+  # Set to true to enable bungeecord compatibility. Set to false when you have
+  # a single server and don't use bungeecord.
+  enabled: false
+
+  # Bungeecord Hubserver
+  # Type: string
+  # The name of the hub/main server of the bungeecord server-farm. This will be
+  # the server where the player will be teleported when they leave.
+  hubserver: hub
+
+  # Endgame Lobby
+  # type: boolean
+  # If true, it sends players to your lobby during the endgame before getting kicked.
+  endgame-in-lobby: true
+
+  # Full server restart
+  # Type: boolean
+  # If true, the server will do a full restart, with false
+  # it tries just to restart the game
+  full-restart: true
+
+  # Use spigot restart
+  # type: boolean
+  # If true, it tries to use spigot's /restart command (ONLY WHEN full-restart IS true)
+  # If spigot isn't running, it will just stop the server
+  spigot-restart: true
+
+  # Message of the Day configuration
+  # Type: string (colorcodes with &)
+  # Here you can specify the MOTDs which should be used
+  # at this bedwars server of your bungeecord server-farm.
+  # Useful for bedwars join signs in your lobby
+  motds:
+    lobby: |
+      $regionname$
+      &7[&b$currentplayers$&7/&b$maxplayers$&7]
+    running: |
+      $regionname$
+      &7[&b$currentplayers$&7/&b$maxplayers$&7]
+    stopped: |
+      $regionname$
+      &c[Stopped]
+    full: |
+      $regionname$
+      &7[&b$currentplayers$&7/&b$maxplayers$&7]
+
+### localization (language)
+### Type: string (length: 2)
+### Sets the localization which should be used.
+### Check the plugin description for possible languages!
+### Currently available languages: https://github.com/BedwarsRel/BedwarsRel/tree/master/src/main/resources/locale
+### The fallback language is en_US (english).
+locale: en_US
+
+# Resources config
+resource:
+  ## Custom spawners list
+  ### Spawners (unique key!):
+  ### item:
+  ###  type: List of ItemStack (same as shop)
+  ### spawn-interval:
+  ###  type: int
+  ###  The interval in milliseconds the ressource should spawn
+  ### spread:
+  ###  type: double
+  ###  How far the items should spread on drop
+  bronze:
+    item:
+      - type: CLAY_BRICK
+        amount: 1
+        meta:
+          ==: ItemMeta
+          meta-type: UNSPECIFIC
+          display-name: "ยง4Bronze"
+    spawn-interval: 1000
+    spread: 1.0
+  iron:
+    item:
+      - type: IRON_INGOT
+        amount: 1
+        meta:
+          ==: ItemMeta
+          meta-type: UNSPECIFIC
+          display-name: "ยง7Iron"
+    spawn-interval: 10000
+    spread: 1.0
+  gold:
+    item:
+      - type: GOLD_INGOT
+        amount: 1
+        meta:
+          ==: ItemMeta
+          meta-type: UNSPECIFIC
+          display-name: "ยง6Gold"
+    spawn-interval: 20000
+    spread: 1.0
+
+# Check Updates
+# type: boolean
+# Allow check for updates and automatically download the new update
+# and save it to the update folder of your server
+check-updates: true
+
+# Update infos
+# type: boolean
+# If true, you will get information when a new update will be downloaded
+# If false, you won't get noticed when a update was downloaded
+update-infos: true
+
+# Reward commands
+# It is prerequisite that every command can be executed from the console (sender).
+# These placeholder can be used in every command:
+# {player} - the player for which the command will be executed
+# {score} - the score of the player in the current game (ONLY WHEN STATISTICS ENABLED!)
+rewards:
+  # Enable rewards
+  # type: boolean
+  # Enables reward commands
+  enabled: false
+
+  # game win
+  # type: List<string>
+  # commands which will be executed for every player which wins
+  # possible placeholders: {player}, {score}
+  # set the first command to "none", no commands will be executed
+  player-win:
+    - /example {player} 200
+
+  # game end (every player in game)
+  # type: List<string>
+  # commands which will be execute for every player in game
+  # after the game has end
+  # possible placeholders: {player}, {score}
+  # set the first command to "none", no commands will be executed
+  player-end-game:
+    - /example {player} {score}
+
+  # Player destroy bed
+  # type: List<string>
+  # commands which will be executed for the player which
+  # destroys a bed of a enemy team
+  # possible placeholders: {player}, {score}
+  # {score} here is the score how much is configured
+  # at "statistics => scores => bed-destroy"
+  # set the first command to "none", no commands will be executed
+  player-destroy-bed:
+    - /example {player} {score}
+
+  # Player kill
+  # type: List<string>
+  # commands which will be executed for the player which
+  # kills a enemy player
+  # possible placeholders: {player}, {score}
+  # {score} here is the score how much is configured
+  # at "statistics => scores => kill"
+  # set the first command to "none", no commands will be executed
+  player-kill:
+    - /example {player} 10
+
+# Special items
+specials:
+  # Rescue platform settings
+  rescue-platform:
+    # Remove platform time
+    # type: int
+    # The time in seconds when the platform will be break after using
+    # the rescue platform
+    break-time: 10
+
+    # Using wait time
+    # type: int
+    # The seconds how long a player has to wait until he can
+    # use a rescue platform again
+    using-wait-time: 20
+
+    # Item
+    # type: int or string
+    # The name or id of the item which should be used for the rescue platform
+    item: BLAZE_ROD
+
+    # Can break
+    # type: boolean
+    # If true, the rescue platform can be breaked by other players.
+    can-break: false
+
+    # Block
+    # type: int or string
+    # The block-type which should be used for the rescue platform
+    block: STAINED_GLASS
+
+  # Protection wall settings
+  protection-wall:
+    # Break time
+    # type: int
+    # The time in seconds when the wall should be removed again or
+    # 0 when the wall shouldn't be breaked again
+    break-time: 0
+
+    # Wait time
+    # type: int
+    # The wait time in seconds a player has to wait until he can
+    # use a protection wall again or 0 if protection walls can be activated anytime
+    wait-time: 20
+
+    # Can break wall
+    # type: boolean
+    # If true, the wall can be breaked by other players or
+    # false if it shouldn't be breakable
+    can-break: true
+
+    # Interact item
+    # type: int or string
+    # The item id or string which indicates which item should be in the
+    # hand to execute the protection wall on interaction
+    item: BRICK
+
+    # Wall type
+    # type: int or string
+    # The item-type which should be used for the wall. Should be
+    # a real block!
+    block: SANDSTONE
+
+    # Wall width
+    # type: int
+    # The width in blocks the wall should be
+    # !! ODD ONLY !!
+    width: 5
+
+    # Wall height
+    # type: int
+    # The height in blocks the wall should be
+    height: 3
+
+    # Distance to player
+    # type: int
+    # The distance in blocks the wall should be away from the player
+    distance: 2
+
+  # Magnetshoe settings
+  magnetshoe:
+    # Knockback probability
+    # type: int
+    # The probability in percent the knockback will be prevented
+    probability: 75
+
+    # Knockback boots
+    # type: item (boots only!!!)
+    # The boots which are used as magnetshoe
+    boots: IRON_BOOTS
+
+  # Warp-Powder settings
+  warp-powder:
+    # Show particles
+    # type: boolean
+    # If true, particles will be shown
+    show-particles: true
+
+    # Particles type
+    # type: string
+    # Decide which particles should be used at teleport.
+    particle: fireworksSpark
+
+    # Teleport time
+    # type: int
+    # The time in seconds a teleportation should need
+    teleport-time: 6
+
+  # Trap settings
+  trap:
+
+    # Trap play sound
+    # type: boolean
+    # Set to true, to play sound when someone step into a trap (sound only to players
+    # of the team, which placed the trap)
+    play-sound: true
+
+    # List of effects the player gets after stepping on a trap
+    effects:
+
+      # Now the custom PotionEffect
+      # It is a list of effects
+      - ==: PotionEffect
+
+        # Potion id
+        # type: int
+        # The id 15 means the PotionEffect Blindness
+        # You can find a list of possible effect ids you can use on http://minecraft-helpandinfo.weebly.com/potion-effects-ids.html
+        effect: 15
+
+
+        # Effect duration in ticks (20 ticks = 1 second)
+        # type: int
+        # The duration the trapeffect will have effects on the player in ticks
+        # 100 ticks is default (5 seconds)
+        duration: 100
+
+        # Effect amplifier
+        # type: int
+        # The higher the value, the heavier the effect.
+        amplifier: 2
+
+        # Effect ambient
+        # type: boolean
+        # Makes potion effect produce more, translucent, particles.
+        ambient: true
+
+        # Effect has particles
+        # type: boolean
+        # Set to true, if trap effect should generate particles around the player
+        has-particles: true
+
+      # Two more examples
+      # Feel free to customize and add more effects
+      - ==: PotionEffect
+
+        # PotionEffect Weakness
+        effect: 18
+
+        duration: 100
+        amplifier: 2
+        ambient: true
+        has-particles: true
+
+      - ==: PotionEffect
+
+        # PotionEffect Slowness
+        effect: 2
+
+        duration: 100
+        amplifier: 2
+        ambient: true
+        has-particles: true
+
+  # TNT-Creature settings
+  tntsheep:
+    # TNT fuse time
+    # type: double
+    # The time in seconds when the TNT will explode
+    fuse-time: 8.0
+
+    # Sheep movement speed
+    # type: double
+    # The movement speed of the sheep
+    # Prefered 0.4! Do not set higher than 0.8!!!
+    speed: 0.4
+
+    # Explosion factor
+    # type: double
+    # The factor for the explosive! 1.0 is default tnt-explosion.
+    # Its not recommended to use values above 1.0
+    explosion-factor: 1.0
+
+  # arrow-blocker settings
+  arrow-blocker:
+    # Protection time
+    # type: int
+    # The time to protect the player from projectils
+    protection-time: 10
+
+    # Protection time
+    # type: int
+    # Time to wait for the next useage
+    using-wait-time: 5
+
+    # Interact item
+    # type: int or string
+    # The item id or string which indicates which item should be in the
+    # hand to execute the arrow-blocker on interaction
+    item: ender_eye
+
+# Sign configuration
+# You can use following placeholder (colors with &):
+# $gamename$ - display game name
+# $regionname$ - display region name
+# $maxplayers$ - display max players amount (color overwrite when full)
+# $currentplayers$ - display current players in game (color overwrite when full)
+# $status$ - display current game status (lobby, running or waiting)
+# $title$ - display bedwars title (sign.firstline of locale file)
+sign:
+  first-line: '$title$'
+  second-line: '$regionname$'
+  third-line: 'Players &7[&b$currentplayers$&7/&b$maxplayers$&7]'
+  fourth-line: '$status$'
+
+# Configure player default settings
+player-settings:
+
+  # shop: One Stack on shift click
+  # type: boolean
+  # Only one full stack when doing a shift click to buy items.
+  # Player can change that in shop, this is just a default
+  one-stack-on-shift: false
+
+  # shop: Default shop on game start
+  # type: boolean
+  # Set the default shop on game start.
+  # Player can change that in shop, this is just a default
+  old-shop-as-default: false
+
+#   ____           _                         _____                    ____                      _             _     _                       ___   __  ___   ___
+#  |  _ \         | |                       / ____|                  |  _ \                    | |   /\      | |   | |                     |__ \ /_ |/ _ \ |__ \
+#  | |_) | ___  __| |_      ____ _ _ __ ___| (___   ___ ___  _ __ ___| |_) | ___   __ _ _ __ __| |  /  \   __| | __| | ___  _ __     __   __  ) | | | | | |   ) |
+#  |  _ < / _ \/ _` \ \ /\ / / _` | '__/ __|\___ \ / __/ _ \| '__/ _ \  _ < / _ \ / _` | '__/ _` | / /\ \ / _` |/ _` |/ _ \| '_ \    \ \ / / / /  | | | | |  / /
+#  | |_) |  __/ (_| |\ V  V / (_| | |  \__ \____) | (_| (_) | | |  __/ |_) | (_) | (_| | | | (_| |/ ____ \ (_| | (_| | (_) | | | |    \ V / / /_ _| | |_| | / /_
+#  |____/ \___|\__,_| \_/\_/ \__,_|_|  |___/_____/ \___\___/|_|  \___|____/ \___/ \__,_|_|  \__,_/_/    \_\__,_|\__,_|\___/|_| |_|     \_/ |____(_)_|\___(_)____|
+#
+#
+# By Ram
+#
+# 更新时间: 2020年2月7日
+#
+
+#插件版本(请勿修改)
+version: 2.10.2
+
+
+#更新检测
+update_check: true
+
+
+#初始化调试
+#  当插件加载失败时启用此项
+#  启用后将显示详细错误报告
+init_debug: false
+
+
+#隐藏非游戏玩家
+hide_player: true
+
+
+#Tab血量显示
+tab_health: true
+
+
+#头顶血量显示
+tag_health: true
+
+
+#合并掉落物品
+item_merge: false
+
+
+#改变饥饿值
+hunger_change: false
+
+
+#喝药水清除玻璃瓶
+clear_bottle: true
+
+
+#聊天格式
+chatformat:
+
+  #是否启用
+  enabled: true
+
+  #全体聊天前置
+  all_prefix:
+    - "!"
+    - "#"
+    - "@"
+
+  #大厅聊天格式
+  lobby: "{player} > {message}"
+
+  #已选择队伍大厅聊天格式
+  lobby_team: "{color}{player} &f> {message}"
+
+  #游戏中聊天格式
+  ingame: "&7[{color}{team}&7] {color}{player} &f> {message}"
+
+  #游戏中全体聊天格式
+  ingame_all: "&7[&f全体&7] &7[{color}{team}&7] {color}{player} &f> {message}"
+
+  #旁观者聊天格式
+  spectator: "&7[&f旁观者&7] &f{player} > {message}"
+
+
+#最终击杀显示
+final_killed:
+
+  #是否启用
+  enabled: true
+
+  #信息
+  message: "&6{player} &6被击杀，击杀者： {killer} &b&l最终击杀"
+
+
+#定时执行指令
+#变量:
+# {player}   所有游戏中玩家
+timecommand:
+
+  #游戏开始时执行的指令
+  startcommand:
+    - ""
+
+  #指令名称
+  #格式:
+  #
+  # 指令名称
+  # 1:
+  #
+  #   当游戏时间剩余多少时执行指令
+  #   gametime: 3600
+  #
+  #   执行的指令
+  #   command:
+  #   - ""
+  #
+  cmd1:
+
+    #当游戏时间剩余多少时执行指令
+    gametime: 3000
+
+    #执行的指令
+    command:
+      - ""
+
+
+#选择队伍菜单
+select_team:
+
+  #是否启用
+  enabled: true
+
+  #队伍状态
+  status:
+
+    select: "&e点击选择！"
+    inteam: "&e已在队伍中！"
+    team_full: "&c队伍已满！"
+
+  #无玩家
+  no_players: "&7(无)"
+
+  #物品名称
+  item:
+
+    #物品名称
+    name: "{color}{team}"
+
+    #描述
+    lore:
+      - ""
+      - "&f玩家: &e{players}&7/&e{maxplayers}"
+      - ""
+      - "&f玩家列表:"
+      - "  {color}{players_list}"
+      - ""
+      - "{status}"
+
+
+#清除大厅方块
+lobby_block:
+
+  #是否启用
+  enabled: false
+
+  #范围1
+  position_1:
+    x: 12
+    y: 10
+    z: 12
+
+  #范围2
+  position_2:
+    x: -12
+    y: -5
+    z: -12
+
+
+#掉线重连
+rejoin:
+
+  #是否启用
+  enabled: true
+
+  #信息
+  message:
+
+    #重新加入成功
+    rejoin: "&e{player} 重新加入了游戏！"
+
+    #重新加入失败
+    error: "&c无法重新加入游戏！"
+
+
+#弓箭伤害显示
+#变量:
+# {player}     玩家名称
+# {damage}     造成伤害值
+# {health}     玩家剩余血量
+# {maxhealth}  玩家最大血量
+bowdamage:
+
+  #是否启用
+  enabled: true
+
+  #大标题
+  title: ""
+
+  #小标题
+  subtitle: ""
+
+  #显示信息
+  message: "&f你对玩家 &a{player} &f造成了 &a{damage} &f点伤害 血量 &a{health}/{maxhealth}"
+
+
+#伤害显示
+#变量:
+# {player}     玩家名称
+# {damage}     造成伤害值
+# {health}     玩家剩余血量
+# {maxhealth}  玩家最大血量
+damagetitle:
+
+  #是否启用
+  enabled: true
+
+  #大标题
+  title: ""
+
+  #小标题
+  subtitle: "&b伤害 &f- &e{damage}  &b血量 &f- &e{health}&f/&e{maxhealth}"
+
+
+#玩家加入游戏时的标题
+#变量:
+# {player}   玩家名称
+jointitle:
+
+  #是否启用
+  enabled: true
+
+  #大标题
+  title: "&f{player}&a加入了游戏"
+
+  #小标题
+  subtitle: ""
+
+
+#游戏开始后标题
+start_title:
+
+  #是否启用
+  enabled: true
+
+  #大标题
+  title:
+    - "&c&l游        戏        开        始"
+    - "&c&l游       戏       开       始"
+    - "&c&l游      戏      开      始"
+    - "&c&l游     戏     开     始"
+    - "&c&l游    戏    开    始"
+    - "&c&l游   戏   开   始"
+    - "&c&l游  戏  开  始"
+    - "&c&l游 戏 开 始"
+    - "&c&l游戏开始"
+
+  #小标题
+  subtitle: "&7保护你的床"
+
+
+#被淘汰后标题
+die_out_title:
+
+  #是否启用
+  enabled: true
+
+  #大标题
+  title: "&c&l游戏结束"
+
+  #小标题
+  subtitle: "&7你现在是一名旁观者"
+
+
+#床被摧毁标题
+destroyed_title:
+
+  #是否启用
+  enabled: true
+
+  #大标题
+  title: "&c床被摧毁"
+
+  #小标题
+  subtitle: "&7你将不能重生!"
+
+
+#胜利标题
+#变量:
+#  {color}    胜利队伍颜色
+#  {team}     胜利队伍名称
+#  {time}     胜利耗时
+victory_title:
+
+  #是否启用
+  enabled: true
+
+  #大标题
+  title:
+    - "&6&l胜利"
+    - "&6&l胜利"
+    - "&6&l胜利"
+    - "&6&l胜利"
+    - "&6&l胜利"
+    - "&6&l胜利"
+    - "&e&l胜&6&l利"
+    - "&e&l胜&6&l利"
+    - "&e&l胜&6&l利"
+    - "&6&l胜&e&l利"
+    - "&6&l胜&e&l利"
+    - "&6&l胜&e&l利"
+    - "&6&l胜利"
+    - "&6&l胜利"
+    - "&6&l胜利"
+    - "&e&l胜&6&l利"
+    - "&e&l胜&6&l利"
+    - "&e&l胜&6&l利"
+    - "&6&l胜&e&l利"
+    - "&6&l胜&e&l利"
+    - "&6&l胜&e&l利"
+    - "&6&l胜利"
+
+  #小标题
+  subtitle: ""
+
+
+#播放声音
+play_sound:
+
+  #是否启用
+  enabled: true
+
+  #声音
+  #  随机播放列表中的声音
+  #  使用 {} 关闭声音
+  #  格式:
+  #    - <声音>,<音量>,<音调>
+  sound:
+
+    #游戏开始
+    start:
+      - ENDERDRAGON_GROWL,1,1
+
+    #死亡
+    death: {}
+
+    #击杀
+    kill:
+      - CAT_MEOW,1,1
+      - WOLF_BARK,1,1
+
+    #资源升级
+    upgrade: {}
+
+    #血量设置
+    sethealth: {}
+
+    #资源不足
+    no_resource:
+      - ENDERMAN_TELEPORT,1,0.5
+
+    #启用凋零弓
+    enable_witherbow:
+      - ENDERDRAGON_GROWL,1,1
+
+    #使用凋零弓
+    witherbow:
+      - WITHER_HURT,1,0
+
+    #死亡模式
+    deathmode: {}
+
+    #游戏结束
+    over:
+      - ENDERDRAGON_DEATH,1,1
+
+
+#旁观设置
+spectator:
+
+  #是否启用
+  enabled: true
+
+  #在地图中心
+  centre:
+
+    #是否启用
+    enabled: true
+
+    #高度
+    height: 120
+
+  #旁观玩家时
+  spectator_target:
+
+    #标题
+    title: "&a正在旁观&7{player}"
+
+    #小标题
+    subtitle: "&a点击左键打开菜单   &c按Shift键退出"
+
+  #退出旁观时
+  quit_spectator:
+
+    #标题
+    title: ""
+
+    #小标题
+    subtitle: "&e退出旁观模式"
+
+  #旁观者速度设置
+  speed:
+
+    #是否启用
+    enabled: true
+
+    #物品位置
+    slot: 5
+
+    #物品数字ID
+    item: 404
+
+    #物品名称
+    item_name: "&a旁观设置"
+
+    #物品描述
+    item_lore: {}
+
+    #菜单标题
+    gui_title: "旁观者设置"
+
+    #速度描述
+    no_speed: "&a没有速度效果"
+    speed_1: "&a速度 I"
+    speed_2: "&a速度 II"
+    speed_3: "&a速度 III"
+    speed_4: "&a速度 IV"
+
+  #快速加入 (需要前置 ServerJoiner)
+  fast_join:
+
+    #是否启用
+    enabled: false
+
+    #物品位置
+    slot: 8
+
+    #物品数字ID
+    item: 339
+
+    #物品名称
+    item_name: "&a再玩一局"
+
+    #物品描述
+    item_lore: {}
+
+    #ServerJoiner服务器组
+    group: "bedwars"
+
+
+#指南针
+compass:
+
+  #是否启用
+  enabled: true
+
+  #菜单标题
+  gui_title: "闪聊"
+
+  #物品名称
+  item_name: "&a指南针"
+
+  #物品描述
+  item_lore: {}
+
+  #返回按钮
+  back: "&f返回"
+
+  #物品描述
+  lore:
+    send_message:
+      - ""
+      - "&e点击发送！"
+    select_team:
+      - "&7您可以选择队伍"
+      - ""
+      - "&e点击选择！"
+    select_resources:
+      - "&7您可以选择资源"
+      - ""
+      - "&e点击选择！"
+
+
+  #资源
+  resources:
+    CLAY_BRICK: "&4红砖"
+    IRON_INGOT: "&7铁锭"
+    GOLD_INGOT: "&6金锭"
+    DIAMOND: "&b钻石"
+    EMERALD: "&2绿宝石"
+
+  #物品名称
+  item:
+    III_II: "&a你好( \uff9f\u25e1\uff9f)/！"
+    IV_II: "&a我回到基地了！"
+    V_II: "&a我正在防守！"
+    VI_II: "&a我正在进攻！"
+    VII_II: "&a我正在收集资源！"
+    VIII_II: "&a我有资源！"
+    III_III: "&a谢谢！"
+    IV_III: "&a返回基地！"
+    V_III: "&a请防守！"
+    VI_III: "&a我们进攻！"
+    VII_III: "&a我需要资源！"
+
+  #信息
+  message:
+    III_II: "&a&l队伍> &7{player}&f: &a你好( \uff9f\u25e1\uff9f)/"
+    IV_II: "&a&l队伍> &7{player}&f: &a我回到基地了"
+    V_II: "&a&l队伍> &7{player}&f: &a我正在防守"
+    VI_II: "&a&l队伍> &7{player}&f: &a我正在进攻 {color}{team}"
+    VII_II: "&a&l队伍> &7{player}&f: &a我正在收集 {resource}"
+    VIII_II: "&a&l队伍> &7{player}&f: &a我有 {resource}"
+    III_III: "&a&l队伍> &7{player}&f: &a谢谢"
+    IV_III: "&a&l队伍> &7{player}&f: &a返回基地"
+    V_III: "&a&l队伍> &7{player}&f: &a请防守"
+    VI_III: "&a&l队伍> &7{player}&f: &a我们进攻 {color}{team}"
+    VII_III: "&a&l队伍> &7{player}&f: &a我需要 {resource}"
+
+
+#商店
+shop:
+
+  #是否启用
+  enabled: true
+
+  #物品商店
+  item_shop:
+
+    #NPC类型
+    type: VILLAGER
+
+    #皮肤
+    skin: Steve
+
+    #商店名称
+    name:
+      - "&b道具商店"
+      - "&e&l右键点击"
+
+    #NPC视角跟随附近玩家
+    look: false
+
+  #队伍商店
+  team_shop:
+
+    #NPC类型
+    type: BLAZE
+
+    #皮肤
+    skin: Steve
+
+    #商店名称
+    name:
+      - "&b组队模式"
+      - "&b升级"
+      - "&e&l右键点击"
+
+    #NPC视角跟随附近玩家
+    look: false
+
+
+#倒计时重生设置
+respawn:
+
+  #是否启用
+  enabled: true
+
+  #在地图中心倒计时
+  centre:
+
+    #是否启用
+    enabled: true
+
+    #高度
+    height: 120
+
+  #重生时间(秒)
+  respawn_delay: 5
+
+  #正在重生时
+  respawning:
+
+    #大标题
+    title: "&c你死了！"
+
+    #小标题
+    subtitle: "&e你将在&c{respawntime}&e秒后复活"
+
+    #信息
+    message: "&e你将在&c{respawntime}&e秒后复活！"
+
+  #已经重生
+  respawned:
+
+    #大标题
+    title: "&a已重生"
+
+    #小标题
+    subtitle: ""
+
+    #信息
+    message: "&a你已重生！"
+
+
+#物品给予
+giveitem:
+
+  #死亡后不重置护甲
+  keeparmor: false
+
+  #护甲
+  armor:
+
+    #头盔
+    helmet:
+
+      #是否给予
+      give: true
+
+      #护甲是否可以脱下
+      move: true
+
+      #物品
+      item:
+        - type: TEAM_ARMOR
+          meta:
+            ==: ItemMeta
+            meta-type: LEATHER_ARMOR
+            enchants:
+              WATER_WORKER: 1
+            Unbreakable: true
+          probability: 1
+
+    #胸甲
+    chestplate:
+
+      #是否给予
+      give: true
+
+      #护甲是否可以脱下
+      move: true
+
+      #物品
+      item:
+        - type: TEAM_ARMOR
+          meta:
+            ==: ItemMeta
+            meta-type: LEATHER_ARMOR
+            Unbreakable: true
+          probability: 1
+
+    #护腿
+    leggings:
+
+      #是否给予
+      give: true
+
+      #护甲是否可以脱下
+      move: true
+
+      #物品
+      item:
+        - type: TEAM_ARMOR
+          meta:
+            ==: ItemMeta
+            meta-type: LEATHER_ARMOR
+            Unbreakable: true
+          probability: 1
+
+    #靴子
+    boots:
+
+      #是否给予
+      give: true
+
+      #护甲是否可以脱下
+      move: true
+
+      #物品
+      item:
+        - type: TEAM_ARMOR
+          meta:
+            ==: ItemMeta
+            meta-type: LEATHER_ARMOR
+            Unbreakable: true
+          probability: 1
+
+  #物品栏
+  #
+  #格式:
+  #
+  #  #物品名称
+  #  item1:
+  #
+  #    #物品所在背包的位置
+  #    slot: 0
+  #
+  #    #物品
+  #    item:
+  #    - type: WOOD_SWORD
+  #      meta:
+  #        ==: ItemMeta
+  #        meta-type: UNSPECIFIC
+  #        Unbreakable: true
+  #      probability: 1
+  item:
+
+    #物品名称
+    item1:
+
+      #物品所在背包的位置
+      slot: 0
+
+      #物品
+      item:
+        - type: WOOD_SWORD
+          meta:
+            ==: ItemMeta
+            meta-type: UNSPECIFIC
+            Unbreakable: true
+          probability: 1
+
+
+#血量设置
+sethealth:
+
+  #开始游戏时设置血量
+  start:
+
+    #是否启用
+    enabled: true
+
+    #设置血量
+    health: 40
+
+    #显示大标题消息
+    title: "&b全体血量提升!"
+
+    #显示小标题消息
+    subtitle: ""
+
+    #显示的信息
+    message: ""
+
+  #编号
+  1:
+
+    #当游戏剩余多少秒时改变血量
+    gametime: 3000
+
+    #设置血量
+    health: 50
+
+    #显示大标题消息
+    title: "&b全体血量提升!"
+
+    #显示小标题消息
+    subtitle: ""
+
+    #显示的信息
+    message: ""
+
+  #编号
+  2:
+
+    #当游戏剩余多少秒时改变血量
+    gametime: 1800
+
+    #设置血量
+    health: 60
+
+    #显示大标题消息
+    title: "&b全体血量提升!"
+
+    #显示小标题消息
+    subtitle: ""
+
+    #显示的信息
+    message: ""
+
+
+#资源点升级
+resourceupgrade:
+  1:
+
+    #当游戏时间剩余多少时升级
+    gametime: 3300
+
+    #设置生成速度 (每隔多少tick生成一个资源)
+    #1 秒 = 20 tick
+    #upgrade:
+    #  - "资源物品名称,设置的tick"
+    upgrade:
+      - "CLAY_BRICK,16"
+      - "IRON_INGOT,400"
+      - "GOLD_INGOT,800"
+      - "DIAMOND,500"
+      - "EMERALD,900"
+
+    #信息提示
+    message: "&e资源生成点已升至&cII级"
+  2:
+    gametime: 2700
+    upgrade:
+      - "CLAY_BRICK,14"
+      - "IRON_INGOT,300"
+      - "GOLD_INGOT,700"
+      - "DIAMOND,400"
+      - "EMERALD,800"
+    message: "&e资源生成点已升至&cIII级"
+  3:
+    gametime: 2100
+    upgrade:
+      - "CLAY_BRICK,12"
+      - "IRON_INGOT,200"
+      - "GOLD_INGOT,600"
+      - "DIAMOND,300"
+      - "EMERALD,700"
+    message: "&e资源生成点已升至&cIV级"
+  4:
+    gametime: 1500
+    upgrade:
+      - "CLAY_BRICK,10"
+      - "IRON_INGOT,150"
+      - "GOLD_INGOT,500"
+      - "DIAMOND,200"
+      - "EMERALD,600"
+    message: "&e资源生成点已升至&cV级"
+
+
+#资源数量上限
+resourcelimit:
+
+  #是否启用
+  enabled: true
+
+  #设置上限
+  limit:
+    - 'CLAY_BRICK,45'
+    - 'IRON_INGOT,30'
+    - 'GOLD_INGOT,10'
+    - 'DIAMOND,4'
+    - 'EMERALD,2'
+
+
+#隐藏隐身玩家(喝隐身药水时触发)
+invisibility_player:
+
+  #是否启用
+  enabled: true
+
+  #显示足迹
+  footstep: true
+
+  #隐藏药水效果
+  hide_particles: true
+
+  #隐身玩家被攻击时显示身体(默认只显示盔甲)
+  damage_show_player: false
+
+
+#凋零弓
+witherbow:
+
+  #是否启用
+  #禁用后倒计时任然继续，但不会开启凋零弓
+  enabled: true
+
+  #当游戏剩余多少秒时开启
+  gametime: 2400
+
+  #当凋零弓开启后变量 {bowtime} 的量
+  already_starte: "已开启"
+
+  #凋零弓开启时的大标题
+  title: "&b&l凋零弓"
+
+  #凋零弓开启时的小标题
+  subtitle: "&f所有箭矢将替换为凋零头颅"
+
+  #凋零弓开启时的提示
+  message: "&b凋零弓已开启，所有箭矢将替换为凋零头颅！"
+
+
+#死亡模式
+deathmode:
+
+  #是否启用
+  enabled: true
+
+  #当游戏剩余多少秒时开启
+  gametime: 900
+
+  #显示大标题消息
+  title: "&c&l死亡模式"
+
+  #显示小标题消息
+  subtitle: "&f所有队伍床被破坏！"
+
+  #显示的信息
+  message: "&f死亡模式开启，所有队伍床被破坏！"
+
+
+#击杀资源抢夺
+deathitem:
+
+  #是否启用
+  enabled: true
+
+  #启用物品
+  items:
+    - 'CLAY_BRICK'
+    - 'IRON_INGOT'
+    - 'GOLD_INGOT'
+    - 'EMERALD'
+    - 'DIAMOND'
+
+  #汉化物品名称
+  item_name_chinesize: true
+
+  #显示的信息
+  #变量:
+  # {amount}           物品数量
+  # {item}             物品名称
+  message: "+{amount} {item}"
+
+
+#禁止摧毁床
+nobreakbed:
+
+  #是否启用
+  enabled: false
+
+  #当游戏剩余多少秒时取消禁止
+  gametime: 3300
+
+  #显示的信息
+  nobreakmessage: "&f游戏开始后5分钟内禁止破坏床！"
+
+  #显示大标题消息
+  title: ""
+
+  #显示小标题消息
+  subtitle: ""
+
+  #显示的信息
+  message: "&f已允许破坏敌方的床！"
+
+
+#出生点、资源点保护
+spawn_no_build:
+
+  #是否启用
+  enabled: true
+
+  #出生点保护范围
+  spawn_range: 2
+
+  #资源点保护范围
+  resource_range: 2
+
+  #提示
+  message: "&c你不能在这里放置方块！"
+
+
+#全息显示图
+holographic:
+
+  #资源生成点全息显示
+  resource:
+
+    #是否启用
+    enabled: true
+
+    #旋转速度
+    speed: 1.0
+
+    #资源生成点
+    resources:
+
+      #格式:
+      #
+      #资源名称(可自定义)
+      #diamond:
+      #
+      #  资源的物品ID
+      #  item: 264
+      #
+      #  显示的全息方块ID
+      #  block: 57
+      #
+      #  全息图距离资源点的高度
+      #  height: 1.5
+      #
+      #  显示全息标题文字
+      #  title:
+      #    - "资源生成点"
+      diamond:
+        item: 264
+        block: 57
+        height: 1.5
+        title:
+          - "&e等级 &c{level}"
+          - "&b&l钻石"
+          - "&e将在 &c{generate_time} &e秒后产出"
+      emerald:
+        item: 388
+        block: 133
+        height: 1.5
+        title:
+          - "&e等级 &c{level}"
+          - "&2&l绿宝石"
+          - "&e将在 &c{generate_time} &e秒后产出"
+
+  #床全息显示
+  bed_title:
+
+    #是否启用
+    enabled: true
+
+    #床未被摧毁时
+    bed_alive: "&c保护你的床！"
+
+    #床被摧毁时
+    bed_destroyed: "&7该队伍床已被 {player} &7所摧毁"
+
+
+#游戏结束时信息统计
+overstats:
+
+  #是否启用
+  enabled: true
+
+  #显示信息
+  #变量:
+  # {win_team}               胜利队伍
+  # {color}                  胜利队伍颜色
+  # {win_team_players}       胜利队伍剩余玩家列表
+  # {first_1_kills_player}   总击杀数第一玩家名称
+  # {first_2_kills_player}   总击杀数第二玩家名称
+  # {first_3_kills_player}   总击杀数第三玩家名称
+  # {first_1_kills}          总击杀数第一玩家击杀数
+  # {first_2_kills}          总击杀数第二玩家击杀数
+  # {first_3_kills}          总击杀数第三玩家击杀数
+  message:
+    - "&a\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac"
+    - "                             &e&l起床战争"
+    - ""
+    - "                             {color}{win_team}"
+    - "                             {win_team_players}"
+    - ""
+    - "    &e&l第一击杀者&7 - &f{first_1_kills_player} &7- &f{first_1_kills}"
+    - "    &6&l第二击杀者&7 - &f{first_2_kills_player} &7- &f{first_2_kills}"
+    - "    &c&l第三击杀者&7 - &f{first_3_kills_player} &7- &f{first_3_kills}"
+    - ""
+    - "&a\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac\u25ac"
+
+
+#物品栏上方信息
+#变量:
+# {team}               玩家队伍
+# {range}              玩家与队伍重生点的距离
+# {color}              玩家队伍颜色
+# {bowtime}            凋零弓时间
+# {date}               日期
+# {online}             玩家在线人数
+# {time}               游戏时间(分钟)
+# {formattime}         格式化游戏时间
+# {game}               游戏地图
+# {team_peoples}       玩家队伍人数
+actionbar: "&f队伍: {color}{team} &f凋零弓: {color}{bowtime} &f追踪: {color}{range}米"
+
+
+#自定义倒计时
+#格式:
+#  编号: 时间
+timer:
+  1: 3600
+
+
+#设定计划信息显示
+#变量 {planinfo} {plantime} 的内容
+#
+#使用计分板的变量
+#
+#格式:
+# 编号
+# 0:
+#
+#   #当游戏剩余多少时间时开始
+#   startametime: 3600
+#
+#   #当游戏剩余多少时间时结束
+#   endametime: 0
+#
+#   #设置变量 {planinfo} 的内容
+#   planinfo: "文本1"
+#
+#   #设置变量 {plantime} 的内容
+#   plantime: "文本2"
+planinfo:
+
+  1:
+    startametime: 3600
+    endametime: 3300
+    planinfo: "资源生成点升至II级倒计时:"
+    plantime: "{resource_upgrade_1}"
+
+  2:
+    startametime: 3300
+    endametime: 3000
+    planinfo: "第一次血量提升倒计时:"
+    plantime: "{sethealthtime_1}"
+
+  3:
+    startametime: 3000
+    endametime: 2700
+    planinfo: "资源生成点升至III级倒计时:"
+    plantime: "{resource_upgrade_2}"
+
+  4:
+    startametime: 2700
+    endametime: 2400
+    planinfo: "凋零弓开启倒计时:"
+    plantime: "{bowtime}"
+
+  5:
+    startametime: 2400
+    endametime: 2100
+    planinfo: "资源生成点升至IV级倒计时:"
+    plantime: "{resource_upgrade_3}"
+
+  6:
+    startametime: 2100
+    endametime: 1800
+    planinfo: "第二次血量提升倒计时:"
+    plantime: "{sethealthtime_2}"
+
+  7:
+    startametime: 1800
+    endametime: 1500
+    planinfo: "资源生成点升至V级倒计时:"
+    plantime: "{resource_upgrade_4}"
+
+  8:
+    startametime: 1500
+    endametime: 900
+    planinfo: "死亡模式倒计时:"
+    plantime: "{death_mode}"
+
+  9:
+    startametime: 900
+    endametime: 0
+    planinfo: "游戏结束倒计时:"
+    plantime: "{formattime}"
+
+
+#玩家头顶名称称号
+#变量:
+# {team}               玩家队伍
+# {color}              玩家队伍颜色
+playertag:
+
+  #前缀
+  prefix: "{color}{team} &f| {color}"
+
+  #后缀
+  suffix: ""
+
+
+#日期格式
+date_format: "MM/dd/yy"
+
+#等待大厅计分板
+lobby_scoreboard:
+
+  #是否启用
+  enabled: true
+
+  #计分板刷新间隔(tick)
+  # 1 秒 = 20 tick
+  interval: 2
+
+  #计分板标题
+  #变量:
+  # {game}             游戏名称
+  title:
+    - "&e&l起床战争"
+    - "&e&l起床战争"
+    - "&e&l起床战争"
+    - "&e&l起床战争"
+    - "&e&l起床战争"
+    - "&e&l起床战争"
+    - "&e&l起床战争"
+    - "&e&l起床战争"
+    - "&e&l起床战争"
+    - "&e&l起床战争"
+    - "&e&l起床战争"
+    - "&e&l起床战争"
+    - "&e&l起床战争"
+    - "&e&l起床战争"
+    - "&e&l起床战争"
+    - "&e&l起床战争"
+    - "&e&l起床战争"
+    - "&e&l起床战争"
+    - "&e&l起床战争"
+    - "&e&l起床战争"
+    - "&6&l起&e&l床战争"
+    - "&f&l起&6&l床&e&l战争"
+    - "&e&l起&f&l床&6&l战&e&l争"
+    - "&e&l起床&f&l战&6&l争"
+    - "&e&l起床战&f&l争"
+    - "&e&l起床战争"
+    - "&f&l起床战争"
+    - "&e&l起床战争"
+    - "&f&l起床战争"
+
+  #等待状态
+  state:
+
+    #等待
+    waiting: "&f等待中..."
+
+    #开始倒计时
+    countdown: "&F即将在&a{countdown}秒后开始"
+
+  #计分板信息
+  #变量:
+  # {date}                    日期
+  # {state}                   等待状态
+  # {game}                    游戏地图
+  # {players}                 游戏玩家
+  # {maxplayers}              最大游戏玩家
+  # {minplayers}             最小游戏玩家
+  # {needplayers}             离倒计时开始所需玩家
+  # {countdown}               游戏开始倒计时
+  lines:
+    - "&7{date}"
+    - ""
+    - "&f地图:&a{game}"
+    - "&f玩家:&a{players}/{maxplayers}"
+    - ""
+    - "{state}"
+    - ""
+    - "&f模式:&a4v4v4v4"
+    - "&f版本:&7v1.0"
+    - ""
+    - "&ewww.minecraft.net"
+
+###############################
+#    BedwarsXP  经验起床插件    #
+#          By.Ldcr            #
+###############################
+
+#设置资源可兑换为的XP数
+XP:
+  #  铜可兑换为的XP
+  bronze: 1
+  # 铁可兑换为的XP
+  iron: 5
+  # 金可兑换为的XP
+  gold: 10
+  # 如有其他自行添加的资源也可以在此处按格式添加
+  #custom: 233
+#  请务必保证起床插件中配置的资源在此处都有对应经验值
+
+#获得XP的提示
+#  使用%xp%代替获得的XP
+#  插件会尝试使用ActionBar来发送,如发送失败(版本不匹配等原因)会使用聊天发送
+#  更改为空('')来禁用发送信息
+Message: '&a你获得了 &6&l%xp% &a点经验'
+
+#是否在商店新增将经验重新兑换回铜铁金的菜单
+Add_Res_Shop: true
+
+#玩家死亡扣除经验
+#  请填写0-100 (百分比)
+#  设置为0关闭此功能
+#  固定扣除功能已被移除
+DeathCostXP: 0
+
+#玩家死亡掉落经验
+#  开启此项后玩家死亡扣除的经验将掉在地上, 可以被其他玩家捡起
+#  请填写0-100 (百分比)
+#  设置为0关闭此功能
+DeathDropXP: 100
+
+#玩家可携带的最大经验
+#  超过该经验将无法捡取
+#  设置为0关闭此功能
+MaxXP: 0
+MaxXPMessage: '&4你携带的经验已达上限'
+
+#完全经验起床模式
+#  设置为false : 玩家捡取资源获得经验,在商店将经验重新兑换回铜铁金购买东西
+#  设置为true  : 玩家捡取资源获得经验,并可以在商店直接使用经验购买东西
+Full_XP_Bedwars: true
+
+#配置文件版本
+#  请务必不要动这个
+#  乱动此项导致配置文件被重置概不负责→_→
+ConfigVersion: 2
+

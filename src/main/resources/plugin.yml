@@ -1,0 +1,51 @@
+name: YaBedwars
+version: ${project.version}
+main: com.yallage.yabedwars.YaBedwars
+api-version: 1.17
+prefix: BEDWAR
+authors: [ APJifengc ]
+description: Minecraft Bedwars Plugin for Yallage server.
+website: reports.yallage.com
+depend: [ ProtocolLib, MultiWorld, Citizens, WorldEdit ]
+
+permissions:
+  bedwarsitemaddon.reload:
+    default: op
+  bedwarsitemshop.reload:
+    default: op
+  bedwarsxp.admin:
+    description: 经验起床相关管理权限.
+    default: op
+  bedwarsscoreboardaddon.reload:
+    default: op
+  bedwarsscoreboardaddon.updatecheck:
+    default: op
+  bedwarsscoreboardaddon.edit:
+    default: op
+  bedwarsscoreboardaddon.shop.list:
+    default: op
+  bedwarsscoreboardaddon.shop.teleport:
+    default: op
+  bedwarsscoreboardaddon.shop.set:
+    default: op
+  bedwarsscoreboardaddon.shop.remove:
+    default: op
+
+commands:
+  bedwarsitemshop:
+    aliases: [bwis]
+  bedwarsscoreboardaddon:
+    description: Base command.
+    aliases: [ bwsba ]
+    shout:
+      description: Shout to everyone.
+    rejoin:
+      description: Rejoin the game.
+  bedwarsxp:
+    description: 经验起床
+    usage: /bedwarsxp
+    aliases: [ bwxp ]
+  bedwarsxpedit:
+    description: 修改玩家经验值
+    usage: /bedwarsxpedit
+    aliases: [ editxp ]

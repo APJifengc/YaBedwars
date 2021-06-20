@@ -9,7 +9,6 @@ import io.github.bedwarsrel.game.GameState;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.yallage.yabedwars.EnumItem;
 import com.yallage.yabedwars.config.Config;
 import com.yallage.yabedwars.event.BedwarsUseItemEvent;
 import com.yallage.yabedwars.utils.TakeItemUtil;

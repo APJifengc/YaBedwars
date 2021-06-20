@@ -1,5 +1,6 @@
 package com.yallage.yabedwars.addon;
 
+import com.yallage.yabedwars.xpshop.XPItemShop;
 import io.github.bedwarsrel.BedwarsRel;
 import io.github.bedwarsrel.events.BedwarsGameStartedEvent;
 import io.github.bedwarsrel.events.BedwarsPlayerJoinEvent;
@@ -14,7 +15,7 @@ import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import com.yallage.yabedwars.api.XPManager;
+import com.yallage.yabedwars.manager.XPManager;
 import com.yallage.yabedwars.YaBedwars;
 import com.yallage.yabedwars.arena.Arena;
 import com.yallage.yabedwars.config.Config;
@@ -84,7 +85,7 @@ public class Spectator implements Listener {
             e.setCancelled(true);
             Item entity = e.getItem();
             if (this.resitems.contains(entity.getItemStack().getType())) {
-                if (Bukkit.getPluginManager().isPluginEnabled("BedwarsXP"))
+                if (BedwarsRel.getInstance().getGameManager().getGameOfPlayer(player).getNewItemShop(player) instanceof XPItemShop)
                     XPManager.getXPManager(getGame.getName()).setXP(player, 0);
                 if (!entity.isDead())
                     entity.remove();
@@ -190,16 +191,16 @@ public class Spectator implements Listener {
                                                         Config.spectator_spectator_target_title
                                                                 .replace("{player}", spectatorTarget.getName())
                                                                 .replace("{color}",
-                                                                        (CharSequence) e.getGame().getPlayerTeam(spectatorTarget)
-                                                                                .getChatColor())
+                                                                        e.getGame().getPlayerTeam(spectatorTarget)
+                                                                                .getChatColor().toString())
                                                                 .replace("{team}",
                                                                         e.getGame().getPlayerTeam(spectatorTarget)
                                                                                 .getName()),
                                                         Config.spectator_spectator_target_subtitle
                                                                 .replace("{player}", spectatorTarget.getName())
                                                                 .replace("{color}",
-                                                                        (CharSequence) e.getGame().getPlayerTeam(spectatorTarget)
-                                                                                .getChatColor())
+                                                                        e.getGame().getPlayerTeam(spectatorTarget)
+                                                                                .getChatColor().toString())
                                                                 .replace("{team}", e.getGame()
                                                                         .getPlayerTeam(spectatorTarget).getName()));
                                         } else {

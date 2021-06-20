@@ -1,30 +1,36 @@
-package com.yallage.yabedwars.events;
+package com.yallage.yabedwars.event;
 
 import io.github.bedwarsrel.game.Game;
-import org.bukkit.entity.Player;
+
+import java.util.List;
+
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-public class BoardAddonPlayerOpenItemShopEvent extends Event {
+public class BoardAddonResourceUpgradeEvent extends Event {
     private static final HandlerList handlers = new HandlerList();
 
     private final Game game;
 
-    private final Player player;
+    private List<String> upgrade;
 
     private Boolean cancelled = Boolean.FALSE;
 
-    public BoardAddonPlayerOpenItemShopEvent(Game game, Player player) {
+    public BoardAddonResourceUpgradeEvent(Game game, List<String> upgrade) {
         this.game = game;
-        this.player = player;
+        this.upgrade = upgrade;
     }
 
     public Game getGame() {
         return this.game;
     }
 
-    public Player getPlayer() {
-        return this.player;
+    public List<String> getUpgrade() {
+        return this.upgrade;
+    }
+
+    public void setUpgrade(List<String> upgrade) {
+        this.upgrade = upgrade;
     }
 
     public boolean isCancelled() {

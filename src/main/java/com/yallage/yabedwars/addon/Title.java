@@ -107,10 +107,10 @@ public class Title implements Listener {
                             for (Player player : team.getPlayers()) {
                                 if (player.isOnline())
                                     Utils.sendTitle(player, 0, 80, 5, Config.victory_title_title.get(this.rn).replace("{time}", formattime)
-                                                    .replace("{color}", (CharSequence) team.getChatColor())
+                                                    .replace("{color}", team.getChatColor().toString())
                                                     .replace("{team}", team.getName()),
                                             Config.victory_title_subtitle.replace("{time}", formattime)
-                                                    .replace("{color}", (CharSequence) team.getChatColor())
+                                                    .replace("{color}", team.getChatColor().toString())
                                                     .replace("{team}", team.getName()));
                             }
                             this.rn++;

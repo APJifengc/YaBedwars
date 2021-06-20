@@ -1,4 +1,4 @@
-package com.yallage.yabedwars;
+package com.yallage.yabedwars.xpshop;
 
 import io.github.bedwarsrel.villager.VillagerTrade;
 import com.yallage.yabedwars.utils.ResourceUtils;

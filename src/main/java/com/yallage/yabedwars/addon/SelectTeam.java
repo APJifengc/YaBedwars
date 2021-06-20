@@ -17,7 +17,7 @@ import org.bukkit.material.Wool;
 
 public class SelectTeam {
     public static void openSelectTeam(Game game, Player player) {
-        int size = 27 + 9 * game.getTeams().values().size() / 7;
+        int size = 27 + 9 * (game.getTeams().values().size() / 7);
         Inventory inventory = Bukkit.createInventory(null, size, BedwarsRel._l(player, "lobby.chooseteam"));
         int slot = 10;
         for (Team team : game.getTeams().values()) {

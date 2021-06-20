@@ -12,7 +12,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.yallage.yabedwars.EnumItem;
 import com.yallage.yabedwars.YaBedwars;
 import com.yallage.yabedwars.config.Config;
 import com.yallage.yabedwars.event.BedwarsUseItemEvent;
@@ -189,7 +188,7 @@ public class TeamIronGolem implements Listener {
                         cancel();
                         return;
                     }
-                    irongolem.setCustomName(Config.items_team_iron_golem_name.replace("{color}", (CharSequence) game.getPlayerTeam(player).getChatColor()).replace("{team}", game.getPlayerTeam(player).getName()).replace("{time}", String.valueOf((Integer) ((Map) TeamIronGolem.this.Guardtime.get(game.getName())).get(irongolem) + 1)));
+                    irongolem.setCustomName(Config.items_team_iron_golem_name.replace("{color}", game.getPlayerTeam(player).getChatColor().toString()).replace("{team}", game.getPlayerTeam(player).getName()).replace("{time}", String.valueOf((Integer) ((Map) TeamIronGolem.this.Guardtime.get(game.getName())).get(irongolem) + 1)));
                     if (irongolem.getTarget() instanceof Player) {
                         Player target = (Player) irongolem.getTarget();
                         if (!target.isOnline()) {

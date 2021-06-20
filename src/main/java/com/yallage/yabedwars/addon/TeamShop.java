@@ -1,5 +1,6 @@
 package com.yallage.yabedwars.addon;
 
+import com.yallage.yabedwars.xpshop.XPItemShop;
 import io.github.bedwarsrel.game.Game;
 import io.github.bedwarsrel.game.GameState;
 import io.github.bedwarsrel.game.Team;
@@ -9,7 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.yallage.yabedwars.api.XPManager;
+import com.yallage.yabedwars.manager.XPManager;
 import com.yallage.yabedwars.YaBedwars;
 import com.yallage.yabedwars.config.Config;
 import com.yallage.yabedwars.utils.ColorUtil;
@@ -213,6 +214,7 @@ public class TeamShop {
                                         new PotionEffect(PotionEffectType.FAST_DIGGING, 30, TeamShop.this.haste.get(hastes) - 1),
                                         true);
                     }
+                    // TODO 锋利改为一级
                     for (Player player : game.getPlayers()) {
                         int i = (player.getInventory().getContents()).length;
                         ItemStack[] stacks = player.getInventory().getContents();
@@ -467,7 +469,7 @@ public class TeamShop {
                     String[] ary = Config.teamshop_upgrade_fast_dig_level_cost
                             .get(this.haste.getOrDefault(team.getName(), 0) + 1).split(",");
                     if (ary[0].equals("XP")) {
-                        if (Bukkit.getPluginManager().isPluginEnabled("BedwarsXP"))
+                        if (game.getNewItemShop(player) instanceof XPItemShop)
                             if (XPManager.getXPManager(this.game.getName()).getXP(player) >= Integer.valueOf(ary[1])) {
                                 XPManager.getXPManager(this.game.getName()).takeXP(player, Integer.valueOf(ary[1]));
                                 this.haste.put(team.getName(), this.haste.getOrDefault(team.getName(), 0) + 1);
@@ -509,7 +511,7 @@ public class TeamShop {
                     String[] ary = Config.teamshop_upgrade_sword_sharpness_level_cost
                             .get(this.sharpness.getOrDefault(team.getName(), 0) + 1).split(",");
                     if (ary[0].equals("XP")) {
-                        if (Bukkit.getPluginManager().isPluginEnabled("BedwarsXP"))
+                        if (game.getNewItemShop(player) instanceof XPItemShop)
                             if (XPManager.getXPManager(this.game.getName()).getXP(player) >= Integer.valueOf(ary[1])) {
                                 XPManager.getXPManager(this.game.getName()).takeXP(player, Integer.valueOf(ary[1]));
                                 this.sharpness.put(team.getName(), this.sharpness.getOrDefault(team.getName(), 0) + 1);
@@ -552,7 +554,7 @@ public class TeamShop {
                     String[] ary = Config.teamshop_upgrade_armor_protection_level_cost
                             .get(this.protection.getOrDefault(team.getName(), 0) + 1).split(",");
                     if (ary[0].equals("XP")) {
-                        if (Bukkit.getPluginManager().isPluginEnabled("BedwarsXP"))
+                        if (game.getNewItemShop(player) instanceof XPItemShop)
                             if (XPManager.getXPManager(this.game.getName()).getXP(player) >= Integer.valueOf(ary[1])) {
                                 XPManager.getXPManager(this.game.getName()).takeXP(player, Integer.valueOf(ary[1]));
                                 this.protection.put(team.getName(), this.protection.getOrDefault(team.getName(), 0) + 1);
@@ -594,7 +596,7 @@ public class TeamShop {
                 if (!this.trap.containsKey(team.getName())) {
                     String[] ary = Config.teamshop_upgrade_trap_level_1_cost.split(",");
                     if (ary[0].equals("XP")) {
-                        if (Bukkit.getPluginManager().isPluginEnabled("BedwarsXP"))
+                        if (game.getNewItemShop(player) instanceof XPItemShop)
                             if (XPManager.getXPManager(this.game.getName()).getXP(player) >= Integer.valueOf(ary[1])) {
                                 XPManager.getXPManager(this.game.getName()).takeXP(player, Integer.valueOf(ary[1]));
                                 this.trap.put(team.getName(), 1);
@@ -634,7 +636,7 @@ public class TeamShop {
                 if (!this.defense.containsKey(team.getName())) {
                     String[] ary = Config.teamshop_upgrade_defense_level_1_cost.split(",");
                     if (ary[0].equals("XP")) {
-                        if (Bukkit.getPluginManager().isPluginEnabled("BedwarsXP"))
+                        if (game.getNewItemShop(player) instanceof XPItemShop)
                             if (XPManager.getXPManager(this.game.getName()).getXP(player) >= Integer.valueOf(ary[1])) {
                                 XPManager.getXPManager(this.game.getName()).takeXP(player, Integer.valueOf(ary[1]));
                                 this.defense.put(team.getName(), 1);
@@ -675,7 +677,7 @@ public class TeamShop {
                 if (!this.heal.containsKey(team.getName())) {
                     String[] ary = Config.teamshop_upgrade_heal_level_1_cost.split(",");
                     if (ary[0].equals("XP")) {
-                        if (Bukkit.getPluginManager().isPluginEnabled("BedwarsXP"))
+                        if (game.getNewItemShop(player) instanceof XPItemShop)
                             if (XPManager.getXPManager(this.game.getName()).getXP(player) >= Integer.valueOf(ary[1])) {
                                 XPManager.getXPManager(this.game.getName()).takeXP(player, Integer.valueOf(ary[1]));
                                 this.heal.put(team.getName(), 1);

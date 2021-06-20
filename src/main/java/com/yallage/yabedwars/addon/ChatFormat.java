@@ -31,7 +31,7 @@ public class ChatFormat implements Listener {
             playermsg = playermsg.substring(7);
             for (Player p : game.getPlayers())
                 p.sendMessage(msg.replace("{player}", player.getName()).replace("{message}", playermsg)
-                        .replace("{color}", (CharSequence) game.getPlayerTeam(player).getChatColor())
+                        .replace("{color}", game.getPlayerTeam(player).getChatColor().toString())
                         .replace("{team}", game.getPlayerTeam(player).getName()));
             e.setCancelled(true);
         }
@@ -95,7 +95,7 @@ public class ChatFormat implements Listener {
                 String playermsg = e.getMessage();
                 playermsg = playermsg.substring(prefix.length());
                 msg = msg.replace("{player}", player.getName()).replace("{message}", playermsg)
-                        .replace("{color}", (CharSequence) game.getPlayerTeam(player).getChatColor())
+                        .replace("{color}", game.getPlayerTeam(player).getChatColor().toString())
                         .replace("{team}", game.getPlayerTeam(player).getName());
                 for (Player p : game.getPlayers())
                     p.sendMessage(msg);
@@ -107,7 +107,7 @@ public class ChatFormat implements Listener {
                 game.getPlayerTeam(player) != null) {
             String msg = Config.chatformat_ingame;
             msg = msg.replace("{player}", player.getName()).replace("{message}", e.getMessage())
-                    .replace("{color}", (CharSequence) game.getPlayerTeam(player).getChatColor())
+                    .replace("{color}", game.getPlayerTeam(player).getChatColor().toString())
                     .replace("{team}", game.getPlayerTeam(player).getName());
             for (Player p : game.getPlayerTeam(player).getPlayers())
                 p.sendMessage(msg);

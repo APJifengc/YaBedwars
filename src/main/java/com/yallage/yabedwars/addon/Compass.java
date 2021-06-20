@@ -142,7 +142,7 @@ public class Compass implements Listener {
                         Team team = game.getTeam(teamname);
                         sendMessage(player, game.getPlayerTeam(player),
                                 Config.compass_message_VI_II.replace("{player}", player.getName())
-                                        .replace("{color}", (CharSequence) team.getChatColor())
+                                        .replace("{color}", team.getChatColor().toString())
                                         .replace("{team}", team.getName()));
                     }
                 }
@@ -160,7 +160,7 @@ public class Compass implements Listener {
                         Team team = game.getTeam(teamname);
                         sendMessage(player, game.getPlayerTeam(player),
                                 Config.compass_message_VI_III.replace("{player}", player.getName())
-                                        .replace("{color}", (CharSequence) team.getChatColor())
+                                        .replace("{color}", team.getChatColor().toString())
                                         .replace("{team}", team.getName()));
                     }
                 }

@@ -12,7 +12,7 @@ import java.util.Map;
 
 import com.yallage.yabedwars.YaBedwars;
 import com.yallage.yabedwars.config.Config;
-import com.yallage.yabedwars.events.BoardAddonResourceUpgradeEvent;
+import com.yallage.yabedwars.event.BoardAddonResourceUpgradeEvent;
 import com.yallage.yabedwars.utils.ColorUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -35,18 +35,6 @@ public class ResourceUpgrade implements Listener {
 
     private final Map<Material, String> Level;
 
-    public Map<String, String> getUpgTime() {
-        return this.UpgTime;
-    }
-
-    public Map<Material, Integer> getSpawnTime() {
-        return this.SpawnTime;
-    }
-
-    public Map<Material, String> getLevel() {
-        return this.Level;
-    }
-
     public ResourceUpgrade(final Game game) {
         this.Interval = new HashMap<>();
         this.SpawnTime = new HashMap<>();
@@ -60,7 +48,7 @@ public class ResourceUpgrade implements Listener {
             Location sloc = spawner.getLocation();
             for (ItemStack itemStack : spawner.getResources()) {
                 (new BukkitRunnable() {
-                    Location loc;
+                    Location loc = sloc;
 
                     int i;
 
@@ -111,15 +99,11 @@ public class ResourceUpgrade implements Listener {
             }
         }
         for (String rs : YaBedwars.getInstance().getConfig().getConfigurationSection("resourceupgrade").getKeys(false)) {
-            (new BukkitRunnable() {
+            new BukkitRunnable() {
                 int gametime;
-
                 List<String> upgrade;
-
                 String message;
-
-                Boolean isExecuted;
-
+                boolean isExecuted = false;
                 public void run() {
                     if (game.getState() == GameState.RUNNING) {
                         if (this.isExecuted) {
@@ -155,8 +139,20 @@ public class ResourceUpgrade implements Listener {
                         cancel();
                     }
                 }
-            }).runTaskTimer(YaBedwars.getInstance(), 0L, 21L);
+            }.runTaskTimer(YaBedwars.getInstance(), 0L, 21L);
         }
+    }
+
+    public Map<String, String> getUpgTime() {
+        return this.UpgTime;
+    }
+
+    public Map<Material, Integer> getSpawnTime() {
+        return this.SpawnTime;
+    }
+
+    public Map<Material, String> getLevel() {
+        return this.Level;
     }
 
     public String getLevel(String level) {

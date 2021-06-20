@@ -1,4 +1,4 @@
-package com.yallage.yabedwars.events;
+package com.yallage.yabedwars.event;
 
 import io.github.bedwarsrel.game.Game;
 import com.yallage.yabedwars.addon.Rejoin;
@@ -6,16 +6,18 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-public class BoardAddonPlayerRejoinedEvent extends Event {
+public class BoardAddonPlayerAddRejoinEvent extends Event {
     private static final HandlerList handlers = new HandlerList();
 
     private final Game game;
 
     private final Player player;
 
+    private Boolean cancelled = Boolean.FALSE;
+
     private final Rejoin rejoin;
 
-    public BoardAddonPlayerRejoinedEvent(Game game, Player player, Rejoin rejoin) {
+    public BoardAddonPlayerAddRejoinEvent(Game game, Player player, Rejoin rejoin) {
         this.game = game;
         this.player = player;
         this.rejoin = rejoin;
@@ -31,6 +33,14 @@ public class BoardAddonPlayerRejoinedEvent extends Event {
 
     public Rejoin getRejoin() {
         return this.rejoin;
+    }
+
+    public boolean isCancelled() {
+        return this.cancelled;
+    }
+
+    public void setCancelled(boolean cancel) {
+        this.cancelled = cancel;
     }
 
     public HandlerList getHandlers() {

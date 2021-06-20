@@ -14,7 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.yallage.yabedwars.api.XPManager;
+import com.yallage.yabedwars.manager.XPManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -150,7 +150,7 @@ public class OldHypixelShop implements Listener {
                 } else {
                     buyItem(game, player, e.getCurrentItem(), resname, 1);
                 }
-            } else if (Bukkit.getPluginManager().isPluginEnabled("BedwarsXP")) {
+            } else if (game.getNewItemShop(player) instanceof XPItemShop) {
                 (new XPItemShop(game.getNewItemShop(player).getCategories(), game)).handleInventoryClick(e, game, player);
             } else {
                 (new ItemShop(game.getNewItemShop(player).getCategories())).handleInventoryClick(e, game, player);
@@ -189,7 +189,7 @@ public class OldHypixelShop implements Listener {
     }
 
     private boolean isEnough(Game game, Player player, String type, int amount, Map<String, ItemStack> resname) {
-        if (type.equals("经验") && Bukkit.getPluginManager().isPluginEnabled("BedwarsXP")) {
+        if (type.equals("经验") && game.getNewItemShop(player) instanceof XPItemShop) {
             return XPManager.getXPManager(game.getName()).getXP(player) >= amount;
         } else {
             int k = 0;

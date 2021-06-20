@@ -12,7 +12,7 @@ import io.github.bedwarsrel.villager.MerchantCategory;
 
 import java.util.*;
 
-import com.yallage.yabedwars.api.XPManager;
+import com.yallage.yabedwars.manager.XPManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -99,7 +99,7 @@ public class NewHypixelShop implements Listener {
                 frame.setDurability((short) 7);
             }
             if (shopitems.size() < 1 && shops.size() > 0)
-                if (Bukkit.getPluginManager().isPluginEnabled("BedwarsXP")) {
+                if (game.getNewItemShop(player) instanceof XPItemShop) {
                     XPItemShop itemShop = new XPItemShop(game.getNewItemShop(player).getCategories(), game);
                     MerchantCategory clickedCategory = itemShop.getCategoryByMaterial(shops.get(0).getType());
                     if (clickedCategory != null) {
@@ -148,7 +148,7 @@ public class NewHypixelShop implements Listener {
                     buyItem(game, player, e.getCurrentItem(), resname, 1);
                 }
             } else if (!Objects.requireNonNull(e.getCurrentItem()).isSimilar(getFrame(7)) && !e.getCurrentItem().isSimilar(getFrame(5))) {
-                if (Bukkit.getPluginManager().isPluginEnabled("BedwarsXP")) {
+                if (game.getNewItemShop(player) instanceof XPItemShop) {
                     (new XPItemShop(game.getNewItemShop(player).getCategories(), game)).handleInventoryClick(e, game, player);
                 } else {
                     (new ItemShop(game.getNewItemShop(player).getCategories())).handleInventoryClick(e, game, player);
@@ -188,7 +188,7 @@ public class NewHypixelShop implements Listener {
     }
 
     private boolean isEnough(Game game, Player player, String type, int amount, Map<String, ItemStack> resname) {
-        if (type.equals("经验") && Bukkit.getPluginManager().isPluginEnabled("BedwarsXP")) {
+        if (type.equals("经验") && game.getNewItemShop(player) instanceof XPItemShop) {
             return XPManager.getXPManager(game.getName()).getXP(player) >= amount;
         } else {
             int k = 0;

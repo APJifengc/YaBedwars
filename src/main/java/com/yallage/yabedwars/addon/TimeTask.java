@@ -35,7 +35,7 @@ public class TimeTask implements Listener {
 
                 List<String> cmdlist;
 
-                Boolean isExecuted;
+                boolean isExecuted = false;
 
                 public void run() {
                     if (e.getGame().getState() == GameState.RUNNING) {

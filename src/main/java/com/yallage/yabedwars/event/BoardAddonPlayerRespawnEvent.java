@@ -1,30 +1,28 @@
-package com.yallage.yabedwars.events;
+package com.yallage.yabedwars.event;
 
 import io.github.bedwarsrel.game.Game;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-public class BoardAddonDeathModeEvent extends Event {
+public class BoardAddonPlayerRespawnEvent extends Event {
     private static final HandlerList handlers = new HandlerList();
 
     private final Game game;
 
-    private Boolean cancelled = Boolean.FALSE;
+    private final Player player;
 
-    public BoardAddonDeathModeEvent(Game game) {
+    public BoardAddonPlayerRespawnEvent(Game game, Player player) {
         this.game = game;
+        this.player = player;
     }
 
     public Game getGame() {
         return this.game;
     }
 
-    public boolean isCancelled() {
-        return this.cancelled;
-    }
-
-    public void setCancelled(boolean cancel) {
-        this.cancelled = cancel;
+    public Player getPlayer() {
+        return this.player;
     }
 
     public HandlerList getHandlers() {

@@ -219,10 +219,10 @@ public class ScoreboardUtil {
                 if (team == null)
                     team = scoreboard.registerNewTeam(game.getName() + ":" + t.getName());
                 if (!Config.playertag_prefix.equals(""))
-                    team.setPrefix(Config.playertag_prefix.replace("{color}", (CharSequence) t.getChatColor()).replace("{team}",
+                    team.setPrefix(Config.playertag_prefix.replace("{color}", t.getChatColor().toString()).replace("{team}",
                             t.getName()));
                 if (!Config.playertag_suffix.equals(""))
-                    team.setSuffix(Config.playertag_suffix.replace("{color}", (CharSequence) t.getChatColor()).replace("{team}",
+                    team.setSuffix(Config.playertag_suffix.replace("{color}", t.getChatColor().toString()).replace("{team}",
                             t.getName()));
                 team.setAllowFriendlyFire(false);
                 for (Player pl : t.getPlayers()) {

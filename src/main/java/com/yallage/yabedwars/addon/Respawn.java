@@ -17,7 +17,7 @@ import java.util.Objects;
 
 import com.yallage.yabedwars.YaBedwars;
 import com.yallage.yabedwars.config.Config;
-import com.yallage.yabedwars.events.BoardAddonPlayerRespawnEvent;
+import com.yallage.yabedwars.event.BoardAddonPlayerRespawnEvent;
 import com.yallage.yabedwars.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;

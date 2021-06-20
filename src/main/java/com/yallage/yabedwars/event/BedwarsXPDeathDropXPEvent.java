@@ -1,4 +1,4 @@
-package com.yallage.yabedwars.api.events;
+package com.yallage.yabedwars.event;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;

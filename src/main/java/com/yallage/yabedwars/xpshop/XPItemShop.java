@@ -16,8 +16,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import com.yallage.yabedwars.XPVillagerTrade;
-import com.yallage.yabedwars.api.XPManager;
+import com.yallage.yabedwars.manager.XPManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;

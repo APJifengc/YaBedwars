@@ -160,7 +160,7 @@ public class HolographicAPI {
         try {
             Field declaredField = Objects.requireNonNull(Utils.getNMSClass("PacketPlayOutSpawnEntityLiving")).getDeclaredField("a");
             declaredField.setAccessible(true);
-            this.ids.put(player.getUniqueId(), (int) (Integer) declaredField.get(packet));
+            this.ids.put(player.getUniqueId(), (Integer) declaredField.get(packet));
             destroyPacket = getDestroyPacket((Integer) declaredField.get(packet));
         } catch (Exception ignored) {
         }

@@ -1,35 +1,38 @@
-package com.yallage.yabedwars.events;
+package com.yallage.yabedwars.event;
 
 import io.github.bedwarsrel.game.Game;
-import com.yallage.yabedwars.addon.Rejoin;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-public class BoardAddonPlayerRemoveRejoinEvent extends Event {
+public class BoardAddonPlayerOpenTeamShopEvent extends Event {
     private static final HandlerList handlers = new HandlerList();
 
     private final Game game;
 
-    private final String player;
+    private final Player player;
 
-    private final Rejoin rejoin;
+    private Boolean cancelled = Boolean.FALSE;
 
-    public BoardAddonPlayerRemoveRejoinEvent(Game game, String player, Rejoin rejoin) {
+    public BoardAddonPlayerOpenTeamShopEvent(Game game, Player player) {
         this.game = game;
         this.player = player;
-        this.rejoin = rejoin;
     }
 
     public Game getGame() {
         return this.game;
     }
 
-    public String getPlayer() {
+    public Player getPlayer() {
         return this.player;
     }
 
-    public Rejoin getRejoin() {
-        return this.rejoin;
+    public boolean isCancelled() {
+        return this.cancelled;
+    }
+
+    public void setCancelled(boolean cancel) {
+        this.cancelled = cancel;
     }
 
     public HandlerList getHandlers() {

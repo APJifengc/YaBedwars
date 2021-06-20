@@ -1,6 +1,8 @@
 package com.yallage.yabedwars;
 
 import com.yallage.yabedwars.config.Config;
+import com.yallage.yabedwars.xpshop.XPItemShop;
+import com.yallage.yabedwars.xpshop.XPVillagerTrade;
 import io.github.bedwarsrel.BedwarsRel;
 import io.github.bedwarsrel.game.Game;
 import io.github.bedwarsrel.shop.NewItemShop;
@@ -14,7 +16,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.yallage.yabedwars.YaBedwars;
 import com.yallage.yabedwars.utils.ListUtils;
 import com.yallage.yabedwars.utils.ReflectionUtils;
 import org.bukkit.Bukkit;

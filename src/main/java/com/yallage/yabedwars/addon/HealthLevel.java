@@ -8,7 +8,7 @@ import java.util.Map;
 
 import com.yallage.yabedwars.YaBedwars;
 import com.yallage.yabedwars.config.Config;
-import com.yallage.yabedwars.events.BoardAddonSetHealthEvent;
+import com.yallage.yabedwars.event.BoardAddonSetHealthEvent;
 import com.yallage.yabedwars.utils.ColorUtil;
 import com.yallage.yabedwars.utils.Utils;
 import org.bukkit.Bukkit;

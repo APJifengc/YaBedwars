@@ -197,15 +197,13 @@ public class GiveItem implements Listener {
             (new BukkitRunnable() {
                 int i;
 
-                Player player;
+                Player player = p;
 
-                ItemStack stack1;
+                ItemStack stack1 = player.getInventory().getHelmet();
+                ItemStack stack2 = player.getInventory().getChestplate();
+                ItemStack stack3 = player.getInventory().getLeggings();
+                ItemStack stack4 = player.getInventory().getBoots();
 
-                ItemStack stack2;
-
-                ItemStack stack3;
-
-                ItemStack stack4;
 
                 public void run() {
                     if (this.i == 0) {

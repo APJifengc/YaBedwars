@@ -4,7 +4,7 @@ import io.github.bedwarsrel.BedwarsRel;
 import io.github.bedwarsrel.game.Game;
 import com.yallage.yabedwars.config.Config;
 import com.yallage.yabedwars.utils.SendMessageUtils;
-import com.yallage.yabedwars.api.XPManager;
+import com.yallage.yabedwars.manager.XPManager;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;

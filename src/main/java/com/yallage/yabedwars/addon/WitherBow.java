@@ -14,7 +14,7 @@ import java.util.Map;
 
 import com.yallage.yabedwars.YaBedwars;
 import com.yallage.yabedwars.config.Config;
-import com.yallage.yabedwars.events.BoardAddonPlayerShootWitherBowEvent;
+import com.yallage.yabedwars.event.BoardAddonPlayerShootWitherBowEvent;
 import com.yallage.yabedwars.manager.PlaceholderManager;
 import com.yallage.yabedwars.utils.Utils;
 import org.bukkit.Bukkit;
@@ -84,7 +84,7 @@ public class WitherBow implements Listener {
                             String ab = Config.actionbar
                                     .replace("{team_peoples}", String.valueOf(e.getGame().getPlayerTeam(player).getPlayers().size()))
                                     .replace("{bowtime}", bowtime)
-                                    .replace("{color}", (CharSequence) e.getGame().getPlayerTeam(player).getChatColor())
+                                    .replace("{color}", e.getGame().getPlayerTeam(player).getChatColor().toString())
                                     .replace("{team}", e.getGame().getPlayerTeam(player).getName())
                                     .replace("{range}", String.valueOf((int) player.getLocation().distance(e.getGame().getPlayerTeam(player).getSpawnLocation())))
 

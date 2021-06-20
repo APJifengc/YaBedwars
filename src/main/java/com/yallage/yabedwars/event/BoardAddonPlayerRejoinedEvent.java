@@ -1,26 +1,24 @@
-package com.yallage.yabedwars.events;
+package com.yallage.yabedwars.event;
 
 import io.github.bedwarsrel.game.Game;
+import com.yallage.yabedwars.addon.Rejoin;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.WitherSkull;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-public class BoardAddonPlayerShootWitherBowEvent extends Event {
+public class BoardAddonPlayerRejoinedEvent extends Event {
     private static final HandlerList handlers = new HandlerList();
 
     private final Game game;
 
     private final Player player;
 
-    private final WitherSkull witherSkull;
+    private final Rejoin rejoin;
 
-    private Boolean cancelled = Boolean.FALSE;
-
-    public BoardAddonPlayerShootWitherBowEvent(Game game, Player player, WitherSkull witherSkull) {
+    public BoardAddonPlayerRejoinedEvent(Game game, Player player, Rejoin rejoin) {
         this.game = game;
         this.player = player;
-        this.witherSkull = witherSkull;
+        this.rejoin = rejoin;
     }
 
     public Game getGame() {
@@ -31,16 +29,8 @@ public class BoardAddonPlayerShootWitherBowEvent extends Event {
         return this.player;
     }
 
-    public WitherSkull getWitherSkull() {
-        return this.witherSkull;
-    }
-
-    public boolean isCancelled() {
-        return this.cancelled;
-    }
-
-    public void setCancelled(boolean cancel) {
-        this.cancelled = cancel;
+    public Rejoin getRejoin() {
+        return this.rejoin;
     }
 
     public HandlerList getHandlers() {

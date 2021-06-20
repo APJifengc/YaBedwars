@@ -1,36 +1,38 @@
-package com.yallage.yabedwars.events;
+package com.yallage.yabedwars.event;
 
 import io.github.bedwarsrel.game.Game;
-
-import java.util.List;
-
+import com.yallage.yabedwars.addon.Rejoin;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-public class BoardAddonResourceUpgradeEvent extends Event {
+public class BoardAddonPlayerRejoinEvent extends Event {
     private static final HandlerList handlers = new HandlerList();
 
     private final Game game;
 
-    private List<String> upgrade;
+    private final Player player;
 
     private Boolean cancelled = Boolean.FALSE;
 
-    public BoardAddonResourceUpgradeEvent(Game game, List<String> upgrade) {
+    private final Rejoin rejoin;
+
+    public BoardAddonPlayerRejoinEvent(Game game, Player player, Rejoin rejoin) {
         this.game = game;
-        this.upgrade = upgrade;
+        this.player = player;
+        this.rejoin = rejoin;
     }
 
     public Game getGame() {
         return this.game;
     }
 
-    public List<String> getUpgrade() {
-        return this.upgrade;
+    public Player getPlayer() {
+        return this.player;
     }
 
-    public void setUpgrade(List<String> upgrade) {
-        this.upgrade = upgrade;
+    public Rejoin getRejoin() {
+        return this.rejoin;
     }
 
     public boolean isCancelled() {

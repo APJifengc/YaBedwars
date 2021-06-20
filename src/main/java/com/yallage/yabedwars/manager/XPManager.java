@@ -1,4 +1,4 @@
-package com.yallage.yabedwars.api;
+package com.yallage.yabedwars.manager;
 
 import java.util.HashMap;
 import java.util.UUID;

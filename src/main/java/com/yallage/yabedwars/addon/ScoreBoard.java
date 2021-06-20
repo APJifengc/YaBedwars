@@ -373,7 +373,7 @@ public class ScoreBoard {
         if (team.isDead(game) && team.getPlayers().size() <= 0)
             status = Config.scoreboard_team_status_format_team_dead;
         return status.replace("{bed_status}", getTeamBedStatus(game, team))
-                .replace("{color}", (CharSequence) team.getChatColor()).replace("{team}", team.getName())
+                .replace("{color}", team.getChatColor().toString()).replace("{team}", team.getName())
                 .replace("{players}", String.valueOf(team.getPlayers().size()));
     }
 }

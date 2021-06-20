@@ -6,7 +6,7 @@ import io.github.bedwarsrel.game.Game;
 import io.github.bedwarsrel.game.GameState;
 import io.github.bedwarsrel.game.Team;
 import com.yallage.yabedwars.config.Config;
-import com.yallage.yabedwars.events.BoardAddonDeathModeEvent;
+import com.yallage.yabedwars.event.BoardAddonDeathModeEvent;
 import com.yallage.yabedwars.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;

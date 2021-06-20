@@ -209,7 +209,7 @@ public class TeamSilverFish implements Listener {
                         cancel();
                         return;
                     }
-                    silverfish.setCustomName(Config.items_team_silver_fish_name.replace("{color}", (CharSequence) game.getPlayerTeam(player).getChatColor()).replace("{team}", game.getPlayerTeam(player).getName()).replace("{time}", String.valueOf((Integer) ((Map) TeamSilverFish.this.Fishtime.get(game.getName())).get(silverfish) + 1)));
+                    silverfish.setCustomName(Config.items_team_silver_fish_name.replace("{color}", game.getPlayerTeam(player).getChatColor().toString()).replace("{team}", game.getPlayerTeam(player).getName()).replace("{time}", String.valueOf((Integer) ((Map) TeamSilverFish.this.Fishtime.get(game.getName())).get(silverfish) + 1)));
                     if (silverfish.getTarget() instanceof Player) {
                         Player target = (Player) silverfish.getTarget();
                         if (!target.isOnline()) {

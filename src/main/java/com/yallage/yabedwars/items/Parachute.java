@@ -12,7 +12,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.yallage.yabedwars.EnumItem;
 import com.yallage.yabedwars.YaBedwars;
 import com.yallage.yabedwars.config.Config;
 import com.yallage.yabedwars.event.BedwarsUseItemEvent;

@@ -238,7 +238,7 @@ public class Arena {
                 String str1 = WinTeamPlayers.toString().replace("[", "").replace("]", "");
                 for (Player player : this.game.getPlayers()) {
                     for (String os : Config.overstats_message)
-                        player.sendMessage(os.replace("{color}", (CharSequence) winner.getChatColor())
+                        player.sendMessage(os.replace("{color}", winner.getChatColor().toString())
                                 .replace("{win_team}", winner.getName())
                                 .replace("{win_team_players}", str1)
                                 .replace("{first_1_kills_player}", kills_1_player)

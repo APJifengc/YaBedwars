@@ -1,7 +1,7 @@
 package com.yallage.yabedwars.event;
 
 import io.github.bedwarsrel.game.Game;
-import com.yallage.yabedwars.EnumItem;
+import com.yallage.yabedwars.items.EnumItem;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;

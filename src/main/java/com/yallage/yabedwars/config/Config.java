@@ -670,7 +670,7 @@ public class Config {
 
     public static String items_tnt_launch_item;
 
-    protected static YamlConfiguration yaml_config;
+    protected static YamlConfiguration yamlConfiguration1;
 
     protected static File file_config;
 
@@ -1123,23 +1123,23 @@ public class Config {
                 lobby_scoreboard_lines.add(line);
             }
         }
-        updataShop();
+        updateShop();
 
-        xpMessage = yaml_config.getString("Message").replaceAll("&", "§").replaceAll("§§", "&");
-        addResShop = yaml_config.getBoolean("Add_Res_Shop");
+        xpMessage = yamlConfiguration1.getString("Message").replaceAll("&", "§").replaceAll("§§", "&");
+        addResShop = yamlConfiguration1.getBoolean("Add_Res_Shop");
         if (addResShop)
-        deathCost = yaml_config.getInt("DeathCostXP", 0) / 100.0D;
-        deathDrop = yaml_config.getInt("DeathDropXP", 0) / 100.0D;
-        maxXP = yaml_config.getInt("MaxXP");
-        maxXPMessage = yaml_config.getString("MaxXPMessage").replaceAll("&", "§").replaceAll("§§", "&");
-        fullXPBedwars = yaml_config.getBoolean("Full_XP_Bedwars");
+        deathCost = yamlConfiguration1.getInt("DeathCostXP", 0) / 100.0D;
+        deathDrop = yamlConfiguration1.getInt("DeathDropXP", 0) / 100.0D;
+        maxXP = yamlConfiguration1.getInt("MaxXP");
+        maxXPMessage = yamlConfiguration1.getString("MaxXPMessage").replaceAll("&", "§").replaceAll("§§", "&");
+        fullXPBedwars = yamlConfiguration1.getBoolean("Full_XP_Bedwars");
         ConfigurationSection resourceSection = BedwarsRel.getInstance().getConfig().getConfigurationSection("resource");
         for (String key : resourceSection.getKeys(false)) {
             List<Map<String, Object>> resourceList = (List<Map<String, Object>>) BedwarsRel.getInstance().getConfig().getList("resource." + key + ".item");
             for (Map<String, Object> resource : resourceList) {
                 ItemStack itemStack = ItemStack.deserialize(resource);
                 Material mat = itemStack.getType();
-                int xp = yaml_config.getInt("XP." + key, 0);
+                int xp = yamlConfiguration1.getInt("XP." + key, 0);
                 resources.put(mat, xp);
                 resourceskey.add(key);
             }
@@ -1177,7 +1177,7 @@ public class Config {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        updataShop();
+        updateShop();
     }
 
     public static void removeShop(String data) {
@@ -1194,10 +1194,10 @@ public class Config {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        updataShop();
+        updateShop();
     }
 
-    private static void updataShop() {
+    private static void updateShop() {
         File folder = new File(YaBedwars.getInstance().getDataFolder(), "/");
         if (!folder.exists())
             folder.mkdirs();

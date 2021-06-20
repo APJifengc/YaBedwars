@@ -1,30 +1,28 @@
-package com.yallage.yabedwars.events;
+package com.yallage.yabedwars.event;
 
 import io.github.bedwarsrel.game.Game;
+import io.github.bedwarsrel.game.Team;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-public class BoardAddonSetHealthEvent extends Event {
+public class BedwarsTeamDeadEvent extends Event {
     private static final HandlerList handlers = new HandlerList();
 
     private final Game game;
 
-    private Boolean cancelled = Boolean.FALSE;
+    private final Team team;
 
-    public BoardAddonSetHealthEvent(Game game) {
+    public BedwarsTeamDeadEvent(Game game, Team team) {
         this.game = game;
+        this.team = team;
     }
 
     public Game getGame() {
         return this.game;
     }
 
-    public boolean isCancelled() {
-        return this.cancelled;
-    }
-
-    public void setCancelled(boolean cancel) {
-        this.cancelled = cancel;
+    public Team getTeam() {
+        return this.team;
     }
 
     public HandlerList getHandlers() {

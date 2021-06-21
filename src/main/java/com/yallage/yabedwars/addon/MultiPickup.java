@@ -18,7 +18,7 @@ public class MultiPickup implements Listener {
         if (Config.resources.containsKey(event.getItem().getItemStack().getType())) {
             Game game = BedwarsRel.getInstance().getGameManager().getGameOfPlayer(event.getPlayer());
             Location location = event.getItem().getLocation();
-            location.getWorld().getNearbyEntities(location, 0.5, 0.5, 0.5).forEach(e -> {
+            location.getWorld().getNearbyEntities(location, 1, 1, 1).forEach(e -> {
                 if (e instanceof Player) {
                     Player player = (Player) e;
                     if (player != event.getPlayer() && !game.isSpectator(player)) {

@@ -39,6 +39,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.block.BlockFromToEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.block.BlockSpreadEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.entity.ItemMergeEvent;
@@ -94,8 +97,8 @@ public class EventListener implements Listener {
         Game game = e.getGame();
         if (YaBedwars.getInstance().getArenaManager().getArenas().containsKey(game.getName()))
             YaBedwars.getInstance().getArenaManager().getArenas().get(game.getName()).onOver(e);
-      for (Player player : e.getGame().getPlayers())
-        player.getEnderChest().clear();
+        for (Player player : e.getGame().getPlayers())
+            player.getEnderChest().clear();
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -553,7 +556,6 @@ public class EventListener implements Listener {
     }
 
 
-
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onOpenTeamSelection(BedwarsOpenTeamSelectionEvent e) {
         if (!Config.select_team_enabled)
@@ -699,169 +701,188 @@ public class EventListener implements Listener {
         return null;
     }
 
-  @EventHandler
-  public void onItemPickup(PlayerPickupItemEvent e) {
-    int count;
-    Game bw = BedwarsRel.getInstance().getGameManager().getGameOfPlayer(e.getPlayer());
-    if (bw == null)
-      return;
-    if (!Config.isGameEnabledXP(bw.getName()))
-      return;
-    Player p = e.getPlayer();
-    Item entity = e.getItem();
-    ItemStack stack = entity.getItemStack();
-    if (stack.hasItemMeta() && stack.getItemMeta().getDisplayName().equals("§b§l&BedwarsXP_DropedXP")) {
-      count = Integer.parseInt(stack.getItemMeta().getLore().get(0));
-    } else {
-      count = ResourceUtils.convertResToXP(stack);
+    @EventHandler
+    public void onItemPickup(PlayerPickupItemEvent e) {
+        int count;
+        Game bw = BedwarsRel.getInstance().getGameManager().getGameOfPlayer(e.getPlayer());
+        if (bw == null)
+            return;
+        if (!Config.isGameEnabledXP(bw.getName()))
+            return;
+        Player p = e.getPlayer();
+        Item entity = e.getItem();
+        ItemStack stack = entity.getItemStack();
+        if (stack.hasItemMeta() && stack.getItemMeta().getDisplayName().equals("§b§l&BedwarsXP_DropedXP")) {
+            count = Integer.parseInt(stack.getItemMeta().getLore().get(0));
+        } else {
+            count = ResourceUtils.convertResToXP(stack);
+        }
+        if (count == 0)
+            return;
+        XPManager xpman = XPManager.getXPManager(bw.getName());
+        if (Config.maxXP != 0 &&
+                xpman.getXP(p) >= Config.maxXP) {
+            e.setCancelled(true);
+            entity.setPickupDelay(10);
+            xpman.sendMaxXPMessage(p);
+            return;
+        }
+        int added = xpman.getXP(p) + count;
+        int leftXP = 0;
+        if (Config.maxXP != 0 &&
+                added > Config.maxXP) {
+            leftXP = added - Config.maxXP;
+            added = Config.maxXP;
+        }
+        xpman.setXP(p, added);
+        p.playSound(p.getLocation(), SoundMachine.get("ORB_PICKUP", "ENTITY_EXPERIENCE_ORB_PICKUP"), 0.2F, 1.5F);
+        xpman.sendXPMessage(p, count);
+        if (leftXP > 0) {
+            e.setCancelled(true);
+            ItemStack s = stack.clone();
+            ItemMeta meta = s.getItemMeta();
+            meta.setDisplayName("§b§l&BedwarsXP_DropedXP");
+            meta.setLore(Collections.singletonList(String.valueOf(leftXP)));
+            s.setItemMeta(meta);
+            entity.setItemStack(s);
+            entity.setPickupDelay(10);
+        } else {
+            e.setCancelled(true);
+            entity.remove();
+        }
     }
-    if (count == 0)
-      return;
-    XPManager xpman = XPManager.getXPManager(bw.getName());
-    if (Config.maxXP != 0 &&
-            xpman.getXP(p) >= Config.maxXP) {
-      e.setCancelled(true);
-      entity.setPickupDelay(10);
-      xpman.sendMaxXPMessage(p);
-      return;
+
+    @EventHandler
+    public void onAnvilOpen(InventoryOpenEvent e) {
+        e.getPlayer();
+        e.getInventory();
+        Game bw = BedwarsRel.getInstance().getGameManager().getGameOfPlayer((Player) e.getPlayer());
+        if (bw == null)
+            return;
+        if (!Config.isGameEnabledXP(bw.getName()))
+            return;
+        if (e.getInventory().getType().equals(InventoryType.ANVIL))
+            e.setCancelled(true);
     }
-    int added = xpman.getXP(p) + count;
-    int leftXP = 0;
-    if (Config.maxXP != 0 &&
-            added > Config.maxXP) {
-      leftXP = added - Config.maxXP;
-      added = Config.maxXP;
+
+    @EventHandler
+    public void onPlayerDeath(PlayerDeathEvent e) {
+        Game bw = BedwarsRel.getInstance().getGameManager().getGameOfPlayer(e.getEntity());
+        if (bw == null)
+            return;
+        if (!Config.isGameEnabledXP(bw.getName()))
+            return;
+        XPManager xpman = XPManager.getXPManager(bw.getName());
+        Player p = e.getEntity();
+        int costed = (int) (xpman.getXP(p) * Config.deathCost);
+        int dropped = 0;
+        if (Config.deathDrop > 0.0D)
+            dropped = (int) (costed * Config.deathDrop);
+        BedwarsXPDeathDropXPEvent event = new BedwarsXPDeathDropXPEvent(bw.getName(), p, dropped, costed);
+        Bukkit.getPluginManager().callEvent(event);
+        costed = event.getXPCosted();
+        dropped = event.getXPDropped();
+        int to = xpman.getXP(p) - costed;
+        if (to < 0)
+            to = 0;
+        e.setNewLevel(to);
+        xpman.setXP(p, to);
+        if (Config.deathDrop > 0.0D) {
+            if (dropped < 1)
+                return;
+            ItemStack dropStack = new ItemStack(Material.EXP_BOTTLE, 1);
+            ItemMeta meta = dropStack.getItemMeta();
+            meta.setDisplayName("§b§l&BedwarsXP_DropedXP");
+            meta.setLore(Collections.singletonList(String.valueOf(dropped)));
+            meta.addEnchant(Enchantment.LOOT_BONUS_MOBS, 1, true);
+            dropStack.setItemMeta(meta);
+            Item droppedItem = p.getWorld().dropItemNaturally(p.getLocation().add(0.0D, 1.0D, 0.0D), dropStack);
+            droppedItem.setPickupDelay(40);
+        }
     }
-    xpman.setXP(p, added);
-    p.playSound(p.getLocation(), SoundMachine.get("ORB_PICKUP", "ENTITY_EXPERIENCE_ORB_PICKUP"), 0.2F, 1.5F);
-    xpman.sendXPMessage(p, count);
-    if (leftXP > 0) {
-      e.setCancelled(true);
-      ItemStack s = stack.clone();
-      ItemMeta meta = s.getItemMeta();
-      meta.setDisplayName("§b§l&BedwarsXP_DropedXP");
-      meta.setLore(Collections.singletonList(String.valueOf(leftXP)));
-      s.setItemMeta(meta);
-      entity.setItemStack(s);
-      entity.setPickupDelay(10);
-    } else {
-      e.setCancelled(true);
-      entity.remove();
+
+    @EventHandler
+    public void onBedWarsStart(BedwarsGameStartEvent e) {
+        if (e.isCancelled())
+            return;
+        if (!Config.isGameEnabledXP(e.getGame().getName()))
+            return;
+        ShopReplacer.replaceShop(e.getGame().getName(), Bukkit.getConsoleSender());
     }
-  }
 
-  @EventHandler
-  public void onAnvilOpen(InventoryOpenEvent e) {
-    e.getPlayer();
-    e.getInventory();
-    Game bw = BedwarsRel.getInstance().getGameManager().getGameOfPlayer((Player) e.getPlayer());
-    if (bw == null)
-      return;
-    if (!Config.isGameEnabledXP(bw.getName()))
-      return;
-    if (e.getInventory().getType().equals(InventoryType.ANVIL))
-      e.setCancelled(true);
-  }
-
-  @EventHandler
-  public void onPlayerDeath(PlayerDeathEvent e) {
-    Game bw = BedwarsRel.getInstance().getGameManager().getGameOfPlayer(e.getEntity());
-    if (bw == null)
-      return;
-    if (!Config.isGameEnabledXP(bw.getName()))
-      return;
-    XPManager xpman = XPManager.getXPManager(bw.getName());
-    Player p = e.getEntity();
-    int costed = (int) (xpman.getXP(p) * Config.deathCost);
-    int dropped = 0;
-    if (Config.deathDrop > 0.0D)
-      dropped = (int) (costed * Config.deathDrop);
-    BedwarsXPDeathDropXPEvent event = new BedwarsXPDeathDropXPEvent(bw.getName(), p, dropped, costed);
-    Bukkit.getPluginManager().callEvent(event);
-    costed = event.getXPCosted();
-    dropped = event.getXPDropped();
-    int to = xpman.getXP(p) - costed;
-    if (to < 0)
-      to = 0;
-    e.setNewLevel(to);
-    xpman.setXP(p, to);
-    if (Config.deathDrop > 0.0D) {
-      if (dropped < 1)
-        return;
-      ItemStack dropStack = new ItemStack(Material.EXP_BOTTLE, 1);
-      ItemMeta meta = dropStack.getItemMeta();
-      meta.setDisplayName("§b§l&BedwarsXP_DropedXP");
-      meta.setLore(Collections.singletonList(String.valueOf(dropped)));
-      meta.addEnchant(Enchantment.LOOT_BONUS_MOBS, 1, true);
-      dropStack.setItemMeta(meta);
-      Item droppedItem = p.getWorld().dropItemNaturally(p.getLocation().add(0.0D, 1.0D, 0.0D), dropStack);
-      droppedItem.setPickupDelay(40);
+    @EventHandler
+    public void onBedWarsEnd(BedwarsGameEndEvent e) {
+        if (!Config.isGameEnabledXP(e.getGame().getName()))
+            return;
+        XPManager.reset(e.getGame().getName());
     }
-  }
 
-  @EventHandler
-  public void onBedWarsStart(BedwarsGameStartEvent e) {
-    if (e.isCancelled())
-      return;
-    if (!Config.isGameEnabledXP(e.getGame().getName()))
-      return;
-    ShopReplacer.replaceShop(e.getGame().getName(), Bukkit.getConsoleSender());
-  }
+    @EventHandler
+    public void onPlayerTeleport(PlayerTeleportEvent e) {
+        final Game bw = BedwarsRel.getInstance().getGameManager().getGameOfPlayer(e.getPlayer());
+        if (bw == null)
+            return;
+        if (!Config.isGameEnabledXP(bw.getName()))
+            return;
+        final Player p = e.getPlayer();
+        Bukkit.getScheduler().runTaskLater(YaBedwars.getInstance(), () -> XPManager.getXPManager(bw.getName()).updateXPBar(p), 5L);
+    }
 
-  @EventHandler
-  public void onBedWarsEnd(BedwarsGameEndEvent e) {
-    if (!Config.isGameEnabledXP(e.getGame().getName()))
-      return;
-    XPManager.reset(e.getGame().getName());
-  }
+    @EventHandler
+    public void onPlayerInteract(PlayerInteractEvent e) {
+        Game bw = BedwarsRel.getInstance().getGameManager().getGameOfPlayer(e.getPlayer());
+        if (bw == null)
+            return;
+        if (!Config.isGameEnabledXP(bw.getName()))
+            return;
+        XPManager.getXPManager(bw.getName()).updateXPBar(e.getPlayer());
+    }
 
-  @EventHandler
-  public void onPlayerTeleport(PlayerTeleportEvent e) {
-    final Game bw = BedwarsRel.getInstance().getGameManager().getGameOfPlayer(e.getPlayer());
-    if (bw == null)
-      return;
-    if (!Config.isGameEnabledXP(bw.getName()))
-      return;
-    final Player p = e.getPlayer();
-    Bukkit.getScheduler().runTaskLater(YaBedwars.getInstance(), () -> XPManager.getXPManager(bw.getName()).updateXPBar(p), 5L);
-  }
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void onInteract(PlayerInteractEvent e) {
+        Player player = e.getPlayer();
+        Game game = BedwarsRel.getInstance().getGameManager().getGameOfPlayer(player);
+        if (game == null) return;
+        if (game.isSpectator(player) || player.getGameMode() == GameMode.SPECTATOR)
+            return;
+        if (!e.getAction().equals(Action.RIGHT_CLICK_BLOCK) || e.getClickedBlock().getType() != Material.ENDER_CHEST)
+            return;
+        e.setCancelled(false);
+    }
 
-  @EventHandler
-  public void onPlayerInteract(PlayerInteractEvent e) {
-    Game bw = BedwarsRel.getInstance().getGameManager().getGameOfPlayer(e.getPlayer());
-    if (bw == null)
-      return;
-    if (!Config.isGameEnabledXP(bw.getName()))
-      return;
-    XPManager.getXPManager(bw.getName()).updateXPBar(e.getPlayer());
-  }
-  @EventHandler(priority = EventPriority.HIGHEST)
-  public void onInteract(PlayerInteractEvent e) {
-    if (e.isCancelled()) return;
-    if (e.getItem() == null || (
-            e.getItem().getType() != Material.WATER_BUCKET && e.getItem().getType() != Material.LAVA_BUCKET) ||
-            e.getAction() != Action.RIGHT_CLICK_BLOCK) return;
-    Player player = e.getPlayer();
-    Game game = BedwarsRel.getInstance().getGameManager().getGameOfPlayer(player);
-    if (game == null) return;
-    if (game.isSpectator(player) || player.getGameMode() == GameMode.SPECTATOR)
-      return;
-    game.getRegion().addPlacedBlock(e.getClickedBlock().getRelative(e.getBlockFace()), null);
-    if (!e.getAction().equals(Action.RIGHT_CLICK_BLOCK) || e.getClickedBlock().getType() != Material.ENDER_CHEST)
-      return;
-    if (game.isSpectator(player))
-      return;
-    e.setCancelled(false);
-  }
+    @EventHandler
+    public void onBlockPlace(BlockPlaceEvent e) {
+        Game game = BedwarsRel.getInstance().getGameManager().getGameOfPlayer(e.getPlayer());
+        if (game == null) return;
+        game.getRegion().addPlacedBlock(e.getBlockPlaced(), null);
+    }
 
-  @EventHandler
-  public void onLeave(BedwarsPlayerLeaveEvent e) {
-    e.getPlayer().getEnderChest().clear();
-  }
+    @EventHandler
+    public void onFluidPlace(PlayerBucketEmptyEvent e) {
+        Game game = BedwarsRel.getInstance().getGameManager().getGameOfPlayer(e.getPlayer());
+        if (game == null) return;
+        game.getRegion().addPlacedBlock(e.getBlockClicked().getRelative(e.getBlockFace()), null);
+    }
 
-  @EventHandler
-  public void onStart(BedwarsGameStartEvent e) {
-    for (Player player : e.getGame().getPlayers())
-      player.getEnderChest().clear();
-  }
+    @EventHandler
+    public void onFluidFlow(BlockFromToEvent event) {
+        if (BedwarsRel.getInstance().getGameManager().getGameByLocation(event.getToBlock().getLocation()) == null ||
+                BedwarsRel.getInstance().getGameManager().getGameByLocation(event.getToBlock().getLocation()).getState() != GameState.RUNNING) {
+            event.setCancelled(true);
+            return;
+        }
+        Game game = BedwarsRel.getInstance().getGameManager().getGameByLocation(event.getBlock().getLocation());
+        if (game != null) game.getRegion().addPlacedBlock(event.getToBlock(), null);
+    }
+
+    @EventHandler
+    public void onLeave(BedwarsPlayerLeaveEvent e) {
+        e.getPlayer().getEnderChest().clear();
+    }
+
+    @EventHandler
+    public void onStart(BedwarsGameStartEvent e) {
+        for (Player player : e.getGame().getPlayers())
+            player.getEnderChest().clear();
+    }
 }

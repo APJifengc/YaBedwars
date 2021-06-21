@@ -82,31 +82,36 @@ public final class YaBedwars extends JavaPlugin {
     }
 
     private void registerEvents() {
-        Bukkit.getPluginManager().registerEvents(new FireBall(), this);
-        Bukkit.getPluginManager().registerEvents(new LightTNT(), this);
-        Bukkit.getPluginManager().registerEvents(new BridgeEgg(), this);
-        Bukkit.getPluginManager().registerEvents(new Parachute(), this);
-        Bukkit.getPluginManager().registerEvents(new TNTLaunch(), this);
-        Bukkit.getPluginManager().registerEvents(new Trampoline(), this);
-        Bukkit.getPluginManager().registerEvents(new WalkPlatform(), this);
-        Bukkit.getPluginManager().registerEvents(new EventListener(), this);
-        Bukkit.getPluginManager().registerEvents(new TeamIronGolem(), this);
-        Bukkit.getPluginManager().registerEvents(new TeamSilverFish(), this);
-        Bukkit.getPluginManager().registerEvents(new ExplosionProof(), this);
-        Bukkit.getPluginManager().registerEvents(new EnderPearlChair(), this);
-        Bukkit.getPluginManager().registerEvents(new Shop(), this);
-        Bukkit.getPluginManager().registerEvents(new LobbyScoreBoard(), this);
-        Bukkit.getPluginManager().registerEvents(new SpawnNoBuild(), this);
-        Bukkit.getPluginManager().registerEvents(new ChatFormat(), this);
-        Bukkit.getPluginManager().registerEvents(new HidePlayer(), this);
-        Bukkit.getPluginManager().registerEvents(new WitherBow(), this);
-        Bukkit.getPluginManager().registerEvents(new DeathItem(), this);
-        Bukkit.getPluginManager().registerEvents(new Spectator(), this);
-        Bukkit.getPluginManager().registerEvents(new GiveItem(), this);
-        Bukkit.getPluginManager().registerEvents(new TimeTask(), this);
-        Bukkit.getPluginManager().registerEvents(new EditGame(), this);
-        Bukkit.getPluginManager().registerEvents(new Compass(), this);
-        Bukkit.getPluginManager().registerEvents(new Title(), this);
+        registerEvents(new FireBall());
+        registerEvents(new LightTNT());
+        registerEvents(new BridgeEgg());
+        registerEvents(new Parachute());
+        registerEvents(new TNTLaunch());
+        registerEvents(new Trampoline());
+        registerEvents(new WalkPlatform());
+        registerEvents(new EventListener());
+        registerEvents(new TeamIronGolem());
+        registerEvents(new TeamSilverFish());
+        registerEvents(new ExplosionProof());
+        registerEvents(new EnderPearlChair());
+        registerEvents(new Shop());
+        registerEvents(new LobbyScoreBoard());
+        registerEvents(new SpawnNoBuild());
+        registerEvents(new ChatFormat());
+        registerEvents(new HidePlayer());
+        registerEvents(new WitherBow());
+        registerEvents(new DeathItem());
+        registerEvents(new Spectator());
+        registerEvents(new GiveItem());
+        registerEvents(new TimeTask());
+        registerEvents(new EditGame());
+        registerEvents(new Compass());
+        registerEvents(new Title());
+        registerEvents(new MultiPickup());
+    }
+    
+    public void registerEvents(Listener listener) {
+        Bukkit.getPluginManager().registerEvents(listener, this);
     }
 
     @Override

@@ -103,8 +103,6 @@ public class TeamShop {
         if (si == 0) {
             sharpness_itemMeta.setLore(Config.teamshop_upgrade_sword_sharpness_level_1_lore);
         } else if (si == 1) {
-            sharpness_itemMeta.setLore(Config.teamshop_upgrade_sword_sharpness_level_2_lore);
-        } else if (si == 2) {
             sharpness_itemMeta.setLore(Config.teamshop_upgrade_sword_sharpness_level_full_lore);
         }
         int pi = getPlayerTeamUpgradeLevel(player, this.protection, this.game);
@@ -227,14 +225,10 @@ public class TeamShop {
                                 if (l > 0) {
                                     if (itemMeta.getLore() == null) {
                                         TeamShop.this.setSharpness(player, stack, itemMeta, j, l, true);
-                                    } else if (!itemMeta.getLore().contains("§s§1§0§0§0§" + l)) {
-                                        TeamShop.this.setSharpness(player, stack, itemMeta, j, l, true);
                                     }
                                 } else if (itemMeta.getLore() != null) {
                                     if (itemMeta.getLore().contains("§s§1§0§0§0§1"))
                                         TeamShop.this.setSharpness(player, stack, itemMeta, j, 1, false);
-                                    if (itemMeta.getLore().contains("§s§1§0§0§0§2"))
-                                        TeamShop.this.setSharpness(player, stack, itemMeta, j, 2, false);
                                 }
                             }
                         }
@@ -470,8 +464,8 @@ public class TeamShop {
                             .get(this.haste.getOrDefault(team.getName(), 0) + 1).split(",");
                     if (ary[0].equals("XP")) {
                         if (game.getNewItemShop(player) instanceof XPItemShop)
-                            if (XPManager.getXPManager(this.game.getName()).getXP(player) >= Integer.valueOf(ary[1])) {
-                                XPManager.getXPManager(this.game.getName()).takeXP(player, Integer.valueOf(ary[1]));
+                            if (XPManager.getXPManager(this.game.getName()).getXP(player) >= Integer.parseInt(ary[1])) {
+                                XPManager.getXPManager(this.game.getName()).takeXP(player, Integer.parseInt(ary[1]));
                                 this.haste.put(team.getName(), this.haste.getOrDefault(team.getName(), 0) + 1);
                                 reOpenTeamShop(player);
                                 for (Player p : team.getPlayers())
@@ -507,20 +501,20 @@ public class TeamShop {
             e.setCancelled(true);
             if (e.getRawSlot() == 11) {
                 Team team = this.game.getPlayerTeam(player);
-                if (!this.sharpness.containsKey(team.getName()) || this.sharpness.get(team.getName()) == 1) {
+                if (!this.sharpness.containsKey(team.getName())) {
                     String[] ary = Config.teamshop_upgrade_sword_sharpness_level_cost
                             .get(this.sharpness.getOrDefault(team.getName(), 0) + 1).split(",");
                     if (ary[0].equals("XP")) {
                         if (game.getNewItemShop(player) instanceof XPItemShop)
-                            if (XPManager.getXPManager(this.game.getName()).getXP(player) >= Integer.valueOf(ary[1])) {
-                                XPManager.getXPManager(this.game.getName()).takeXP(player, Integer.valueOf(ary[1]));
+                            if (XPManager.getXPManager(this.game.getName()).getXP(player) >= Integer.parseInt(ary[1])) {
+                                XPManager.getXPManager(this.game.getName()).takeXP(player, Integer.parseInt(ary[1]));
                                 this.sharpness.put(team.getName(), this.sharpness.getOrDefault(team.getName(), 0) + 1);
                                 reOpenTeamShop(player);
                                 for (Player p : team.getPlayers())
                                     p.sendMessage(Config.teamshop_message.replace("{player}", player.getName())
                                             .replace("{upgrade}",
                                                     ColorUtil.remColor(Config.teamshop_upgrade_sword_sharpness_name))
-                                            .replace("{level}", getLevel(this.sharpness.get(team.getName()))));
+                                            .replace("{level}", ""));
                             } else {
                                 player.sendMessage(Config.teamshop_no_resource);
                                 PlaySound.playSound(player, Config.play_sound_sound_no_resource);
@@ -533,7 +527,7 @@ public class TeamShop {
                             p.sendMessage(Config.teamshop_message.replace("{player}", player.getName())
                                     .replace("{upgrade}",
                                             ColorUtil.remColor(Config.teamshop_upgrade_sword_sharpness_name))
-                                    .replace("{level}", getLevel(this.sharpness.get(team.getName()))));
+                                    .replace("{level}", ""));
                     } else {
                         player.sendMessage(Config.teamshop_no_resource);
                         PlaySound.playSound(player, Config.play_sound_sound_no_resource);
@@ -555,8 +549,8 @@ public class TeamShop {
                             .get(this.protection.getOrDefault(team.getName(), 0) + 1).split(",");
                     if (ary[0].equals("XP")) {
                         if (game.getNewItemShop(player) instanceof XPItemShop)
-                            if (XPManager.getXPManager(this.game.getName()).getXP(player) >= Integer.valueOf(ary[1])) {
-                                XPManager.getXPManager(this.game.getName()).takeXP(player, Integer.valueOf(ary[1]));
+                            if (XPManager.getXPManager(this.game.getName()).getXP(player) >= Integer.parseInt(ary[1])) {
+                                XPManager.getXPManager(this.game.getName()).takeXP(player, Integer.parseInt(ary[1]));
                                 this.protection.put(team.getName(), this.protection.getOrDefault(team.getName(), 0) + 1);
                                 reOpenTeamShop(player);
                                 for (Player p : team.getPlayers())
@@ -597,8 +591,8 @@ public class TeamShop {
                     String[] ary = Config.teamshop_upgrade_trap_level_1_cost.split(",");
                     if (ary[0].equals("XP")) {
                         if (game.getNewItemShop(player) instanceof XPItemShop)
-                            if (XPManager.getXPManager(this.game.getName()).getXP(player) >= Integer.valueOf(ary[1])) {
-                                XPManager.getXPManager(this.game.getName()).takeXP(player, Integer.valueOf(ary[1]));
+                            if (XPManager.getXPManager(this.game.getName()).getXP(player) >= Integer.parseInt(ary[1])) {
+                                XPManager.getXPManager(this.game.getName()).takeXP(player, Integer.parseInt(ary[1]));
                                 this.trap.put(team.getName(), 1);
                                 reOpenTeamShop(player);
                                 for (Player p : this.game.getPlayerTeam(player).getPlayers())
@@ -637,8 +631,8 @@ public class TeamShop {
                     String[] ary = Config.teamshop_upgrade_defense_level_1_cost.split(",");
                     if (ary[0].equals("XP")) {
                         if (game.getNewItemShop(player) instanceof XPItemShop)
-                            if (XPManager.getXPManager(this.game.getName()).getXP(player) >= Integer.valueOf(ary[1])) {
-                                XPManager.getXPManager(this.game.getName()).takeXP(player, Integer.valueOf(ary[1]));
+                            if (XPManager.getXPManager(this.game.getName()).getXP(player) >= Integer.parseInt(ary[1])) {
+                                XPManager.getXPManager(this.game.getName()).takeXP(player, Integer.parseInt(ary[1]));
                                 this.defense.put(team.getName(), 1);
                                 reOpenTeamShop(player);
                                 for (Player p : team.getPlayers())
@@ -678,8 +672,8 @@ public class TeamShop {
                     String[] ary = Config.teamshop_upgrade_heal_level_1_cost.split(",");
                     if (ary[0].equals("XP")) {
                         if (game.getNewItemShop(player) instanceof XPItemShop)
-                            if (XPManager.getXPManager(this.game.getName()).getXP(player) >= Integer.valueOf(ary[1])) {
-                                XPManager.getXPManager(this.game.getName()).takeXP(player, Integer.valueOf(ary[1]));
+                            if (XPManager.getXPManager(this.game.getName()).getXP(player) >= Integer.parseInt(ary[1])) {
+                                XPManager.getXPManager(this.game.getName()).takeXP(player, Integer.parseInt(ary[1]));
                                 this.heal.put(team.getName(), 1);
                                 reOpenTeamShop(player);
                                 for (Player p : team.getPlayers())
@@ -794,11 +788,11 @@ public class TeamShop {
                     stack.getType().equals(Material.valueOf(ary[0])))
                 k += stack.getAmount();
         }
-        return k >= Integer.valueOf(ary[1]);
+        return k >= Integer.parseInt(ary[1]);
     }
 
     private void takeItem(Player player, String[] ary) {
-        int ta = Integer.valueOf(ary[1]);
+        int ta = Integer.parseInt(ary[1]);
         int i = (player.getInventory().getContents()).length;
         ItemStack[] stacks = player.getInventory().getContents();
         for (int j = 0; j < i; j++) {

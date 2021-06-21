@@ -31,6 +31,7 @@ import net.citizensnpcs.api.event.CitizensEnableEvent;
 import net.citizensnpcs.api.npc.NPC;
 import org.bukkit.*;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.craftbukkit.v1_8_R3.entity.CraftHumanEntity;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
@@ -283,6 +284,7 @@ public class EventListener implements Listener {
     @EventHandler
     public void onRespawn(PlayerRespawnEvent e) {
         Player player = e.getPlayer();
+        ((CraftHumanEntity) player).getHandle().killer = null;
         Game game = BedwarsRel.getInstance().getGameManager().getGameOfPlayer(player);
         if (game != null && YaBedwars.getInstance().getArenaManager().getArenas().containsKey(game.getName()))
             YaBedwars.getInstance().getArenaManager().getArenas().get(game.getName()).onRespawn(player);
@@ -290,9 +292,14 @@ public class EventListener implements Listener {
 
     @EventHandler
     public void onPlayerKilled(BedwarsPlayerKilledEvent e) {
-        Game game = BedwarsRel.getInstance().getGameManager().getGameOfPlayer(e.getKiller());
+        Game game = e.getGame();
         if (game != null && YaBedwars.getInstance().getArenaManager().getArenas().containsKey(game.getName()))
             YaBedwars.getInstance().getArenaManager().getArenas().get(game.getName()).onPlayerKilled(e);
+        if (!Config.isGameEnabledXP(e.getGame().getName()))
+            return;
+        XPManager xpManager = XPManager.getXPManager(e.getGame().getName());
+        if (e.getKiller() != null) xpManager.addXP(e.getKiller(), xpManager.getXP(e.getPlayer()));
+        xpManager.setXP(e.getPlayer(), 0);
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
@@ -403,7 +410,7 @@ public class EventListener implements Listener {
             arena.onArmorStandManipulate(e);
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onClick(InventoryClickEvent e) {
         for (Arena arena : YaBedwars.getInstance().getArenaManager().getArenas().values())
             arena.onClick(e);
@@ -703,6 +710,7 @@ public class EventListener implements Listener {
 
     @EventHandler
     public void onItemPickup(PlayerPickupItemEvent e) {
+        if (e.isCancelled()) return;
         int count;
         Game bw = BedwarsRel.getInstance().getGameManager().getGameOfPlayer(e.getPlayer());
         if (bw == null)
@@ -712,11 +720,7 @@ public class EventListener implements Listener {
         Player p = e.getPlayer();
         Item entity = e.getItem();
         ItemStack stack = entity.getItemStack();
-        if (stack.hasItemMeta() && stack.getItemMeta().getDisplayName().equals("§b§l&BedwarsXP_DropedXP")) {
-            count = Integer.parseInt(stack.getItemMeta().getLore().get(0));
-        } else {
-            count = ResourceUtils.convertResToXP(stack);
-        }
+        count = ResourceUtils.convertResToXP(stack);
         if (count == 0)
             return;
         XPManager xpman = XPManager.getXPManager(bw.getName());
@@ -763,42 +767,6 @@ public class EventListener implements Listener {
             return;
         if (e.getInventory().getType().equals(InventoryType.ANVIL))
             e.setCancelled(true);
-    }
-
-    @EventHandler
-    public void onPlayerDeath(PlayerDeathEvent e) {
-        Game bw = BedwarsRel.getInstance().getGameManager().getGameOfPlayer(e.getEntity());
-        if (bw == null)
-            return;
-        if (!Config.isGameEnabledXP(bw.getName()))
-            return;
-        XPManager xpman = XPManager.getXPManager(bw.getName());
-        Player p = e.getEntity();
-        int costed = (int) (xpman.getXP(p) * Config.deathCost);
-        int dropped = 0;
-        if (Config.deathDrop > 0.0D)
-            dropped = (int) (costed * Config.deathDrop);
-        BedwarsXPDeathDropXPEvent event = new BedwarsXPDeathDropXPEvent(bw.getName(), p, dropped, costed);
-        Bukkit.getPluginManager().callEvent(event);
-        costed = event.getXPCosted();
-        dropped = event.getXPDropped();
-        int to = xpman.getXP(p) - costed;
-        if (to < 0)
-            to = 0;
-        e.setNewLevel(to);
-        xpman.setXP(p, to);
-        if (Config.deathDrop > 0.0D) {
-            if (dropped < 1)
-                return;
-            ItemStack dropStack = new ItemStack(Material.EXP_BOTTLE, 1);
-            ItemMeta meta = dropStack.getItemMeta();
-            meta.setDisplayName("§b§l&BedwarsXP_DropedXP");
-            meta.setLore(Collections.singletonList(String.valueOf(dropped)));
-            meta.addEnchant(Enchantment.LOOT_BONUS_MOBS, 1, true);
-            dropStack.setItemMeta(meta);
-            Item droppedItem = p.getWorld().dropItemNaturally(p.getLocation().add(0.0D, 1.0D, 0.0D), dropStack);
-            droppedItem.setPickupDelay(40);
-        }
     }
 
     @EventHandler

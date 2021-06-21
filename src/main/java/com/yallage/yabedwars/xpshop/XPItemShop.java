@@ -1,5 +1,6 @@
 package com.yallage.yabedwars.xpshop;
 
+import com.yallage.yabedwars.YaBedwars;
 import io.github.bedwarsrel.BedwarsRel;
 import io.github.bedwarsrel.game.Game;
 import io.github.bedwarsrel.shop.NewItemShop;
@@ -24,10 +25,12 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.PotionMeta;
+import org.bukkit.scheduler.BukkitRunnable;
 
 public class XPItemShop extends NewItemShop {
     private final Game bedwars;
@@ -167,6 +170,30 @@ public class XPItemShop extends NewItemShop {
             if (trade.getItem1().getType() != Material.AIR || trade.getRewardItem().getType() != Material.AIR) {
                 int slot = getInventorySize(sizeCategories) + i;
                 ItemStack tradeStack = toItemStack(trade, player, game);
+                if (tradeStack.getType() == Material.CHAINMAIL_BOOTS &&
+                        (player.getInventory().getLeggings().getType() == Material.CHAINMAIL_LEGGINGS ||
+                                player.getInventory().getLeggings().getType() == Material.IRON_LEGGINGS ||
+                                player.getInventory().getLeggings().getType() == Material.DIAMOND_LEGGINGS)) {
+                    ItemMeta itemMeta = tradeStack.getItemMeta();
+                    itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+                    tradeStack.setItemMeta(itemMeta);
+                    tradeStack.addEnchantment(Enchantment.DURABILITY, 1);
+                }
+                if (tradeStack.getType() == Material.IRON_BOOTS &&
+                        (player.getInventory().getLeggings().getType() == Material.IRON_LEGGINGS ||
+                                player.getInventory().getLeggings().getType() == Material.DIAMOND_LEGGINGS)) {
+                    ItemMeta itemMeta = tradeStack.getItemMeta();
+                    itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+                    tradeStack.setItemMeta(itemMeta);
+                    tradeStack.addEnchantment(Enchantment.DURABILITY, 1);
+                }
+                if (tradeStack.getType() == Material.DIAMOND_BOOTS &&
+                        player.getInventory().getLeggings().getType() == Material.DIAMOND_LEGGINGS) {
+                    ItemMeta itemMeta = tradeStack.getItemMeta();
+                    itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+                    tradeStack.setItemMeta(itemMeta);
+                    tradeStack.addEnchantment(Enchantment.DURABILITY, 1);
+                }
                 buyInventory.setItem(slot, tradeStack);
             }
         }
@@ -259,6 +286,7 @@ public class XPItemShop extends NewItemShop {
             } else {
                 buyItem(trade, ice.getCurrentItem(), player);
             }
+            openBuyInventory(category, player, game);
         }
     }
 

@@ -6,6 +6,7 @@ import com.yallage.yabedwars.utils.ItemUtil;
 import com.yallage.yabedwars.xpshop.ItemShop;
 import com.yallage.yabedwars.xpshop.XPItemShop;
 import io.github.bedwarsrel.BedwarsRel;
+import io.github.bedwarsrel.events.BedwarsPlayerKilledEvent;
 import io.github.bedwarsrel.game.Game;
 import io.github.bedwarsrel.utils.SoundMachine;
 import io.github.bedwarsrel.villager.MerchantCategory;
@@ -23,10 +24,13 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.scheduler.BukkitRunnable;
 
 public class NewHypixelShop implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -147,6 +151,47 @@ public class NewHypixelShop implements Listener {
                 } else {
                     buyItem(game, player, e.getCurrentItem(), resname, 1);
                 }
+                new BukkitRunnable()
+                {
+                    @Override
+                    public void run() {
+                        int slot1 = -1;
+                        for (int i = 9; i < inventory.getSize(); i++) {
+                            if (inventory.getItem(i) != null && inventory.getItem(i).getType() == Material.CHAINMAIL_BOOTS) slot1 = i;
+                        }
+                        int slot2 = inventory.first(Material.IRON_BOOTS);
+                        int slot3 = inventory.first(Material.DIAMOND_BOOTS);
+                        if (slot1 != -1 && (player.getInventory().getLeggings().getType() == Material.CHAINMAIL_LEGGINGS ||
+                                player.getInventory().getLeggings().getType() == Material.IRON_LEGGINGS ||
+                                player.getInventory().getLeggings().getType() == Material.DIAMOND_LEGGINGS)) {
+                            ItemStack itemStack = inventory.getItem(slot1);
+                            ItemMeta itemMeta = itemStack.getItemMeta();
+                            itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+                            itemStack.setItemMeta(itemMeta);
+                            itemStack.addEnchantment(Enchantment.DURABILITY, 1);
+                            inventory.setItem(slot1, itemStack);
+                        }
+                        if (slot2 != -1 && (player.getInventory().getLeggings().getType() == Material.IRON_LEGGINGS ||
+                                player.getInventory().getLeggings()
+                                        .getType() == Material.DIAMOND_LEGGINGS)) {
+                            ItemStack itemStack = inventory.getItem(slot2);
+                            ItemMeta itemMeta = itemStack.getItemMeta();
+                            itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+                            itemStack.setItemMeta(itemMeta);
+                            itemStack.addEnchantment(Enchantment.DURABILITY, 1);
+                            inventory.setItem(slot2, itemStack);
+                        }
+                        if (slot3 != -1 && player.getInventory().getLeggings().getType() == Material.DIAMOND_LEGGINGS) {
+                            ItemStack itemStack = inventory.getItem(slot3);
+                            ItemMeta itemMeta = itemStack.getItemMeta();
+                            itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+                            itemStack.setItemMeta(itemMeta);
+                            itemStack.addEnchantment(Enchantment.DURABILITY, 1);
+                            inventory.setItem(slot3, itemStack);
+                        }
+                        player.updateInventory();
+                    }
+                }.runTaskLater(YaBedwars.getInstance(), 1L);
             } else if (!Objects.requireNonNull(e.getCurrentItem()).isSimilar(getFrame(7)) && !e.getCurrentItem().isSimilar(getFrame(5))) {
                 if (game.getNewItemShop(player) instanceof XPItemShop) {
                     (new XPItemShop(game.getNewItemShop(player).getCategories(), game)).handleInventoryClick(e, game, player);
@@ -161,8 +206,8 @@ public class NewHypixelShop implements Listener {
         String lore = itemStack.getItemMeta().getLore().get(itemStack.getItemMeta().getLore().size() - 1);
         String[] args = lore.split(" ");
         for (int i = 0; i < a; i++) {
-            if (isEnough(game, player, lore.substring(args[0].length() + 1), Integer.valueOf(ColorUtil.remColor(args[0])), resname)) {
-                takeItem(game, player, lore.substring(args[0].length() + 1), Integer.valueOf(ColorUtil.remColor(args[0])), resname);
+            if (isEnough(game, player, lore.substring(args[0].length() + 1), Integer.parseInt(ColorUtil.remColor(args[0])), resname)) {
+                takeItem(game, player, lore.substring(args[0].length() + 1), Integer.parseInt(ColorUtil.remColor(args[0])), resname);
                 ItemStack item = itemStack.clone();
                 List<String> lores = item.getItemMeta().getLore();
                 lores.remove(lores.size() - 1);
@@ -171,7 +216,7 @@ public class NewHypixelShop implements Listener {
                 item.setItemMeta(meta);
                 player.getInventory().addItem(item);
                 if (i < 1)
-                    player.playSound(player.getLocation(), SoundMachine.get("ITEM_PICKUP", "ENTITY_ITEM_PICKUP"), Float.valueOf("1.0"), Float.valueOf("1.0"));
+                    player.playSound(player.getLocation(), SoundMachine.get("ITEM_PICKUP", "ENTITY_ITEM_PICKUP"), 1.0f, 1.0f);
                 if (i < 1 && YaBedwars.message_buy.length() > 0) {
                     String name;
                     if (item.getItemMeta().getDisplayName() == null) {

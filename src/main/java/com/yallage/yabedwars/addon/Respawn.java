@@ -197,7 +197,7 @@ public class Respawn {
                             }
                             this.respawntime--;
                         }
-                    }).runTaskTimer(YaBedwars.getInstance(), 30L, 21L);
+                    }).runTaskTimer(YaBedwars.getInstance(), 0L, 21L);
                     cancel();
                 }
             }

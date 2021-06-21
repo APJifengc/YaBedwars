@@ -101,11 +101,6 @@ public class Shop implements Listener {
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onNPCLeftClick(NPCLeftClickEvent e) {
-        e.setCancelled(onNPCClick(e.getClicker(), e.getNPC(), e.isCancelled()));
-    }
-
-    @EventHandler(priority = EventPriority.HIGHEST)
     public void onNPCRightClick(NPCRightClickEvent e) {
         e.setCancelled(onNPCClick(e.getClicker(), e.getNPC(), e.isCancelled()));
     }

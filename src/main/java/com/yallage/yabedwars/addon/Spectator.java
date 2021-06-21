@@ -28,13 +28,17 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityExplodeEvent;
+import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
@@ -83,29 +87,21 @@ public class Spectator implements Listener {
             return;
         if (getGame.getPlayers().contains(player) && getGame.isSpectator(player)) {
             e.setCancelled(true);
-            Item entity = e.getItem();
-            if (this.resitems.contains(entity.getItemStack().getType())) {
-                if (BedwarsRel.getInstance().getGameManager().getGameOfPlayer(player).getNewItemShop(player) instanceof XPItemShop)
-                    XPManager.getXPManager(getGame.getName()).setXP(player, 0);
-                if (!entity.isDead())
-                    entity.remove();
-                Item item = player.getWorld().dropItem(entity.getLocation(), entity.getItemStack());
-                item.setVelocity(entity.getVelocity());
-                item.setPickupDelay(0);
-            }
         }
     }
 
     @EventHandler
     public void onDamage(EntityDamageEvent e) {
-        if (e.getEntity() instanceof Player && e.getCause() == EntityDamageEvent.DamageCause.SUFFOCATION) {
+        if (e.getEntity() instanceof Player) {
             Player player = (Player) e.getEntity();
             Game getGame = BedwarsRel.getInstance().getGameManager().getGameOfPlayer(player);
-            if (getGame == null)
-                return;
-            if (getGame.getPlayers().contains(player) &&
-                    getGame.isSpectator(player))
-                player.teleport(player.getLocation().add(0.0D, 5.0D, 0.0D));
+            if (e.getCause() == EntityDamageEvent.DamageCause.SUFFOCATION) {
+                if (getGame == null)
+                    return;
+                if (getGame.getPlayers().contains(player) &&
+                        getGame.isSpectator(player))
+                    player.teleport(player.getLocation().add(0.0D, 5.0D, 0.0D));
+            }
         }
     }
 
@@ -137,6 +133,7 @@ public class Spectator implements Listener {
         List<Material> items = new ArrayList<>();
         ConfigurationSection config = BedwarsRel.getInstance().getConfig().getConfigurationSection("resource");
         for (String res : config.getKeys(false)) {
+            @SuppressWarnings("unchecked")
             List<Map<String, Object>> list = (List<Map<String, Object>>) BedwarsRel.getInstance().getConfig()
                     .getList("resource." + res + ".item");
             for (Map<String, Object> resource : list) {
@@ -266,21 +263,7 @@ public class Spectator implements Listener {
                                     player.teleport(player.getLocation().add(0.0D, 128.0D, 0.0D));
                                 for (Entity entity : player.getWorld().getNearbyEntities(player.getLocation(), 2.0D, 3.5D,
                                         2.0D)) {
-                                    if (entity instanceof Item) {
-                                        Item item = (Item) entity;
-                                        if (Spectator.this.resitems.contains(item.getItemStack().getType()) ||
-                                                item.getItemStack().getType().equals(Material.EXP_BOTTLE)) {
-                                            if (player.getGameMode() != GameMode.SPECTATOR) {
-                                                player.teleport(LocationUtil.getPositionLoc(player.getLocation(),
-                                                        item.getLocation()));
-                                                player.setVelocity(
-                                                        LocationUtil.getPositionVector(player.getLocation(), item.getLocation())
-                                                                .multiply(0.07D));
-                                            }
-                                            break;
-                                        }
-                                    }
-                                    if (entity instanceof org.bukkit.entity.Fireball || entity instanceof org.bukkit.entity.TNTPrimed) {
+                                    if (entity instanceof org.bukkit.entity.Fireball) {
                                         if (player.getGameMode() != GameMode.SPECTATOR) {
                                             player.teleport(LocationUtil.getPositionLoc(player.getLocation(),
                                                     entity.getLocation()));

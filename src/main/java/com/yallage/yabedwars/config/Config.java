@@ -498,7 +498,7 @@ public class Config {
 
     public static boolean holographic_resource_enabled;
 
-    public static boolean holographic_bed_title_enabled;
+    public static boolean holographic_bed_title_enabled = false;
 
     public static double holographic_resource_speed;
 
@@ -1068,7 +1068,7 @@ public class Config {
         spawn_no_build_resource_range = config.getInt("spawn_no_build.resource_range");
         spawn_no_build_message = ColorUtil.color(YaBedwars.getInstance().getConfig().getString("spawn_no_build.message"));
         holographic_resource_enabled = config.getBoolean("holographic.resource.enabled");
-        holographic_bed_title_enabled = config.getBoolean("holographic.bed_title.enabled");
+        //holographic_bed_title_enabled = config.getBoolean("holographic.bed_title.enabled");
         holographic_resource_speed = config.getDouble("holographic.resource.speed");
         holographic_resource = new ArrayList<>();
         holographic_resource.addAll(YaBedwars.getInstance().getConfig().getConfigurationSection("holographic.resource.resources").getKeys(false));

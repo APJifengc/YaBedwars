@@ -56,26 +56,6 @@ public class Holographic {
                 setArmorStand(game, r);
         (new BukkitRunnable() {
             public void run() {
-                for (Team team : game.getTeams().values()) {
-                    Location location = team.getTargetHeadBlock().clone().add(0.5D, 0.0D, 0.5D);
-                    final HolographicAPI holo = new HolographicAPI(location.clone().add(0.0D, -1.25D, 0.0D),
-                            Config.holographic_bedtitle_bed_alive);
-                    for (Player player : team.getPlayers())
-                        holo.display(player);
-                    Holographic.this.pbtitles.put(team.getName(), holo);
-                    (new BukkitRunnable() {
-                        public void run() {
-                            if (game.getState() != GameState.RUNNING || team.isDead(game)) {
-                                cancel();
-                                holo.remove();
-                            }
-                        }
-                    }).runTaskTimer(YaBedwars.getInstance(), 1L, 1L);
-                }
-            }
-        }).runTaskLater(YaBedwars.getInstance(), 20L);
-        (new BukkitRunnable() {
-            public void run() {
                 if (game.getState() != GameState.RUNNING || game.getPlayers().size() < 1) {
                     cancel();
                     for (HolographicAPI holo : Holographic.this.ablocks)
@@ -96,34 +76,7 @@ public class Holographic {
     }
 
     public void onTargetBlockDestroyed(BedwarsTargetBlockDestroyedEvent e) {
-        if (Config.holographic_bed_title_enabled) {
-            Team team = e.getTeam();
-            final Game game = e.getGame();
-            if (this.pbtitles.containsKey(team.getName()))
-                this.pbtitles.get(team.getName()).remove();
-            Location loc = team.getTargetHeadBlock().clone().add(0.0D, -1.0D, 0.0D);
-            if (loc.getX() == loc.getBlock().getLocation().getX())
-                loc.add(0.5D, 0.0D, 0.0D);
-            if (loc.getZ() == loc.getBlock().getLocation().getZ())
-                loc.add(0.0D, 0.0D, 0.5D);
-            if (!loc.getBlock().getChunk().isLoaded())
-                loc.getBlock().getChunk().load(true);
-            final HolographicAPI holo = new HolographicAPI(loc, Config.holographic_bedtitle_bed_destroyed.replace("{player}",
-                    game.getPlayerTeam(e.getPlayer()).getChatColor() + e.getPlayer().getName()));
-            this.btitles.add(holo);
-            for (Player player : game.getPlayers())
-                holo.display(player);
-            (new BukkitRunnable() {
-                public void run() {
-                    if (game.getState() == GameState.RUNNING) {
-                        if (!holo.getLocation().getBlock().getChunk().isLoaded())
-                            holo.getLocation().getBlock().getChunk().load(true);
-                    } else {
-                        cancel();
-                    }
-                }
-            }).runTaskTimer(YaBedwars.getInstance(), 0L, 0L);
-        }
+
     }
 
     private void setArmorStand(final Game game, String res) {

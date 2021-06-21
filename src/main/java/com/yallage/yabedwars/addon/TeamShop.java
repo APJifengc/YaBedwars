@@ -212,7 +212,6 @@ public class TeamShop {
                                         new PotionEffect(PotionEffectType.FAST_DIGGING, 30, TeamShop.this.haste.get(hastes) - 1),
                                         true);
                     }
-                    // TODO 锋利改为一级
                     for (Player player : game.getPlayers()) {
                         int i = (player.getInventory().getContents()).length;
                         ItemStack[] stacks = player.getInventory().getContents();
@@ -762,12 +761,18 @@ public class TeamShop {
                             }
                             if (stack.getType() != Material.WOOD_SWORD &&
                                     meta.getLore().contains("§s§w§o§r§d")) {
+                                int slot = player.getInventory().first(Material.WOOD_SWORD);
                                 player.getInventory().remove(Material.WOOD_SWORD);
                                 List<String> lore = meta.getLore();
                                 lore.remove("§s§w§o§r§d");
                                 meta.setLore(lore);
                                 stack.setItemMeta(meta);
-                                player.getInventory().setItem(j, stack);
+                                if (slot != -1) {
+                                    player.getInventory().setItem(slot, stack);
+                                    player.getInventory().setItem(j, new ItemStack(Material.AIR));
+                                } else {
+                                    player.getInventory().setItem(j, stack);
+                                }
                                 player.updateInventory();
                                 break;
                             }

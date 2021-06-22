@@ -8,6 +8,7 @@ import com.comphenix.protocol.wrappers.BlockPosition;
 import com.comphenix.protocol.wrappers.EnumWrappers;
 import com.comphenix.protocol.wrappers.WrappedChatComponent;
 import com.google.common.collect.ImmutableMap;
+import com.sk89q.worldedit.event.platform.BlockInteractEvent;
 import com.yallage.yabedwars.ShopReplacer;
 import com.yallage.yabedwars.YaBedwars;
 import com.yallage.yabedwars.addon.SelectTeam;
@@ -282,12 +283,32 @@ public class EventListener implements Listener {
     }
 
     @EventHandler
+    public void onRightClick(PlayerInteractEvent event) {
+        if (event.getAction() == Action.RIGHT_CLICK_BLOCK && event.getClickedBlock().getType() == Material.BED_BLOCK && !event.getPlayer().isSneaking()) {
+            event.setCancelled(true);
+        }
+    }
+
+    @EventHandler
     public void onRespawn(PlayerRespawnEvent e) {
         Player player = e.getPlayer();
         ((CraftHumanEntity) player).getHandle().killer = null;
         Game game = BedwarsRel.getInstance().getGameManager().getGameOfPlayer(player);
         if (game != null && YaBedwars.getInstance().getArenaManager().getArenas().containsKey(game.getName()))
             YaBedwars.getInstance().getArenaManager().getArenas().get(game.getName()).onRespawn(player);
+    }
+
+    @EventHandler
+    public void onDamage(EntityDamageByEntityEvent event) {
+        if (event.getDamager() instanceof Player && event.getEntity() instanceof Player) {
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    ((CraftHumanEntity) event.getEntity()).getHandle().killer = null;
+                    BedwarsRel.getInstance().getGameManager().getGameOfPlayer((Player) event.getEntity()).setPlayerDamager((Player) event.getEntity(), null);
+                }
+            }.runTaskLater(YaBedwars.getInstance(), 200L);
+        }
     }
 
     @EventHandler
@@ -298,8 +319,8 @@ public class EventListener implements Listener {
         if (!Config.isGameEnabledXP(e.getGame().getName()))
             return;
         XPManager xpManager = XPManager.getXPManager(e.getGame().getName());
-        if (e.getKiller() != null) xpManager.addXP(e.getKiller(), xpManager.getXP(e.getPlayer()));
-        xpManager.setXP(e.getPlayer(), 0);
+        if (e.getKiller() != null) xpManager.addXP(e.getKiller(), (int) (xpManager.getXP(e.getPlayer()) * 0.6));
+        xpManager.setXP(e.getPlayer(), (int) (xpManager.getXP(e.getPlayer()) * 0.4));
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
@@ -608,23 +629,7 @@ public class EventListener implements Listener {
                     ItemStack itemStack = player.getOpenInventory().getItem(slot);
                     if (itemStack == null || !itemStack.hasItemMeta() || !itemStack.getItemMeta().hasLore())
                         return;
-                    List<String> lore = itemStack.getItemMeta().getLore();
-                    ItemStack leggings = player.getInventory().getLeggings();
-                    ItemStack boots = player.getInventory().getBoots();
-                    if (leggings == null || boots == null)
-                        return;
-                    if ((lore.contains("§a§r§m§o§r§0§0§1") && ((leggings.getType() == Material.CHAINMAIL_LEGGINGS &&
-                            leggings.getType() == Material.CHAINMAIL_LEGGINGS) || (
-                            leggings.getType() == Material.IRON_LEGGINGS &&
-                                    leggings.getType() == Material.IRON_LEGGINGS) || (
-                            leggings.getType() == Material.DIAMOND_LEGGINGS &&
-                                    leggings.getType() == Material.DIAMOND_LEGGINGS))) || (
-                            lore.contains("§a§r§m§o§r§0§0§2") && ((leggings.getType() == Material.IRON_LEGGINGS &&
-                                    leggings.getType() == Material.IRON_LEGGINGS) || (
-                                    leggings.getType() == Material.DIAMOND_LEGGINGS &&
-                                            leggings.getType() == Material.DIAMOND_LEGGINGS))) || (
-                            lore.contains("§a§r§m§o§r§0§0§3") && leggings.getType() == Material.DIAMOND_LEGGINGS &&
-                                    leggings.getType() == Material.DIAMOND_LEGGINGS)) {
+                    if (itemStack.getItemMeta().getLore().contains(ChatColor.RED + "你已经购买了这个物品！")) {
                         e.setCancelled(true);
                         (new BukkitRunnable() {
                             public void run() {
@@ -706,6 +711,13 @@ public class EventListener implements Listener {
             return null;
         }
         return null;
+    }
+
+    @EventHandler
+    public void onItemDrop(PlayerDropItemEvent event) {
+        if (event.getItemDrop().getItemStack().getType() == Material.WOOD_SWORD) {
+            event.setCancelled(true);
+        }
     }
 
     @EventHandler

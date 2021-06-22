@@ -709,9 +709,12 @@ public class TeamShop {
                 for (int j = 0; j < i; j++) {
                     ItemStack stack = stacks[j];
                     if (stack != null) {
+                        Material type = stack.getType();
                         ItemMeta meta = stack.getItemMeta();
-                        if (meta.getLore() != null) {
-                            if (meta.getLore().contains("§a§r§m§o§r§0§0§1")) {
+                        if (meta.hasItemFlag(ItemFlag.HIDE_POTION_EFFECTS)) {
+                            meta.removeItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
+                            stack.setItemMeta(meta);
+                            if (type == Material.CHAINMAIL_BOOTS) {
                                 stack.setAmount(0);
                                 player.getInventory().setItem(j, stack);
                                 player.updateInventory();
@@ -727,7 +730,7 @@ public class TeamShop {
                                 player.getInventory().setBoots(boots);
                                 break;
                             }
-                            if (meta.getLore().contains("§a§r§m§o§r§0§0§2")) {
+                            if (type == Material.IRON_BOOTS) {
                                 stack.setAmount(0);
                                 player.getInventory().setItem(j, stack);
                                 player.updateInventory();
@@ -743,7 +746,7 @@ public class TeamShop {
                                 player.getInventory().setBoots(boots);
                                 break;
                             }
-                            if (meta.getLore().contains("§a§r§m§o§r§0§0§3")) {
+                            if (type == Material.DIAMOND_BOOTS) {
                                 stack.setAmount(0);
                                 player.getInventory().setItem(j, stack);
                                 player.updateInventory();
@@ -759,14 +762,9 @@ public class TeamShop {
                                 player.getInventory().setBoots(boots);
                                 break;
                             }
-                            if (stack.getType() != Material.WOOD_SWORD &&
-                                    meta.getLore().contains("§s§w§o§r§d")) {
+                            if (type != Material.WOOD_SWORD && type.toString().contains("_SWORD")) {
                                 int slot = player.getInventory().first(Material.WOOD_SWORD);
                                 player.getInventory().remove(Material.WOOD_SWORD);
-                                List<String> lore = meta.getLore();
-                                lore.remove("§s§w§o§r§d");
-                                meta.setLore(lore);
-                                stack.setItemMeta(meta);
                                 if (slot != -1) {
                                     player.getInventory().setItem(slot, stack);
                                     player.getInventory().setItem(j, new ItemStack(Material.AIR));
@@ -776,8 +774,31 @@ public class TeamShop {
                                 player.updateInventory();
                                 break;
                             }
+                            if (type.toString().contains("_PICKAXE")) {
+                                Inventory inventory = player.getInventory();
+                                for (int k = 0; k < inventory.getSize(); k++) {
+                                    ItemStack item = inventory.getItem(k);
+                                    if (k!=j && item != null && item.getType().toString().contains("_PICKAXE")) {
+                                        inventory.setItem(j, new ItemStack(Material.AIR));
+                                        inventory.setItem(k, stack);
+                                        break;
+                                    }
+                                }
+                            }
+                            if (type.toString().contains("_AXE")) {
+                                Inventory inventory = player.getInventory();
+                                for (int k = 0; k < inventory.getSize(); k++) {
+                                    ItemStack item = inventory.getItem(k);
+                                    if (k!=j && item != null && item.getType().toString().contains("_AXE")) {
+                                        inventory.setItem(j, new ItemStack(Material.AIR));
+                                        inventory.setItem(k, stack);
+                                        break;
+                                    }
+                                }
+                            }
                         }
                     }
+
                 }
             }
         }).runTaskLater(YaBedwars.getInstance(), 1L);

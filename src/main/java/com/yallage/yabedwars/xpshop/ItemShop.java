@@ -312,7 +312,8 @@ public class ItemShop {
     }
 
     public void openBuyInventory(MerchantCategory category, Player player, Game game) {
-        List<VillagerTrade> offers = category.getOffers();
+        new XPItemShop(categories, game).openBuyInventory(category, player, game);
+        /*List<VillagerTrade> offers = category.getOffers();
         int sizeCategories = getCategoriesSize(player);
         int sizeItems = offers.size();
         int invSize = getBuyInventorySize(sizeCategories, sizeItems);
@@ -351,7 +352,7 @@ public class ItemShop {
                 buyInventory.setItem(slot, tradeStack);
             }
         }
-        player.openInventory(buyInventory);
+        player.openInventory(buyInventory);*/
     }
 
     public void openCategoryInventory(Player player) {

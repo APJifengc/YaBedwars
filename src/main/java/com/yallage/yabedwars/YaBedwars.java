@@ -15,10 +15,16 @@ import com.yallage.yabedwars.shop.OldHypixelShop;
 import com.yallage.yabedwars.utils.ActionBarUtils;
 import com.yallage.yabedwars.utils.ColorUtil;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
+import org.bukkit.entity.Item;
 import org.bukkit.event.Listener;
+import org.bukkit.inventory.ItemFlag;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.IOException;
 import java.util.List;
 
 public final class YaBedwars extends JavaPlugin {
@@ -108,6 +114,9 @@ public final class YaBedwars extends JavaPlugin {
         registerEvents(new Compass());
         registerEvents(new Title());
         registerEvents(new MultiPickup());
+        registerEvents(new Tool());
+        registerEvents(new VoidProtection());
+        registerEvents(new RespawnProtection());
     }
     
     public void registerEvents(Listener listener) {

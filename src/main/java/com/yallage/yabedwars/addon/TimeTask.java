@@ -31,11 +31,10 @@ public class TimeTask implements Listener {
         }
         for (String cmds : YaBedwars.getInstance().getConfig().getConfigurationSection("timecommand").getKeys(false)) {
             (new BukkitRunnable() {
-                int gametime;
+                int gametime = YaBedwars.getInstance().getConfig().getInt("timecommand." + cmds + ".gametime");
+                List<String> cmdlist = YaBedwars.getInstance().getConfig().getStringList("timecommand." + cmds + ".command");
+                Boolean isExecuted = false;
 
-                List<String> cmdlist;
-
-                boolean isExecuted = false;
 
                 public void run() {
                     if (e.getGame().getState() == GameState.RUNNING) {

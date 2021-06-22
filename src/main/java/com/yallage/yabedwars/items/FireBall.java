@@ -56,7 +56,7 @@ public class FireBall implements Listener {
                 e.getAction().equals(Action.RIGHT_CLICK_AIR) || e.getAction().equals(Action.RIGHT_CLICK_BLOCK)) && e.getItem().getType() == (new ItemStack(Material.FIREBALL)).getType())
             if (System.currentTimeMillis() - this.cooldown.getOrDefault(player, 0L) <= (Config.items_fireball_cooldown * 1000L)) {
                 e.setCancelled(true);
-                player.sendMessage(Config.message_cooling.replace("{time}", String.valueOf(((Config.items_fireball_cooldown * 1000) - System.currentTimeMillis() + this.cooldown.getOrDefault(player, 0L)) / 1000L + 1L)));
+                player.sendMessage(Config.message_cooling.replace("{time}", String.valueOf(((Config.items_fireball_cooldown * 1000L) - System.currentTimeMillis() + this.cooldown.getOrDefault(player, 0L)) / 1000L + 1L)));
             } else {
                 ItemStack stack = e.getItem();
                 BedwarsUseItemEvent bedwarsUseItemEvent = new BedwarsUseItemEvent(game, player, EnumItem.FireBall, stack);

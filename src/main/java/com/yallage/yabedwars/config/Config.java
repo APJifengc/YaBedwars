@@ -11,6 +11,7 @@ import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Item;
 import org.bukkit.inventory.ItemStack;
 
 import java.io.File;
@@ -65,6 +66,8 @@ public class Config {
     public static String select_team_no_players;
 
     public static String select_team_item_name;
+
+    public static Map<String, ItemStack> resourceItems = new HashMap<>();
 
     public static List<String> select_team_item_lore;
 
@@ -698,6 +701,12 @@ public class Config {
 
     private static final HashSet<String> enabledGameList = new HashSet<>();
 
+    public static ItemStack getResourceItem(String type, int amount) {
+        ItemStack itemStack = resourceItems.get(type).clone();
+        itemStack.setAmount(amount);
+        return itemStack;
+    }
+
     public static void loadConfig() {
         YaBedwars.getInstance().saveDefaultConfig();
         YaBedwars.getInstance().getHolographicManager().removeAll();
@@ -1138,6 +1147,7 @@ public class Config {
             List<Map<String, Object>> resourceList = (List<Map<String, Object>>) BedwarsRel.getInstance().getConfig().getList("resource." + key + ".item");
             for (Map<String, Object> resource : resourceList) {
                 ItemStack itemStack = ItemStack.deserialize(resource);
+                resourceItems.put(key, itemStack);
                 Material mat = itemStack.getType();
                 int xp = yamlConfiguration1.getInt("XP." + key, 0);
                 resources.put(mat, xp);

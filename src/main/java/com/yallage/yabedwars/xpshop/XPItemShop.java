@@ -1,6 +1,8 @@
 package com.yallage.yabedwars.xpshop;
 
 import com.yallage.yabedwars.YaBedwars;
+import com.yallage.yabedwars.addon.Tool;
+import com.yallage.yabedwars.shop.NewHypixelShop;
 import io.github.bedwarsrel.BedwarsRel;
 import io.github.bedwarsrel.game.Game;
 import io.github.bedwarsrel.shop.NewItemShop;
@@ -174,6 +176,7 @@ public class XPItemShop extends NewItemShop {
                         (player.getInventory().getLeggings().getType() == Material.CHAINMAIL_LEGGINGS ||
                                 player.getInventory().getLeggings().getType() == Material.IRON_LEGGINGS ||
                                 player.getInventory().getLeggings().getType() == Material.DIAMOND_LEGGINGS)) {
+                    NewHypixelShop.addUnusableLore(tradeStack);
                     ItemMeta itemMeta = tradeStack.getItemMeta();
                     itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
                     tradeStack.setItemMeta(itemMeta);
@@ -182,6 +185,7 @@ public class XPItemShop extends NewItemShop {
                 if (tradeStack.getType() == Material.IRON_BOOTS &&
                         (player.getInventory().getLeggings().getType() == Material.IRON_LEGGINGS ||
                                 player.getInventory().getLeggings().getType() == Material.DIAMOND_LEGGINGS)) {
+                    NewHypixelShop.addUnusableLore(tradeStack);
                     ItemMeta itemMeta = tradeStack.getItemMeta();
                     itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
                     tradeStack.setItemMeta(itemMeta);
@@ -189,11 +193,22 @@ public class XPItemShop extends NewItemShop {
                 }
                 if (tradeStack.getType() == Material.DIAMOND_BOOTS &&
                         player.getInventory().getLeggings().getType() == Material.DIAMOND_LEGGINGS) {
+                    NewHypixelShop.addUnusableLore(tradeStack);
                     ItemMeta itemMeta = tradeStack.getItemMeta();
                     itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
                     tradeStack.setItemMeta(itemMeta);
                     tradeStack.addEnchantment(Enchantment.DURABILITY, 1);
                 }
+                if (tradeStack.getType() == Material.WOOD_PICKAXE) {
+                    tradeStack = Tool.getToolShopItem(player, Tool.ToolType.PICKAXE);
+                }
+                if (tradeStack.getType() == Material.WOOD_AXE) {
+                    tradeStack = Tool.getToolShopItem(player, Tool.ToolType.AXE);
+                }
+                if (tradeStack.getType() == Material.SHEARS) {
+                    tradeStack = Tool.getToolShopItem(player, Tool.ToolType.SHEAR);
+                }
+
                 buyInventory.setItem(slot, tradeStack);
             }
         }
@@ -204,7 +219,7 @@ public class XPItemShop extends NewItemShop {
         return getInventorySize(sizeCategories) + getInventorySize(sizeOffers);
     }
 
-    private ItemStack toItemStack(VillagerTrade trade, Player player, Game game) {
+    public static ItemStack toItemStack(VillagerTrade trade, Player player, Game game) {
         ItemStack tradeStack = trade.getRewardItem().clone();
         Method colorable = Utils.getColorableMethod(tradeStack.getType());
         ItemMeta meta = tradeStack.getItemMeta();

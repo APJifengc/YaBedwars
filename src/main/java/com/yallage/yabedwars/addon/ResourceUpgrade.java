@@ -1,123 +1,141 @@
 package com.yallage.yabedwars.addon;
 
+import com.yallage.yabedwars.YaBedwars;
+import com.yallage.yabedwars.config.Config;
+import com.yallage.yabedwars.event.BoardAddonResourceUpgradeEvent;
+import com.yallage.yabedwars.utils.ColorUtil;
 import io.github.bedwarsrel.BedwarsRel;
 import io.github.bedwarsrel.events.BedwarsResourceSpawnEvent;
 import io.github.bedwarsrel.game.Game;
 import io.github.bedwarsrel.game.GameState;
 import io.github.bedwarsrel.game.ResourceSpawner;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import com.yallage.yabedwars.YaBedwars;
-import com.yallage.yabedwars.config.Config;
-import com.yallage.yabedwars.event.BoardAddonResourceUpgradeEvent;
-import com.yallage.yabedwars.utils.ColorUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.util.Vector;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class ResourceUpgrade implements Listener {
-    private final Map<Material, Integer> Interval;
+    private Map<Material, Integer> interval;
+    private Map<Material, Integer> spawn_time;
+    private Map<String, String> upg_time;
+    private Map<Material, String> levels;
 
-    private final Map<Material, Integer> SpawnTime;
+    public Map<String, String> getUpgTime() {
+        return upg_time;
+    }
 
-    private final Map<String, String> UpgTime;
+    public Map<Material, Integer> getSpawnTime() {
+        return spawn_time;
+    }
 
-    private final Map<Material, String> Level;
+    public Map<Material, String> getLevel() {
+        return levels;
+    }
 
-    public ResourceUpgrade(final Game game) {
-        this.Interval = new HashMap<>();
-        this.SpawnTime = new HashMap<>();
-        this.UpgTime = new HashMap<>();
-        this.Level = new HashMap<>();
+    public ResourceUpgrade(Game game) {
+        interval = new HashMap<Material, Integer>();
+        spawn_time = new HashMap<Material, Integer>();
+        upg_time = new HashMap<String, String>();
+        levels = new HashMap<Material, String>();
         for (ResourceSpawner spawner : game.getResourceSpawners()) {
             for (ItemStack itemStack : spawner.getResources()) {
-                this.Level.put(itemStack.getType(), "I");
-                this.Interval.put(itemStack.getType(), spawner.getInterval() / 50);
+                levels.put(itemStack.getType(), "I");
+                interval.put(itemStack.getType(), (int) (spawner.getInterval() / 50));
             }
             Location sloc = spawner.getLocation();
             for (ItemStack itemStack : spawner.getResources()) {
-                (new BukkitRunnable() {
-                    Location loc = sloc;
+                new BukkitRunnable() {
+                    Location loc = new Location(sloc.getWorld(), sloc.getX(), sloc.getY(), sloc.getZ());
+                    int i = 0;
 
-                    int i;
-
+                    @Override
                     public void run() {
                         if (game.getState() != GameState.WAITING && game.getState() == GameState.RUNNING) {
-                            ResourceUpgrade.this.SpawnTime.put(itemStack.getType(), this.i / 20 + 1);
-                            if (this.i <= 0) {
-                                this.i = ResourceUpgrade.this.Interval.get(itemStack.getType());
+                            spawn_time.put(itemStack.getType(), ((int) (i / 20) + 1));
+                            if (i <= 0) {
+                                i = interval.get(itemStack.getType());
                                 int es = 0;
-                                for (Entity entity : this.loc.getWorld().getNearbyEntities(this.loc, 2.0D, 2.0D, 2.0D)) {
+                                for (Entity entity : loc.getWorld().getNearbyEntities(loc, 2, 2, 2)) {
                                     if (entity instanceof Item) {
                                         Item item = (Item) entity;
-                                        if (item.getItemStack().getType() == itemStack.getType())
+                                        if (item.getItemStack().getType().equals(itemStack.getType())) {
                                             es += item.getItemStack().getAmount();
+                                        }
                                     }
                                 }
                                 boolean drop = true;
-                                if (Config.resourcelimit_enabled)
+                                if (Config.resourcelimit_enabled) {
                                     for (String[] rl : Config.resourcelimit_limit) {
-                                        if (Material.valueOf(rl[0]) == itemStack.getType() &&
-                                                es >= Integer.valueOf(rl[1]))
+                                        if (rl[0].equals(itemStack.getType().name()) && es >= Integer.valueOf(rl[1])) {
                                             drop = false;
-                                    }
-                                Block block = this.loc.getBlock();
-                                Boolean inchest = (block.getType().equals(Material.CHEST) &&
-                                        BedwarsRel.getInstance().getBooleanConfig("spawn-resources-in-chest", true));
-                                if (drop || inchest) {
-                                    BedwarsResourceSpawnEvent event = new BedwarsResourceSpawnEvent(game, this.loc,
-                                            itemStack.clone());
-                                    Bukkit.getPluginManager().callEvent(event);
-                                    if (!event.isCancelled())
-                                        if (inchest && spawner.canContainItem(((Chest) block.getState()).getInventory(),
-                                                itemStack)) {
-                                            ((Chest) block.getState()).getInventory().addItem(itemStack);
-                                        } else if (drop) {
-                                            Item item = this.loc.getWorld().dropItemNaturally(this.loc, itemStack);
-                                            item.setPickupDelay(0);
-                                            item.setVelocity(item.getVelocity().multiply(spawner.getSpread()));
                                         }
+                                    }
+                                }
+                                Block block = loc.getBlock();
+                                Boolean inchest = block.getType().equals(Material.CHEST) && BedwarsRel.getInstance().getBooleanConfig("spawn-resources-in-chest", true);
+                                if (drop || inchest) {
+                                    BedwarsResourceSpawnEvent event = new BedwarsResourceSpawnEvent(game, loc, itemStack.clone());
+                                    Bukkit.getPluginManager().callEvent(event);
+                                    if (!event.isCancelled()) {
+                                        if (inchest && spawner.canContainItem(((Chest) block.getState()).getInventory(), itemStack)) {
+                                            ((Chest) block.getState()).getInventory().addItem(itemStack.clone());
+                                        } else if (drop) {
+                                            ConfigurationSection config = YaBedwars.getInstance().getConfig().getConfigurationSection("holographic.resource.resources");
+                                            String res_name = getResourceName(itemStack.getTypeId());
+                                            double i = res_name == null || !config.getBoolean(res_name + ".drop", false) ? 0 : config.getDouble(res_name + ".height", 0.0);
+                                            i = i > 0 ? i : 0.325;
+                                            Item item = loc.getWorld().dropItem(loc.clone().add(0, i, 0), itemStack);
+                                            item.setPickupDelay(0);
+                                            Vector vector = item.getVelocity();
+                                            vector.multiply(spawner.getSpread());
+                                            vector.setY(0);
+                                            item.setVelocity(vector);
+                                        }
+                                    }
                                 }
                             }
-                            this.i--;
+                            i--;
                         } else {
                             cancel();
                         }
                     }
-                }).runTaskTimer(YaBedwars.getInstance(), 0L, 1L);
+                }.runTaskTimer(YaBedwars.getInstance(), 0L, 1L);
             }
         }
         for (String rs : YaBedwars.getInstance().getConfig().getConfigurationSection("resourceupgrade").getKeys(false)) {
             new BukkitRunnable() {
-                int gametime;
-                List<String> upgrade;
-                String message;
-                boolean isExecuted = false;
+                int gametime = YaBedwars.getInstance().getConfig().getInt("resourceupgrade." + rs + ".gametime");
+                List<String> upgrade = YaBedwars.getInstance().getConfig().getStringList("resourceupgrade." + rs + ".upgrade");
+                String message = YaBedwars.getInstance().getConfig().getString("resourceupgrade." + rs + ".message");
+                Boolean isExecuted = false;
+
+                @Override
                 public void run() {
                     if (game.getState() == GameState.RUNNING) {
-                        if (this.isExecuted) {
+                        if (isExecuted) {
                             cancel();
                             return;
                         }
-                        int remtime = game.getTimeLeft() - this.gametime;
-                        String formatremtime = remtime / 60 + ":" + (
-                                (remtime % 60 < 10) ? ("0" + (remtime % 60)) : remtime % 60);
-                        ResourceUpgrade.this.UpgTime.put(rs, formatremtime);
-                        if (game.getTimeLeft() <= this.gametime) {
-                            this.isExecuted = Boolean.TRUE;
-                            BoardAddonResourceUpgradeEvent resourceUpgradeEvent = new BoardAddonResourceUpgradeEvent(
-                                    game, this.upgrade);
+                        int remtime = game.getTimeLeft() - gametime;
+                        String formatremtime = remtime / 60 + ":" + ((remtime % 60 < 10) ? ("0" + remtime % 60) : (remtime % 60));
+                        upg_time.put(rs, formatremtime);
+                        if (game.getTimeLeft() <= gametime) {
+                            isExecuted = true;
+                            BoardAddonResourceUpgradeEvent resourceUpgradeEvent = new BoardAddonResourceUpgradeEvent(game, upgrade);
                             Bukkit.getPluginManager().callEvent(resourceUpgradeEvent);
                             if (resourceUpgradeEvent.isCancelled()) {
                                 cancel();
@@ -125,13 +143,14 @@ public class ResourceUpgrade implements Listener {
                             }
                             for (String upg : resourceUpgradeEvent.getUpgrade()) {
                                 String[] ary = upg.split(",");
-                                if (ResourceUpgrade.this.Level.containsKey(Material.valueOf(ary[0]))) {
-                                    ResourceUpgrade.this.Level.put(Material.valueOf(ary[0]), ResourceUpgrade.this.getLevel(ResourceUpgrade.this.Level.get(Material.valueOf(ary[0]))));
-                                    ResourceUpgrade.this.Interval.put(Material.valueOf(ary[0]), Integer.valueOf(ary[1]));
+                                if (levels.containsKey(Material.valueOf(ary[0]))) {
+                                    levels.put(Material.valueOf(ary[0]), getLevel(levels.get(Material.valueOf(ary[0]))));
+                                    interval.put(Material.valueOf(ary[0]), Integer.valueOf(ary[1]));
                                 }
                             }
-                            for (Player player : game.getPlayers())
-                                player.sendMessage(ColorUtil.color(this.message));
+                            for (Player player : game.getPlayers()) {
+                                player.sendMessage(ColorUtil.color(message));
+                            }
                             PlaySound.playSound(game, Config.play_sound_sound_upgrade);
                             cancel();
                         }
@@ -143,40 +162,40 @@ public class ResourceUpgrade implements Listener {
         }
     }
 
-    public Map<String, String> getUpgTime() {
-        return this.UpgTime;
+    private String getResourceName(int id) {
+        FileConfiguration config = YaBedwars.getInstance().getConfig();
+        for (String r : Config.holographic_resource) {
+            if (id == config.getInt("holographic.resource.resources." + r + ".item", 0)) {
+                return r;
+            }
+        }
+        return null;
     }
 
-    public Map<Material, Integer> getSpawnTime() {
-        return this.SpawnTime;
-    }
-
-    public Map<Material, String> getLevel() {
-        return this.Level;
-    }
-
-    public String getLevel(String level) {
-        String l = "I";
-        if (level.equals("I"))
-            l = "II";
-        if (level.equals("II"))
-            l = "III";
-        if (level.equals("III"))
-            l = "IV";
-        if (level.equals("IV"))
-            l = "V";
-        if (level.equals("V"))
-            l = "VI";
-        if (level.equals("VI"))
-            l = "VII";
-        if (level.equals("VII"))
-            l = "VIII";
-        if (level.equals("VIII"))
-            l = "IX";
-        if (level.equals("IX"))
-            l = "X";
-        if (level.equals("X"))
-            l = "X";
-        return l;
+    private String getLevel(String level) {
+        switch (level) {
+            case "I":
+                return "II";
+            case "II":
+                return "III";
+            case "III":
+                return "IV";
+            case "IV":
+                return "V";
+            case "V":
+                return "VI";
+            case "VI":
+                return "VII";
+            case "VII":
+                return "VIII";
+            case "VIII":
+                return "IX";
+            case "IX":
+                return "X";
+            case "X":
+                return "X";
+            default:
+                return "I";
+        }
     }
 }

@@ -47,43 +47,47 @@ public class ScoreBoard {
         this.teamstatus = new HashMap<>();
         this.timerplaceholder = new HashMap<>();
         for (String id : Config.timer.keySet()) {
-            (new BukkitRunnable() {
-                int i;
+            new BukkitRunnable() {
+                int i = Config.timer.get(id);
 
+                @Override
                 public void run() {
-                    if (ScoreBoard.this.game.getState() == GameState.RUNNING) {
-                        String format = this.i / 60 + ":" + ((this.i % 60 < 10) ? ("0" + (this.i % 60)) : this.i % 60);
-                        ScoreBoard.this.timerplaceholder.put("{timer_" + id + "}", format);
-                        this.i--;
+                    if (game.getState() == GameState.RUNNING) {
+                        String format = i / 60 + ":" + ((i % 60 < 10) ? ("0" + i % 60) : (i % 60));
+                        timerplaceholder.put("{timer_" + id + "}", format);
+                        i--;
                     } else {
-                        cancel();
+                        this.cancel();
                     }
                 }
-            }).runTaskTimer(YaBedwars.getInstance(), 0L, 21L);
+            }.runTaskTimer(YaBedwars.getInstance(), 0L, 21L);
         }
-        (new BukkitRunnable() {
+        new BukkitRunnable() {
             int i = Config.scoreboard_interval;
 
+            @Override
             public void run() {
-                this.i--;
-                if (this.i <= 0) {
-                    this.i = Config.scoreboard_interval;
-                    if (ScoreBoard.this.game.getState() != GameState.WAITING && ScoreBoard.this.game.getState() == GameState.RUNNING) {
-                        ScoreBoard.this.updateScoreboard();
-                    } else {
+                i--;
+                if (i <= 0) {
+                    i = Config.scoreboard_interval;
+                    if (game.getState() != GameState.WAITING && game.getState() == GameState.RUNNING) {
+                        updateScoreboard();
+                    } else
                         cancel();
-                    }
+                    return;
                 }
             }
-        }).runTaskTimer(YaBedwars.getInstance(), 0L, 1L);
-        (new BukkitRunnable() {
+        }.runTaskTimer(YaBedwars.getInstance(), 0L, 1L);
+        new BukkitRunnable() {
+            @Override
             public void run() {
-                for (BukkitTask task : ScoreBoard.this.game.getRunningTasks())
+                for (BukkitTask task : game.getRunningTasks()) {
                     task.cancel();
-                ScoreBoard.this.game.getRunningTasks().clear();
-                ScoreBoard.this.startTimerCountdown(ScoreBoard.this.game);
+                }
+                game.getRunningTasks().clear();
+                startTimerCountdown(game);
             }
-        }).runTaskLater(YaBedwars.getInstance(), 19L);
+        }.runTaskLater(YaBedwars.getInstance(), 19L);
     }
 
     public PlaceholderManager getPlaceholderManager() {

@@ -1,6 +1,7 @@
 package com.yallage.yabedwars.shop;
 
 import com.yallage.yabedwars.YaBedwars;
+import com.yallage.yabedwars.addon.Tool;
 import com.yallage.yabedwars.utils.ColorUtil;
 import com.yallage.yabedwars.utils.ItemUtil;
 import com.yallage.yabedwars.xpshop.ItemShop;
@@ -14,11 +15,13 @@ import io.github.bedwarsrel.villager.MerchantCategory;
 import java.util.*;
 
 import com.yallage.yabedwars.manager.XPManager;
+import net.citizensnpcs.npc.ai.speech.Chat;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -60,7 +63,8 @@ public class NewHypixelShop implements Listener {
                 if (shop.getItem(i) != null && shop.getItem(i).getItemMeta().getLore() != null && shop.getItem(i).getItemMeta().getLore().size() > 0) {
                     String lore = shop.getItem(i).getItemMeta().getLore().get(shop.getItem(i).getItemMeta().getLore().size() - 1);
                     String[] args = lore.split(" ");
-                    if (args.length > 1 && ColorUtil.remColor(args[0].replaceAll("\\d+", "")).length() == 0 && resname.contains(lore.substring(args[0].length() + 1))) {
+                    if (args.length > 1 && ColorUtil.remColor(args[0].replaceAll("\\d+", "")).length() == 0 && resname.contains(lore.substring(args[0].length() + 1))
+                        || shop.getItem(i).getItemMeta().getLore().contains(ChatColor.RED + "你已经购买了这个物品！")) {
                         shopitems.add(shop.getItem(i));
                         isShopItem = Boolean.TRUE;
                     }
@@ -122,7 +126,16 @@ public class NewHypixelShop implements Listener {
         }
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST)
+    public static void addUnusableLore(ItemStack itemStack) {
+        ItemMeta meta = itemStack.getItemMeta();
+        List<String> lores = meta.getLore();
+        if (lores == null) lores = new ArrayList<>();
+        if (!lores.contains(ChatColor.RED + "你已经购买了这个物品！")) lores.add(ChatColor.RED + "你已经购买了这个物品！");
+        meta.setLore(lores);
+        itemStack.setItemMeta(meta);
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onClick(InventoryClickEvent e) {
         if (YaBedwars.mode != 1)
             return;
@@ -145,53 +158,78 @@ public class NewHypixelShop implements Listener {
                     isShopItem = Boolean.TRUE;
             }
             if (isShopItem) {
+                boolean result;
                 if (e.isShiftClick()) {
                     int ba = 64 / e.getCurrentItem().getAmount();
-                    buyItem(game, player, e.getCurrentItem(), resname, ba);
+                    result = buyItem(game, player, e.getCurrentItem(), resname, ba);
                 } else {
-                    buyItem(game, player, e.getCurrentItem(), resname, 1);
+                    result = buyItem(game, player, e.getCurrentItem(), resname, 1);
                 }
-                new BukkitRunnable()
-                {
-                    @Override
-                    public void run() {
-                        int slot1 = -1;
-                        for (int i = 9; i < inventory.getSize(); i++) {
-                            if (inventory.getItem(i) != null && inventory.getItem(i).getType() == Material.CHAINMAIL_BOOTS) slot1 = i;
-                        }
-                        int slot2 = inventory.first(Material.IRON_BOOTS);
-                        int slot3 = inventory.first(Material.DIAMOND_BOOTS);
-                        if (slot1 != -1 && (player.getInventory().getLeggings().getType() == Material.CHAINMAIL_LEGGINGS ||
-                                player.getInventory().getLeggings().getType() == Material.IRON_LEGGINGS ||
-                                player.getInventory().getLeggings().getType() == Material.DIAMOND_LEGGINGS)) {
-                            ItemStack itemStack = inventory.getItem(slot1);
-                            ItemMeta itemMeta = itemStack.getItemMeta();
-                            itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-                            itemStack.setItemMeta(itemMeta);
-                            itemStack.addEnchantment(Enchantment.DURABILITY, 1);
-                            inventory.setItem(slot1, itemStack);
-                        }
-                        if (slot2 != -1 && (player.getInventory().getLeggings().getType() == Material.IRON_LEGGINGS ||
-                                player.getInventory().getLeggings()
-                                        .getType() == Material.DIAMOND_LEGGINGS)) {
-                            ItemStack itemStack = inventory.getItem(slot2);
-                            ItemMeta itemMeta = itemStack.getItemMeta();
-                            itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-                            itemStack.setItemMeta(itemMeta);
-                            itemStack.addEnchantment(Enchantment.DURABILITY, 1);
-                            inventory.setItem(slot2, itemStack);
-                        }
-                        if (slot3 != -1 && player.getInventory().getLeggings().getType() == Material.DIAMOND_LEGGINGS) {
-                            ItemStack itemStack = inventory.getItem(slot3);
-                            ItemMeta itemMeta = itemStack.getItemMeta();
-                            itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-                            itemStack.setItemMeta(itemMeta);
-                            itemStack.addEnchantment(Enchantment.DURABILITY, 1);
-                            inventory.setItem(slot3, itemStack);
-                        }
-                        player.updateInventory();
+                if (result) {
+                    if (e.getCurrentItem().getType().toString().contains("_PICKAXE")) {
+                        Tool.toolLevelMap.get(player).put(Tool.ToolType.PICKAXE, Tool.nextLevel(Tool.ToolType.PICKAXE, Tool.toolLevelMap.get(player).getOrDefault(Tool.ToolType.PICKAXE, Tool.ToolLevel.NONE)));
                     }
-                }.runTaskLater(YaBedwars.getInstance(), 1L);
+                    if (e.getCurrentItem().getType().toString().contains("_AXE")) {
+                        Tool.toolLevelMap.get(player).put(Tool.ToolType.AXE, Tool.nextLevel(Tool.ToolType.AXE, Tool.toolLevelMap.get(player).getOrDefault(Tool.ToolType.AXE, Tool.ToolLevel.NONE)));
+                    }
+                    if (e.getCurrentItem().getType() == Material.SHEARS) {
+                        Tool.toolLevelMap.get(player).put(Tool.ToolType.SHEAR, Tool.nextLevel(Tool.ToolType.SHEAR, Tool.toolLevelMap.get(player).getOrDefault(Tool.ToolType.SHEAR, Tool.ToolLevel.NONE)));
+                    }
+                    new BukkitRunnable()
+                    {
+                        @Override
+                        public void run() {
+                            for (int i = 9; i < inventory.getSize(); i++) {
+                                if (inventory.getItem(i) != null) {
+                                    if (inventory.getItem(i).getType() == Material.CHAINMAIL_BOOTS
+                                            && (player.getInventory().getLeggings().getType() == Material.CHAINMAIL_LEGGINGS ||
+                                            player.getInventory().getLeggings().getType() == Material.IRON_LEGGINGS ||
+                                            player.getInventory().getLeggings().getType() == Material.DIAMOND_LEGGINGS)) {
+                                        ItemStack itemStack = inventory.getItem(i);
+                                        NewHypixelShop.addUnusableLore(itemStack);
+                                        ItemMeta itemMeta = itemStack.getItemMeta();
+                                        itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+                                        itemStack.setItemMeta(itemMeta);
+                                        itemStack.addEnchantment(Enchantment.DURABILITY, 1);
+                                        inventory.setItem(i, itemStack);
+                                    }
+                                    if (inventory.getItem(i).getType() == Material.IRON_BOOTS
+                                            && (player.getInventory().getLeggings().getType() == Material.IRON_LEGGINGS ||
+                                            player.getInventory().getLeggings()
+                                                    .getType() == Material.DIAMOND_LEGGINGS)) {
+                                        ItemStack itemStack = inventory.getItem(i);
+                                        NewHypixelShop.addUnusableLore(itemStack);
+                                        ItemMeta itemMeta = itemStack.getItemMeta();
+                                        itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+                                        itemStack.setItemMeta(itemMeta);
+                                        itemStack.addEnchantment(Enchantment.DURABILITY, 1);
+                                        inventory.setItem(i, itemStack);
+                                    }
+                                    if (inventory.getItem(i).getType() == Material.DIAMOND_BOOTS &&
+                                            player.getInventory().getLeggings().getType() == Material.DIAMOND_LEGGINGS) {
+                                        ItemStack itemStack = inventory.getItem(i);
+                                        NewHypixelShop.addUnusableLore(itemStack);
+                                        ItemMeta itemMeta = itemStack.getItemMeta();
+                                        itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+                                        itemStack.setItemMeta(itemMeta);
+                                        itemStack.addEnchantment(Enchantment.DURABILITY, 1);
+                                        inventory.setItem(i, itemStack);
+                                    }
+                                    if (inventory.getItem(i).getType().toString().contains("_PICKAXE")) {
+                                        inventory.setItem(i, Tool.getToolShopItem(player, Tool.ToolType.PICKAXE));
+                                    }
+                                    if (inventory.getItem(i).getType().toString().contains("_AXE")) {
+                                        inventory.setItem(i, Tool.getToolShopItem(player, Tool.ToolType.AXE));
+                                    }
+                                    if (inventory.getItem(i).getType() == Material.SHEARS) {
+                                        inventory.setItem(i, Tool.getToolShopItem(player, Tool.ToolType.SHEAR));
+                                    }
+                                }
+                            }
+                            player.updateInventory();
+                        }
+                    }.runTaskLater(YaBedwars.getInstance(), 1L);
+                }
             } else if (!Objects.requireNonNull(e.getCurrentItem()).isSimilar(getFrame(7)) && !e.getCurrentItem().isSimilar(getFrame(5))) {
                 if (game.getNewItemShop(player) instanceof XPItemShop) {
                     (new XPItemShop(game.getNewItemShop(player).getCategories(), game)).handleInventoryClick(e, game, player);
@@ -202,7 +240,7 @@ public class NewHypixelShop implements Listener {
         }
     }
 
-    private void buyItem(Game game, Player player, ItemStack itemStack, Map<String, ItemStack> resname, int a) {
+    private boolean buyItem(Game game, Player player, ItemStack itemStack, Map<String, ItemStack> resname, int a) {
         String lore = itemStack.getItemMeta().getLore().get(itemStack.getItemMeta().getLore().size() - 1);
         String[] args = lore.split(" ");
         for (int i = 0; i < a; i++) {
@@ -226,10 +264,14 @@ public class NewHypixelShop implements Listener {
                     }
                     player.sendMessage(YaBedwars.message_buy.replace("{item}", name));
                 }
+                return true;
             } else if (i < 1) {
                 player.sendMessage("§c" + ColorUtil.color(BedwarsRel._l(player, "errors.notenoughress")));
+                return false;
             }
+            return false;
         }
+        return false;
     }
 
     private boolean isEnough(Game game, Player player, String type, int amount, Map<String, ItemStack> resname) {
